@@ -1,0 +1,138 @@
+package Heartbreaker.objects;
+
+import java.awt.*;
+import java.awt.geom.Point2D;
+import java.util.Random;
+
+import Heartbreaker.engine.GameFrame;
+import Heartbreaker.engine.SoundManager;
+import Heartbreaker.main.Heartbreaker;
+import Heartbreaker.scenes.MainMenu;
+
+public class Heart extends BaseObject {
+
+    private double frames = 0;
+    int hp = 200;
+    double damage = 0;
+    double bpm = 60;
+    Random random = new Random();
+    HeartGraph graph = new HeartGraph(this);
+    private boolean flatlined = false;
+    private BrokenHeart left;
+    private BrokenHeart right;
+    private boolean dead = false;
+    private int iframes = 0;
+
+    public Heart(int x, int y){
+        Heartbreaker.startTrack();
+        this.xPosition = x;
+        this.yPosition = y;
+
+        scale = -5;
+
+        vertices = new Point2D.Double[]{
+                new Point2D.Double(0,-13),
+                new Point2D.Double(14,0),
+                new Point2D.Double(16,8),
+                new Point2D.Double(14,13),
+                new Point2D.Double(10,15),
+                new Point2D.Double(5,12),
+                new Point2D.Double(0,8),
+                new Point2D.Double(-5,12),
+                new Point2D.Double(-10,15),
+                new Point2D.Double(-14,13),
+                new Point2D.Double(-16,8),
+                new Point2D.Double(-14,0),
+                new Point2D.Double(0,-13)};
+        transformedVertices = new Point2D.Double[vertices.length];
+        transformedVertices = copyVertices(vertices);
+
+
+    }
+
+
+    public void move() {}
+    public void update(){
+        //frames += .15;
+        frames ++;
+
+        double beat_duration = 60 / bpm;
+        double totalTime = frames / 60;
+        double rate = totalTime % beat_duration;
+        double time = rate / beat_duration * (2 * Math.PI);
+        xPosition = currentScene.origin.x + random.nextInt(-1 - (int)(damage*Math.pow(damage,.2)/20),1 + (int)(damage*Math.pow(damage,.2)/20));
+        yPosition = currentScene.origin.y + random.nextInt(-1 - (int)damage/20,1 + (int)damage/20);
+        //BPM
+        //double time = rate;
+        //scale = (Math.abs(Math.sin(time)) * Math.abs((Math.cos(time+.4) - Math.tan(time/2) - .4))) + 3;
+        scale = (Math.abs(-Math.sin(time)) * (Math.abs((-Math.cos(time - 1.5) +Math.tan(time/2) - 4.5)) - 5.4)) + 5;
+        scale *= -1;
+        //scale = 1 * -(Math.abs(Math.sin(frames)) * Math.abs(Math.cos(frames) - 1)) + 5;
+        graph.update();
+        if(left != null && right != null){
+            left.update();
+            right.update();
+        }
+
+    }
+    public void damage(int dmg) {
+
+        if (iframes <= 0) {
+            if (!flatlined) {
+                GameFrame.soundManager.playClip(SoundManager.heartDamage);
+                iframes = 10;
+                currentScene.score += 100 * dmg;
+                damage += .5 * dmg;
+                bpm += .5 * dmg;
+                graph.setBPM(bpm);
+                currentScene.shield.bpm = bpm;
+                Heartbreaker.setBpm((float) bpm);
+                if (bpm >= 180) {
+                    iframes = 30;
+                    //GameFrame.setCurrentScene(new MainMenu());
+                    bpm = 0;
+                    graph.setBPM(bpm);
+                    graph.setFlatlined(true);
+                    currentScene.shield.setFlatlined(true);
+                    Heartbreaker.setBpm(10);
+                    flatlined = true;
+                    GameFrame.soundManager.playClip(SoundManager.flatline);
+                }
+        } else {
+            if (!dead) {
+                currentScene.score += 1000;
+                currentScene.levelBeaten();
+                GameFrame.soundManager.playClip(SoundManager.heartbreak);
+                dead = true;
+                left = new BrokenHeart(1, xPosition, yPosition, scale);
+                right = new BrokenHeart(-1, xPosition, yPosition, scale);
+            }
+            }
+        }
+    }
+    
+
+    public void draw(Graphics2D g){
+        if(iframes <= 0) {
+            g.setColor(Color.getHSBColor(0f, .7f, .7f));
+        } else {
+            g.setColor(Color.getHSBColor(0f, .2f, .9f));
+            scale *= 1.25;
+            iframes--;
+        }
+        if(!dead) {
+            g.drawPolygon(realizePoly(transformedVertices));
+        } else {
+            left.draw(g);
+            right.draw(g);
+        }
+        graph.draw(g);
+    }
+
+
+
+
+
+
+
+}
