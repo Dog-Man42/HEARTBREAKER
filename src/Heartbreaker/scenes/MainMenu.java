@@ -16,6 +16,10 @@ import java.awt.image.BufferedImage;
 public class MainMenu extends Level implements UsesBullets {
 
     private ParticleEmitter emitter;
+    private Tentacle tentacle;
+    private Tentacle tentacle2;
+    private Tentacle tentacle3;
+    private Tentacle tentacle4;
 
 
     public boolean initialize() {
@@ -26,6 +30,13 @@ public class MainMenu extends Level implements UsesBullets {
         heart = new Heart(origin.x,origin.y);
         shield = null;
         emitter = new ParticleEmitter(TestParticle.class,500,500,1000);
+        tentacle = new Tentacle(10,10,origin.x,origin.y,15);
+        tentacle2 = new Tentacle(5,5,origin.x,origin.y,15);
+        tentacle3 = new Tentacle(5,5,origin.x,origin.y,15);
+        tentacle4 = new Tentacle(5,5,origin.x,origin.y,15);
+        tentacle2.setRotation(90);
+        tentacle3.setRotation(180);
+        tentacle4.setRotation(270);
 
         System.out.println(Runtime.getRuntime().availableProcessors());
         bullets.clear();
@@ -35,7 +46,11 @@ public class MainMenu extends Level implements UsesBullets {
     }
 
     public void updateScene(){
-        player.move();
+        tentacle.update();
+        tentacle2.update();
+        tentacle3.update();
+        tentacle4.update();
+        player.update();
         heart.update();
         updateBullets();
         deleteBullets();
@@ -89,7 +104,17 @@ public class MainMenu extends Level implements UsesBullets {
         g.setStroke(new BasicStroke(3));
         heart.draw(g);
         player.draw(g);
+        tentacle.draw(g);
+/*
+        tentacle2.draw(g);
+        tentacle3.draw(g);
+        tentacle4.draw(g);
+
+ */
+
         drawBullets(g);
+
+
 
 
     }
