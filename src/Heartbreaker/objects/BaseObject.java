@@ -148,6 +148,18 @@ public abstract class BaseObject {
         }
         this.parent = p;
     }
+    public void removeParent(boolean keepTransforms){
+        if(keepTransforms){
+            if(parent == null){
+                throw new NullPointerException();
+            }
+            xPosition += parent.xPosition;
+            yPosition += parent.yPosition;
+            scale = parent.scale;
+            rotation = parent.rotation;
+        }
+        this.parent = null;
+    }
     public BaseObject getParent(){
         return parent;
     }

@@ -47,8 +47,6 @@ public class Player extends BaseObject implements UsesPolar {
 
     private Point2D mousePosition = new Point2D.Double(0,0);
 
-    private BrokenHeart bh;
-    private Box box;
     public Player(int x, int y){
         this.xPosition = x;
         this.yPosition = y;
@@ -59,10 +57,6 @@ public class Player extends BaseObject implements UsesPolar {
         transformedVertices = new Point2D.Double[vertices.length];
         transformedVertices = copyVertices(vertices);
         this.hp = 5;
-        bh = new BrokenHeart(1,20,0,.5);
-        box = new Box(-40,0,1);
-        bh.setParent(this,false);
-        box.setParent(this,false);
 
     }
     //input
@@ -106,9 +100,6 @@ public class Player extends BaseObject implements UsesPolar {
     }
 
     public void update() {
-
-        bh.rotation+= 5;
-        box.rotation-=5;
 
         checkKeys();
 
@@ -174,6 +165,7 @@ public class Player extends BaseObject implements UsesPolar {
         }
 
         if(coolDown <= 0) {
+
             Point2D.Double[] temp = realizePoints();
             if(spawnBullet) {
                 spawnBullet = false;
@@ -218,8 +210,6 @@ public class Player extends BaseObject implements UsesPolar {
         g.setStroke(new BasicStroke(2));
         g.setFont(new Font("Consolas",Font.PLAIN,40));
         g.drawString("HP: " + hp, 0,GameFrame.GAME_HEIGHT - 40);
-        bh.draw(g);
-        box.draw(g);
     }
 
     public void checkKeys(){
