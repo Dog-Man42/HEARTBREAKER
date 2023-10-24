@@ -31,7 +31,9 @@ public class BrokenHeart extends BaseObject{
         scale +=.1;
     }
     public void draw(Graphics2D g){
-        g.draw(realizePoly());
+        g.draw(realizePoly(transformedVertices));
+        System.out.println("Parent = " + getParent());
+
 
     }
 }

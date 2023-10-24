@@ -52,7 +52,8 @@ public class ShieldCircle extends BaseObject{
         return hp;
     }
 
-    public void draw(Graphics g){
+    @Override
+    public void draw(Graphics2D g){
 
         int midX = currentScene.origin.x;
         int midY = currentScene.origin.y;
@@ -78,5 +79,8 @@ public class ShieldCircle extends BaseObject{
         }
         g.drawOval((int) ((midX + xPosition) - radius),(int) ((midY + yPosition) - radius),2 * radius,2 * radius);
     }
+
+    @Override
+    public void update() {}
 
 }

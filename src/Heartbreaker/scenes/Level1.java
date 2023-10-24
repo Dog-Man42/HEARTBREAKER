@@ -40,7 +40,7 @@ public class Level1 extends Level implements UsesBullets {
             }
         }
         long updateNano = System.currentTimeMillis();
-        player.move();
+        player.update();
         heart.update();
         if(shield != null)
             shield.update();

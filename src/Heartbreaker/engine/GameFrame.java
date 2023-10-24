@@ -1,5 +1,6 @@
 package Heartbreaker.engine;
 
+import Heartbreaker.engine.scenes.Scene;
 import Heartbreaker.main.Heartbreaker;
 import Heartbreaker.objects.FrameTimeGraph;
 import Heartbreaker.scenes.*;
@@ -9,6 +10,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class GameFrame extends JPanel implements Runnable{
 
@@ -44,6 +46,8 @@ public class GameFrame extends JPanel implements Runnable{
     static Level currentScene = new MainMenu();
     public static int highScore = 0;
     public static final LoadingScreen loadingScreen = new LoadingScreen();
+
+    private static ArrayList<Scene> renderLayers = new ArrayList<>();
 
 
 

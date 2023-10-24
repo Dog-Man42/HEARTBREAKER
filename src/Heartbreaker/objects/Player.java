@@ -1,13 +1,11 @@
 package Heartbreaker.objects;
 
 import Heartbreaker.engine.*;
-import Heartbreaker.scenes.Level1;
 import Heartbreaker.scenes.MainMenu;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Point2D;
-import java.util.Random;
 
 public class Player extends BaseObject implements UsesPolar {
 
@@ -49,6 +47,8 @@ public class Player extends BaseObject implements UsesPolar {
 
     private Point2D mousePosition = new Point2D.Double(0,0);
 
+    private BrokenHeart bh;
+    private Box box;
     public Player(int x, int y){
         this.xPosition = x;
         this.yPosition = y;
@@ -59,6 +59,10 @@ public class Player extends BaseObject implements UsesPolar {
         transformedVertices = new Point2D.Double[vertices.length];
         transformedVertices = copyVertices(vertices);
         this.hp = 5;
+        bh = new BrokenHeart(1,20,0,.5);
+        box = new Box(-40,0,1);
+        bh.setParent(this,false);
+        box.setParent(this,false);
 
     }
     //input
@@ -101,8 +105,10 @@ public class Player extends BaseObject implements UsesPolar {
         }
     }
 
-    public void move() {
+    public void update() {
 
+        bh.rotation+= 5;
+        box.rotation-=5;
 
         checkKeys();
 
@@ -133,6 +139,7 @@ public class Player extends BaseObject implements UsesPolar {
         if(Math.abs(theta) > 360){
             theta = theta - (360 * Math.signum(theta));
         }
+
         if(radialPosition >= 600){
             radialPosition = 600;
         }
@@ -167,17 +174,16 @@ public class Player extends BaseObject implements UsesPolar {
         }
 
         if(coolDown <= 0) {
+            Point2D.Double[] temp = realizePoints();
             if(spawnBullet) {
                 spawnBullet = false;
                 GameFrame.soundManager.playClip(SoundManager.shootGeneric);
-                currentScene.spawnBullet((transformedVertices[1].x * scale) + xPosition, (transformedVertices[1].y * scale) +
-                        yPosition, 0, 0, rotation, 10, 60,true);
+                currentScene.spawnBullet(temp[1].x, temp[1].y, 0, 0, rotation, 10, 60,true);
                 coolDown = 8;
             } else if(spawnGravBullet){
                 spawnGravBullet = false;
                 GameFrame.soundManager.playClip(SoundManager.shootGrav);
-                currentScene.spawnGravBullet((transformedVertices[1].x * scale) + xPosition, (transformedVertices[1].y * scale) +
-                        yPosition, 0,0, rotation, 1, 240,true);
+                currentScene.spawnGravBullet(temp[1].x, temp[1].y, 0,0, rotation, 1, 240,true);
                 coolDown = 16;
             }
         } else {
@@ -186,7 +192,7 @@ public class Player extends BaseObject implements UsesPolar {
         }
 
 
-        transformedVertices = rotatePoints(Math.toRadians(rotation),vertices);
+        //transformedVertices = rotatePoints(Math.toRadians(rotation),vertices);
 
     }
 
@@ -212,6 +218,8 @@ public class Player extends BaseObject implements UsesPolar {
         g.setStroke(new BasicStroke(2));
         g.setFont(new Font("Consolas",Font.PLAIN,40));
         g.drawString("HP: " + hp, 0,GameFrame.GAME_HEIGHT - 40);
+        bh.draw(g);
+        box.draw(g);
     }
 
     public void checkKeys(){
@@ -298,6 +306,9 @@ public class Player extends BaseObject implements UsesPolar {
 
     public double getRadialPosition(){
         return radialPosition;
+    }
+    public double getTheta(){
+        return theta;
     }
 
 }

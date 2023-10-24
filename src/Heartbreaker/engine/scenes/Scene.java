@@ -11,7 +11,6 @@ public abstract class Scene {
     public Point origin;
     public ArrayList<BaseObject> objects = new ArrayList<>();
 
-
     public void windowResized(){
         origin = new Point(GameFrame.GAME_WIDTH/2, GameFrame.HEIGHT/2);
     }

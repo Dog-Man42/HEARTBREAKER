@@ -34,6 +34,10 @@ public class FrameTimeGraph extends BaseObject {
             transformedVertices[i].setLocation(i, histogram[i]);
         }
     }
+
+    @Override
+    public void update() {}
+
     public void draw(Graphics2D g ){
         Point2D.Double[] line = realizePoints();
 

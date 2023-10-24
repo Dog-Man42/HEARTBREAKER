@@ -8,12 +8,15 @@ import java.awt.geom.Point2D;
 
 
 
-public class BaseObject {
+public abstract class BaseObject {
+
+    private BaseObject parent;
 
     protected double xPosition;
     protected double yPosition;
     protected double rotation;
     protected double scale = 10;
+
     Level currentScene = GameFrame.getCurrentScene();
 
     protected Point2D.Double[] vertices;
@@ -23,15 +26,26 @@ public class BaseObject {
     public Point2D.Double[] rotatePoints(double theta, Point2D.Double[] inputPoints){
         Point2D.Double[] output = new Point2D.Double[inputPoints.length];
         for(int i = 0; i < inputPoints.length; i++){
-            double x = inputPoints[i].x * Math.cos(theta) - inputPoints[i].y * Math.sin(theta);
-            double y = inputPoints[i].x * Math.sin(theta) + inputPoints[i].y * Math.cos(theta);
+            double sin = Math.sin(theta);
+            double cos = Math.cos(theta);
+            double x = inputPoints[i].x * cos- inputPoints[i].y * sin;
+            double y = inputPoints[i].x * sin + inputPoints[i].y * cos;
             output[i] = new Point2D.Double(x,y);
         }
         return output;
     }
     public Point2D.Double rotatePoint(double theta, Point2D.Double inputPoint){
-        double x = inputPoint.x * Math.cos(theta) - inputPoint.y * Math.sin(theta);
-        double y = inputPoint.x * Math.sin(theta) + inputPoint.y * Math.cos(theta);
+        double sin = Math.sin(theta);
+        double cos = Math.cos(theta);
+        double x = inputPoint.x * cos - inputPoint.y * sin;
+        double y = inputPoint.x * sin + inputPoint.y * cos;
+        return new Point2D.Double(x,y);
+    }
+    public Point2D.Double rotatePointAroundPoint(double theta, Point2D.Double inputPoint, Point2D.Double parent){
+        double sin = Math.sin(theta);
+        double cos = Math.cos(theta);
+        double x = (inputPoint.x - parent.x) * cos - (inputPoint.y - parent.y) * sin + parent.x;
+        double y = (inputPoint.x - parent.x) * sin + (inputPoint.y - parent.y) * cos + parent.y;
         return new Point2D.Double(x,y);
     }
 
@@ -47,9 +61,21 @@ public class BaseObject {
     }
 
     public Polygon realizePoly(Point2D.Double[] points){
+
         Polygon temp = new Polygon();
         for (Point2D.Double point : points) {
-            temp.addPoint((int) ((point.x * scale) + xPosition), (int) ((point.y * scale) + yPosition));
+            if(parent != null){
+                //4.5 hours spent here
+                Point2D.Double tempPoint = new Point2D.Double((point.x * (scale * parent.scale)),(point.y * (scale * parent.scale)));
+                tempPoint = rotatePoint(Math.toRadians(rotation),tempPoint);
+                tempPoint.setLocation(tempPoint.x + xPosition,tempPoint.y + yPosition);
+                tempPoint = rotatePoint(Math.toRadians(parent.rotation),tempPoint);
+                temp.addPoint((int) (tempPoint.x + parent.xPosition),(int) (tempPoint.y + parent.yPosition));
+            } else {
+                Point2D.Double tempPoint = new Point2D.Double(point.x * scale,point.y * scale);
+                tempPoint = rotatePoint(Math.toRadians(rotation),tempPoint);
+                temp.addPoint((int) (tempPoint.x + xPosition),(int) (tempPoint.y + yPosition));
+            }
         }
         return temp;
     }
@@ -60,15 +86,17 @@ public class BaseObject {
         Point2D.Double[] temp = new Point2D.Double[transformedVertices.length];
         for (int i = 0; i < temp.length; i++) {
             temp[i] = new Point2D.Double();
-            temp[i].setLocation( ((transformedVertices[i].x * scale) + xPosition), ((transformedVertices[i].y * scale) + yPosition));
-        }
-        return temp;
-    }
-
-    public Polygon realizePoly(){
-        Polygon temp = new Polygon();
-        for (Point2D.Double point : transformedVertices) {
-            temp.addPoint((int) ((point.x * scale) + xPosition), (int) ((point.y * scale) + yPosition));
+            if(parent != null){
+                Point2D.Double tempPoint = new Point2D.Double((transformedVertices[i].x * (scale * parent.scale)),(transformedVertices[i].y * (scale * parent.scale)));
+                tempPoint = rotatePoint(Math.toRadians(rotation),tempPoint);
+                tempPoint.setLocation(tempPoint.x + xPosition,tempPoint.y + yPosition);
+                tempPoint = rotatePoint(Math.toRadians(parent.rotation),tempPoint);
+                temp[i].setLocation((int) (tempPoint.x + parent.xPosition),(int) (tempPoint.y + parent.yPosition));
+            } else {
+                Point2D.Double tempPoint = new Point2D.Double(transformedVertices[i].x * scale,transformedVertices[i].y * scale);
+                tempPoint = rotatePoint(Math.toRadians(rotation),tempPoint);
+                temp[i].setLocation((int) (tempPoint.x + xPosition),(int) (tempPoint.y + yPosition));
+            }
         }
         return temp;
     }
@@ -76,8 +104,55 @@ public class BaseObject {
     public double getxPosition() {
         return xPosition;
     }
-
     public double getyPosition() {
         return yPosition;
+
     }
+
+    public double getxPosition(boolean worldSpace) {
+        if(worldSpace){
+            return xPosition + parent.xPosition;
+        } else {
+            return xPosition;
+        }
+
+    }
+    public double getyPosition(boolean worldSpace) {
+        if(worldSpace){
+            return yPosition + parent.yPosition;
+        } else {
+            return yPosition;
+        }
+    }
+    public Point2D.Double getPosition(){
+        return new Point2D.Double(xPosition,yPosition);
+    }
+
+    public void setXPosition(double x){
+        xPosition = x;
+    }
+    public void setYPosition(double y){
+        yPosition = y;
+    }
+    public void setRotation(double theta){this.rotation = theta;}
+
+    public void setParent(BaseObject p, boolean keepTransforms){
+        if(keepTransforms){
+            if(parent == null){
+                throw new NullPointerException();
+            }
+            xPosition += parent.xPosition;
+            yPosition += parent.yPosition;
+            scale = parent.scale;
+            rotation = parent.rotation;
+        }
+        this.parent = p;
+    }
+    public BaseObject getParent(){
+        return parent;
+    }
+
+    public abstract void update();
+
+     public abstract void draw(Graphics2D g);
 }

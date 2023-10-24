@@ -2,6 +2,7 @@ package Heartbreaker.objects;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+
 import Heartbreaker.engine.*;
 import Heartbreaker.engine.vectors.*;
 
@@ -41,8 +42,8 @@ public class Bullet extends BaseObject {
                 new Point2D.Double(1,4),
                 new Point2D.Double(1,-4)
         };
-        transformedVertices = new Point2D.Double[vertices.length];
-        transformedVertices = rotatePoints(Math.toRadians(rotation),vertices);
+        transformedVertices = copyVertices(vertices);
+        //transformedVertices = rotatePoints(Math.toRadians(rotation),vertices);
         polygon = realizePoly(transformedVertices);
     }
 
