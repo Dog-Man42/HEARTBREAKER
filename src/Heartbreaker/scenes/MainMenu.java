@@ -134,7 +134,7 @@ public class MainMenu extends Level implements UsesBullets {
 
                     Vector3 normal = Vector3Math.normalize(vec);
                     double dp = Math.abs(player.getRadialPosition());
-                    Vector3 light = new Vector3(player.getxPosition(), player.getyPosition(), r*r / dp);
+                    Vector3 light = new Vector3(player.getXPosition(), player.getYPosition(), r*r / dp);
                     Vector3 direction = Vector3Math.normalize(Vector3.difference(light,new Vector3(x,y,dz)));
                     double shade =  Vector3Math.dot(normal,direction);
                     if(shade >= 0.01) {

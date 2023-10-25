@@ -97,8 +97,8 @@ public class Bullet extends BaseObject {
                     ShieldCircle[] circles = currentScene.shield.getCircles();
                     for(int i = 0; i < circles.length; i++){
                         if(circles[i].isAlive()){
-                            Point2D.Double circleCenter = new Point2D.Double(circles[i].getxPosition() +
-                                    currentScene.origin.x,circles[i].getyPosition() + currentScene.origin.y);
+                            Point2D.Double circleCenter = new Point2D.Double(circles[i].getXPosition() +
+                                    currentScene.origin.x,circles[i].getYPosition() + currentScene.origin.y);
                             if(Collision.circlePolygon(circleCenter,20, realizePoints())){
                                 //currentScene.addToBulletQueue(this);
                                 currentScene.shieldHitCout++;

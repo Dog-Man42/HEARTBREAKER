@@ -1,7 +1,5 @@
 package Heartbreaker.objects;
 
-import Heartbreaker.engine.vectors.Vector;
-
 import java.awt.*;
 import java.util.Random;
 
@@ -41,7 +39,7 @@ public class Tentacle extends BaseObject {
     }
 
     public void update() {
-        rotation++;
+        rotation+=10d;
         boolean slow;
 
         for(int i = 0; i < segments.length; i++){
@@ -72,12 +70,12 @@ public class Tentacle extends BaseObject {
                 angularVels[i] += (random.nextDouble(-10, 10)/(25.0/i) + angularVels[i-1]/2) * angularAccel;
                 angularVels[i-1] += (angularVels[i] - angularVels[i-1])/i * angularAccel;
 
-                segments[i].setPosition(rotatePointAroundPoint(relativeRotation,segments[i].getPosition(),segments[i-1].getPosition()));
+                segments[i].setPosition(rotatePointAroundPoint(relativeRotation,segments[i].getPosition(false),segments[i-1].getPosition(false)));
 
 
                 // Normalize the line segment to maintain its length
-                double dx = segments[i].getxPosition() -segments[i-1].getxPosition();
-                double dy = segments[i].getyPosition() -segments[i-1].getyPosition();
+                double dx = segments[i].getXPosition(false) -segments[i-1].getXPosition(false);
+                double dy = segments[i].getYPosition(false) -segments[i-1].getYPosition(false);
                 double length = Math.sqrt(dx * dx + dy * dy);
 
                 if (length > 0) {
@@ -85,12 +83,12 @@ public class Tentacle extends BaseObject {
                     dx *= scaleFactor;
                     dy *= scaleFactor;
 
-                    segments[i].setXPosition(segments[i-1].getxPosition() + dx);
-                    segments[i].setYPosition(segments[i-1].getyPosition() + dy);
+                    segments[i].setXPosition(segments[i-1].getXPosition(false) + dx);
+                    segments[i].setYPosition(segments[i-1].getYPosition(false) + dy);
                 }
             } else {
                 angularVels[i] += (random.nextDouble(-1, 1) * angularAccel);
-                segments[i].setPosition(rotatePoint(Math.toRadians(angles[i]),segments[i].getPosition()));
+                segments[i].setPosition(rotatePoint(Math.toRadians(angles[i]),segments[i].getPosition(false)));
             }
 
             //System.out.println(this);
@@ -103,7 +101,7 @@ public class Tentacle extends BaseObject {
         for(int i = 0; i < segments.length; i++) {
             if(i > 0){
                 g.setColor(Color.GREEN);
-                g.drawLine((int) segments[i-1].getxPosition(true), (int) segments[i-1].getyPosition(true), (int) segments[i].getxPosition(true),(int) segments[i].getyPosition(true));
+                g.drawLine((int) segments[i-1].getXPosition(true), (int) segments[i-1].getYPosition(true), (int) segments[i].getXPosition(true),(int) segments[i].getYPosition(true));
             }
             segments[i].draw(g);
         }

@@ -5,7 +5,6 @@ import Heartbreaker.engine.UsesPolar;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 
 public class GravBullet extends Bullet implements UsesPolar {
 
@@ -120,8 +119,8 @@ public class GravBullet extends Bullet implements UsesPolar {
                     ShieldCircle[] circles = currentScene.shield.getCircles();
                     for(int i = 0; i < circles.length; i++){
                         if(circles[i].isAlive()){
-                            Point2D.Double circleCenter = new Point2D.Double(circles[i].getxPosition() +
-                                    currentScene.origin.x,circles[i].getyPosition() + currentScene.origin.y);
+                            Point2D.Double circleCenter = new Point2D.Double(circles[i].getXPosition() +
+                                    currentScene.origin.x,circles[i].getYPosition() + currentScene.origin.y);
                             if(Collision.circleCircle(circleCenter,20, new Point2D.Double(xPosition,yPosition), scale/2)){
                                 //currentScene.addToBulletQueue(this);
                                 currentScene.shieldHitCout++;

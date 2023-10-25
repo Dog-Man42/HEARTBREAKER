@@ -34,7 +34,7 @@ public class TentacleSegment extends BaseObject{
 
     public void draw(Graphics2D g){
         g.setColor(Color.ORANGE);
-        g.fillOval((int) (getxPosition(true) - radius), (int) (getyPosition(true) - radius), radius*2,radius*2);
+        g.fillOval((int) (getXPosition() - radius), (int) (getYPosition() - radius), radius*2,radius*2);
 
 
 
