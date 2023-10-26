@@ -41,6 +41,7 @@ public class MainMenu extends Level implements UsesBullets {
         System.out.println(Runtime.getRuntime().availableProcessors());
         bullets.clear();
         bulletDeleteQueue.clear();
+        objects.add(new MinorEye(250,500));
         return true;
 
     }
@@ -54,6 +55,7 @@ public class MainMenu extends Level implements UsesBullets {
         heart.update();
         updateBullets();
         deleteBullets();
+        updateObjects();
     }
 
     public void damageHeart(int dmg){
@@ -105,6 +107,7 @@ public class MainMenu extends Level implements UsesBullets {
         heart.draw(g);
         player.draw(g);
         tentacle.draw(g);
+        drawObjects(g);
 /*
         tentacle2.draw(g);
         tentacle3.draw(g);

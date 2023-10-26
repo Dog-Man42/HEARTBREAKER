@@ -17,6 +17,22 @@ public abstract class Scene {
 
 
     public void updateScene(){}
+
+    public void updateObjects(){
+        if(objects.size() > 0){
+            for(BaseObject object : objects){
+                object.update();
+            }
+        }
+    }
     public abstract void draw(Graphics2D g);
+
+    public void drawObjects(Graphics2D g){
+        if(objects.size() > 0){
+            for(BaseObject object : objects){
+                object.draw(g);
+            }
+        }
+    }
 
 }

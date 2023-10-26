@@ -3,6 +3,7 @@ package Heartbreaker.scenes;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.Random;
 
 import Heartbreaker.engine.*;
 import Heartbreaker.objects.*;
@@ -28,6 +29,23 @@ public class Level1 extends Level implements UsesBullets {
 
         bullets.clear();
         bulletDeleteQueue.clear();
+        Random rand = new Random();
+        objects.add(new MinorEye(rand.nextInt(0,GameFrame.GAME_WIDTH),rand.nextInt(0,GameFrame.GAME_HEIGHT)));
+        objects.add(new MinorEye(rand.nextInt(0,GameFrame.GAME_WIDTH),rand.nextInt(0,GameFrame.GAME_HEIGHT)));
+        objects.add(new MinorEye(rand.nextInt(0,GameFrame.GAME_WIDTH),rand.nextInt(0,GameFrame.GAME_HEIGHT)));
+        objects.add(new MinorEye(rand.nextInt(0,GameFrame.GAME_WIDTH),rand.nextInt(0,GameFrame.GAME_HEIGHT)));
+        objects.add(new MinorEye(rand.nextInt(0,GameFrame.GAME_WIDTH),rand.nextInt(0,GameFrame.GAME_HEIGHT)));
+        objects.add(new MinorEye(rand.nextInt(0,GameFrame.GAME_WIDTH),rand.nextInt(0,GameFrame.GAME_HEIGHT)));
+        objects.add(new MinorEye(rand.nextInt(0,GameFrame.GAME_WIDTH),rand.nextInt(0,GameFrame.GAME_HEIGHT)));
+        objects.add(new MinorEye(rand.nextInt(0,GameFrame.GAME_WIDTH),rand.nextInt(0,GameFrame.GAME_HEIGHT)));
+        objects.add(new MinorEye(rand.nextInt(0,GameFrame.GAME_WIDTH),rand.nextInt(0,GameFrame.GAME_HEIGHT)));
+        objects.add(new MinorEye(rand.nextInt(0,GameFrame.GAME_WIDTH),rand.nextInt(0,GameFrame.GAME_HEIGHT)));
+        objects.add(new MinorEye(rand.nextInt(0,GameFrame.GAME_WIDTH),rand.nextInt(0,GameFrame.GAME_HEIGHT)));
+        objects.add(new MinorEye(rand.nextInt(0,GameFrame.GAME_WIDTH),rand.nextInt(0,GameFrame.GAME_HEIGHT)));
+        objects.add(new MinorEye(rand.nextInt(0,GameFrame.GAME_WIDTH),rand.nextInt(0,GameFrame.GAME_HEIGHT)));
+        objects.add(new MinorEye(rand.nextInt(0,GameFrame.GAME_WIDTH),rand.nextInt(0,GameFrame.GAME_HEIGHT)));
+        objects.add(new MinorEye(rand.nextInt(0,GameFrame.GAME_WIDTH),rand.nextInt(0,GameFrame.GAME_HEIGHT)));
+        objects.add(new MinorEye(rand.nextInt(0,GameFrame.GAME_WIDTH),rand.nextInt(0,GameFrame.GAME_HEIGHT)));
         return true;
     }
 
@@ -50,6 +68,7 @@ public class Level1 extends Level implements UsesBullets {
                 box.update();
             }
         }
+        updateObjects();
         updateBullets();
         deleteBullets();
     }
@@ -81,6 +100,7 @@ public class Level1 extends Level implements UsesBullets {
         drawBullets(g);
         player.draw(g);
         heart.draw(g);
+        drawObjects(g);
         g.setColor(Color.RED);
         //g.drawLine(0,GAME_HEIGHT/2,GAME_WIDTH,GAME_HEIGHT/2);
         //g.drawLine(GAME_WIDTH/2,0,GAME_WIDTH/2,GAME_HEIGHT);
