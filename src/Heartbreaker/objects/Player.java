@@ -171,7 +171,7 @@ public class Player extends BaseObject implements UsesPolar {
             if(spawnBullet) {
                 spawnBullet = false;
                 GameFrame.soundManager.playClip(SoundManager.shootGeneric);
-                currentScene.spawnBullet(temp[1].x, temp[1].y, 0, 0, rotation, 10, 60,true);
+                currentScene.spawnBullet(temp[1].x, temp[1].y, 0, 0, rotation, 12, 120,true);
                 coolDown = 8;
             } else if(spawnGravBullet){
                 spawnGravBullet = false;
@@ -217,9 +217,9 @@ public class Player extends BaseObject implements UsesPolar {
 
         if(dPressed) {
             if(spacePressed){
-                xvel += 1.5 * acceleration;
-                if (xvel > 4) {
-                    xvel = 4;
+                xvel += 2.5 * acceleration;
+                if (xvel > 12) {
+                    xvel = 12;
                 }
 
             } else {
@@ -231,9 +231,9 @@ public class Player extends BaseObject implements UsesPolar {
         }
         if(aPressed) {
             if (spacePressed) {
-                xvel -= 1.5 * acceleration;
-                if (xvel < -4) {
-                    xvel = -4;
+                xvel -= 2.5 * acceleration;
+                if (xvel < -12) {
+                    xvel = -12;
                 }
 
             } else {
@@ -245,9 +245,9 @@ public class Player extends BaseObject implements UsesPolar {
         }
         if(wPressed) {
             if(spacePressed){
-                yvel -= 1.5 * acceleration;
-                if (yvel < -4) {
-                    yvel = -4;
+                yvel -= 2.5 * acceleration;
+                if (yvel < -12){
+                    yvel = -12;
                 }
 
             } else {
@@ -259,9 +259,9 @@ public class Player extends BaseObject implements UsesPolar {
         }
         if(sPressed) {
             if(spacePressed){
-                yvel += 1.5 * acceleration;
-                if (yvel > 4) {
-                    yvel = 4;
+                yvel += 2.5 * acceleration;
+                if (yvel > 12) {
+                    yvel = 12;
                 }
 
             } else {
