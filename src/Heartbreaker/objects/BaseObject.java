@@ -131,6 +131,18 @@ public abstract class BaseObject {
     }
 
     /**
+     * Calculates the distance between two points.
+     *
+     * @param p1 x position of point 1
+     * @param p2 y position of point 1
+     * @return distance between two points
+     */
+    public double calculateDistance(Point2D.Double p1, Point2D.Double p2){
+        return Math.sqrt( Math.pow((p2.x - p1.x),2.0) +
+                Math.pow(p2.y - p1.y,2.0) );
+    }
+
+    /**
      * Generates a Polygon from a given Point2D.Double array
      *
      * @param points Point2D.Double array
