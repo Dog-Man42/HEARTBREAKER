@@ -1,4 +1,4 @@
-package Heartbreaker.engine;
+package Heartbreaker.engine.collision;
 import Heartbreaker.engine.vectors.*;
 
 
@@ -11,7 +11,6 @@ Resources Used:
     https://www.youtube.com/watch?v=vWs33LVrs74&list=PLSlpr6o9vURwq3oxVZSimY8iC-cdd3kIs&index=8
  */
 
-//TODO consider switching some usage of Point2D to using Vectors
 
 public class Collision {
 

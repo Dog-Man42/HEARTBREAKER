@@ -1,6 +1,6 @@
 package Heartbreaker.objects;
 
-import Heartbreaker.engine.Collision;
+import Heartbreaker.engine.collision.Collision;
 import Heartbreaker.engine.UsesPolar;
 
 import java.awt.*;

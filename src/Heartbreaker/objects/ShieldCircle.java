@@ -14,7 +14,7 @@ public class ShieldCircle extends BaseObject{
     private boolean hit = false;
     private int iframes = 0;
 
-    ShieldCircle(double xpos, double ypos){
+    public ShieldCircle(double xpos, double ypos){
         this.xPosition = xpos;
         this.yPosition = ypos;
         this.hp = 40;

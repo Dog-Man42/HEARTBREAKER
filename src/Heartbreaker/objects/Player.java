@@ -1,6 +1,7 @@
 package Heartbreaker.objects;
 
 import Heartbreaker.engine.*;
+import Heartbreaker.engine.collision.Collision;
 import Heartbreaker.scenes.MainMenu;
 
 import java.awt.*;
@@ -112,7 +113,7 @@ public class Player extends BaseObject implements UsesPolar {
         double targetRotation = Math.toDegrees(-Math.atan2(GameFrame.mouseX - xPosition, GameFrame.mouseY  - yPosition));
 
         rotation = (rotation + targetRotation);
-        rotation  = Math.toDegrees(-Math.atan2(GameFrame.mouseX - xPosition,GameFrame.mouseY - yPosition));
+        rotation  = Math.toDegrees(-Math.atan2(GameFrame.mouseX - getXPosition(),GameFrame.mouseY - getYPosition()));
 
 
         double prevX = xPosition;
