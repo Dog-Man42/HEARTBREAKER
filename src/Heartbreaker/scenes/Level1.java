@@ -7,33 +7,38 @@ import java.util.Random;
 
 import Heartbreaker.engine.*;
 import Heartbreaker.objects.*;
-import Heartbreaker.scenes.attributes.UsesBullets;
 
-public class Level1 extends Level implements UsesBullets {
+public class Level1 extends Level {
 
     private long startTime = System.currentTimeMillis();
     private boolean beaten = false;
     private long beatTime;
 
 
+    public Level1(){
+        super();
+    }
 
 
     public boolean initialize(){
 
+
         origin = new Point(GameFrame.GAME_WIDTH/2,GameFrame.GAME_HEIGHT/2);
 
+        clearObjects();
+        collisionManager.clear();
         spawnPlayer();
         spawnHeart();
         spawnShield();
+        addObject(player);
+        addObject(heart);
+        addObject(shield);
         boxes = new ArrayList<>();
-
-        bullets.clear();
-        bulletDeleteQueue.clear();
         Random rand = new Random();
-        objects.add(new MinorEye(rand.nextInt(0,GameFrame.GAME_WIDTH),rand.nextInt(0,GameFrame.GAME_HEIGHT)));
-        objects.add(new MinorEye(rand.nextInt(0,GameFrame.GAME_WIDTH),rand.nextInt(0,GameFrame.GAME_HEIGHT)));
-        objects.add(new MinorEye(rand.nextInt(0,GameFrame.GAME_WIDTH),rand.nextInt(0,GameFrame.GAME_HEIGHT)));
-        objects.add(new MinorEye(rand.nextInt(0,GameFrame.GAME_WIDTH),rand.nextInt(0,GameFrame.GAME_HEIGHT)));
+        addObject(new MinorEye(rand.nextInt(0,GameFrame.GAME_WIDTH),rand.nextInt(0,GameFrame.GAME_HEIGHT)));
+        addObject(new MinorEye(rand.nextInt(0,GameFrame.GAME_WIDTH),rand.nextInt(0,GameFrame.GAME_HEIGHT)));
+        addObject(new MinorEye(rand.nextInt(0,GameFrame.GAME_WIDTH),rand.nextInt(0,GameFrame.GAME_HEIGHT)));
+        addObject(new MinorEye(rand.nextInt(0,GameFrame.GAME_WIDTH),rand.nextInt(0,GameFrame.GAME_HEIGHT)));
         return true;
     }
 
@@ -46,6 +51,7 @@ public class Level1 extends Level implements UsesBullets {
             }
         }
         long updateNano = System.currentTimeMillis();
+        /*
         player.update();
         heart.update();
         if(shield != null)
@@ -56,9 +62,9 @@ public class Level1 extends Level implements UsesBullets {
                 box.update();
             }
         }
+
+         */
         updateObjects();
-        updateBullets();
-        deleteBullets();
     }
 
     public void spawnPlayer(){
@@ -78,16 +84,14 @@ public class Level1 extends Level implements UsesBullets {
         radialGrid(g);
 
         g.setStroke(new BasicStroke(3));
-        if(shield != null)
-            shield.draw(g);
         if(boxes.size() > 0){
             for(Box box : boxes){
                 box.draw(g);
             }
         }
-        drawBullets(g);
-        player.draw(g);
-        heart.draw(g);
+        //drawBullets(g);
+        //player.draw(g);
+        //heart.draw(g);
         drawObjects(g);
         g.setColor(Color.RED);
         //g.drawLine(0,GAME_HEIGHT/2,GAME_WIDTH,GAME_HEIGHT/2);

@@ -6,10 +6,13 @@ import java.util.Random;
 
 import Heartbreaker.engine.GameFrame;
 import Heartbreaker.engine.SoundManager;
+import Heartbreaker.engine.collision.Collider;
+import Heartbreaker.engine.collision.CollisionData;
 import Heartbreaker.main.Heartbreaker;
+import Heartbreaker.scenes.Level1;
 import Heartbreaker.scenes.MainMenu;
 
-public class Heart extends BaseObject {
+public class Heart extends BaseObject implements Collider {
 
     private double frames = 0;
     int hp = 200;
@@ -85,7 +88,9 @@ public class Heart extends BaseObject {
                 damage += .5 * dmg;
                 bpm += .5 * dmg;
                 graph.setBPM(bpm);
-                currentScene.shield.bpm = bpm;
+                if(currentScene.shield != null) {
+                    currentScene.shield.bpm = bpm;
+                }
                 Heartbreaker.setBpm((float) bpm);
                 if (bpm >= 180) {
                     iframes = 30;
@@ -130,9 +135,52 @@ public class Heart extends BaseObject {
     }
 
 
+    @Override
+    public void collided(CollisionData colData) {
+        if(currentScene instanceof MainMenu){
+            GameFrame.setCurrentScene(new Level1());
+        } else {
+            damage(colData.getCollider().getDamage());
+        }
+    }
 
+    @Override
+    public int getCanHit() {
+        return Collider.HITS_PLAYER;
+    }
 
+    @Override
+    public int getHitBy() {
+        return Collider.HIT_BY_PLAYER;
+    }
 
+    @Override
+    public int getHitBoxType() {
+        return Collider.POLYGON;
+    }
 
+    @Override
+    public int getDamage() {
+        return 1;
+    }
 
+    @Override
+    public double getXVelocity() {
+        return 0;
+    }
+
+    @Override
+    public double getYVelocity() {
+        return 0;
+    }
+
+    @Override
+    public double getRadius() {
+        return 0;
+    }
+
+    @Override
+    public Point2D.Double[] getPoints() {
+        return realizePoints();
+    }
 }

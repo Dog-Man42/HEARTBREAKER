@@ -1,7 +1,9 @@
 package Heartbreaker.objects;
 
+import Heartbreaker.engine.collision.Collider;
 import Heartbreaker.engine.collision.Collision;
 import Heartbreaker.engine.UsesPolar;
+import Heartbreaker.engine.collision.CollisionData;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -22,12 +24,21 @@ public class GravBullet extends Bullet implements UsesPolar {
 
     private double radialPosition;
     private double radialVelocity;
+    private int hits;
+    private int hitBy;
 
 
 
     public GravBullet(double xpos,double ypos, double shooterXvel, double shooterYvel, double angle,double speed, int limit,boolean player){
         damage = 2;
         playerBullet = player;
+        if(player){
+            hits = Collider.HITS_ENEMY;
+            hitBy = Collider.HIT_BY_NONE;
+        } else {
+            hits = Collider.HITS_PLAYER;
+            hitBy = Collider.HIT_BY_NONE;
+        }
         scale = 10;
         rotation = angle;
         ageLimit = limit;
@@ -75,17 +86,17 @@ public class GravBullet extends Bullet implements UsesPolar {
 
         if(radialPosition < 20  || radialPosition > 1000 ){
             currentScene.missedCount++;
-            currentScene.addToBulletQueue(this);
+            currentScene.removeObject(this);
         }
 
 
-        collisionDetection();
+        //collisionDetection();
 
         if(ageLimit > 0){
             if(age >= ageLimit-20){
                 if(scale <= 1.25) {
                     currentScene.missedCount++;
-                    currentScene.addToBulletQueue(this);
+                    currentScene.removeObject(this);
                 } else{
                     scale -= 1.25;
                 }
@@ -97,7 +108,7 @@ public class GravBullet extends Bullet implements UsesPolar {
 
 
     }
-
+/*
     public void collisionDetection(){
         if(dieNextFrame){
             if(dieInFrames <= 0) {
@@ -143,10 +154,55 @@ public class GravBullet extends Bullet implements UsesPolar {
             }
         }
     }
+    */
 
     public void draw(Graphics2D g){
         g.setColor(Color.cyan);
         g.drawOval((int) xPosition - (int) (scale /2),(int) yPosition - (int) (scale/2),(int) scale,(int) scale);
+
+
+    }
+    @Override
+    public void collided(CollisionData colData) {
+        if(colData.getCollider().getClass() == ShieldCircle.class){
+
+        }
+        currentScene.removeObject(this);
+        dieNextFrame = true;
+        dieInFrames = 10;
+    }
+    @Override
+    public int getCanHit() {
+        return hits;
+    }
+
+    @Override
+    public int getHitBy() {
+        return hitBy;
+    }
+    @Override
+    public int getDamage() {
+        return damage;
+    }
+
+    @Override
+    public double getXVelocity() {
+        return xvel;
+    }
+
+    @Override
+    public double getYVelocity() {
+        return yvel;
+    }
+
+    @Override
+    public int getHitBoxType(){
+        return Collider.CIRCLE;
+    }
+
+    @Override
+    public double getRadius(){
+        return scale/2.0;
     }
 
 }

@@ -5,6 +5,7 @@ import java.awt.geom.Point2D;
 
 import Heartbreaker.engine.collision.Collider;
 import Heartbreaker.engine.collision.Collision;
+import Heartbreaker.engine.collision.CollisionData;
 import Heartbreaker.engine.vectors.*;
 
 public class Bullet extends BaseObject implements Collider{
@@ -18,9 +19,18 @@ public class Bullet extends BaseObject implements Collider{
     private boolean dieNextFrame;
     private int dieInFrames= -1;
     protected int damage = 1;
+    private int hits;
+    private int hitBy;
 
     public Bullet(double xpos,double ypos, double shooterXvel, double shooterYvel, double angle,double speed, int limit,boolean player){
         playerBullet = player;
+        if(player){
+            hits = Collider.HITS_ENEMY;
+            hitBy = Collider.HIT_BY_NONE;
+        } else {
+            hits = Collider.HITS_PLAYER;
+            hitBy = Collider.HIT_BY_NONE;
+        }
         xPosition = xpos;
         yPosition = ypos;
         scale = 2;
@@ -46,6 +56,7 @@ public class Bullet extends BaseObject implements Collider{
         transformedVertices = copyVertices(vertices);
         //transformedVertices = rotatePoints(Math.toRadians(rotation),vertices);
         polygon = realizePoly(transformedVertices);
+
     }
 
     public Bullet() {
@@ -58,15 +69,15 @@ public class Bullet extends BaseObject implements Collider{
 
         if(xPosition < negative || currentScene.DIAGONAL < xPosition || yPosition < negative || currentScene.DIAGONAL < yPosition ){
             currentScene.missedCount++;
-            currentScene.addToBulletQueue(this);
+            currentScene.removeObject(this);
         }
-        collisionDetection();
+        //collisionDetection();
         if(ageLimit > 0){
             if(age >= ageLimit-20){
                 if(scale <= 0.1) {
                     if(playerBullet)
                         currentScene.missedCount++;
-                    currentScene.addToBulletQueue(this);
+                    currentScene.removeObject(this);
                 } else{
                     scale -= .1;
                 }
@@ -74,8 +85,18 @@ public class Bullet extends BaseObject implements Collider{
         }
         polygon = realizePoly(transformedVertices);
         age++;
+        if(dieNextFrame) {
+            if (dieInFrames <= 0) {
+                if (playerBullet)
+                    currentScene.missedCount++;
+                currentScene.addToBulletQueue(this);
+            } else {
+                dieInFrames--;
+            }
+        }
     }
 
+    /*
     public void collisionDetection(){
         if(dieNextFrame){
             if(dieInFrames <= 0) {
@@ -119,6 +140,7 @@ public class Bullet extends BaseObject implements Collider{
             }
         }
     }
+     */
 
     public boolean isPlayerBullet() {
         return playerBullet;
@@ -127,5 +149,52 @@ public class Bullet extends BaseObject implements Collider{
     public void draw(Graphics2D g){
         g.setColor(Color.yellow);
         g.drawPolygon(polygon);
+    }
+
+    @Override
+    public void collided(CollisionData colData) {
+        currentScene.removeObject(this);
+        dieNextFrame = true;
+        dieInFrames = 10;
+    }
+
+    @Override
+    public int getCanHit() {
+        return hits;
+    }
+
+    @Override
+    public int getHitBy() {
+        return hitBy;
+    }
+
+    @Override
+    public int getHitBoxType() {
+        return Collider.POLYGON;
+    }
+
+    @Override
+    public int getDamage() {
+        return damage;
+    }
+
+    @Override
+    public double getXVelocity() {
+        return xvel;
+    }
+
+    @Override
+    public double getYVelocity() {
+        return yvel;
+    }
+
+    @Override
+    public double getRadius() {
+        return 0;
+    }
+
+    @Override
+    public Point2D.Double[] getPoints(){
+        return realizePoints();
     }
 }

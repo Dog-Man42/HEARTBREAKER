@@ -6,14 +6,13 @@ import Heartbreaker.engine.vectors.Vector3;
 import Heartbreaker.engine.vectors.Vector3Math;
 import Heartbreaker.main.Heartbreaker;
 import Heartbreaker.objects.*;
-import Heartbreaker.scenes.attributes.UsesBullets;
 
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
-public class MainMenu extends Level implements UsesBullets {
+public class MainMenu extends Level {
 
     private ParticleEmitter emitter;
     private Tentacle tentacle;
@@ -21,13 +20,18 @@ public class MainMenu extends Level implements UsesBullets {
     private Tentacle tentacle3;
     private Tentacle tentacle4;
 
+    public MainMenu(){
+        super();
+    }
 
     public boolean initialize() {
         origin = new Point(GameFrame.GAME_WIDTH/2,GameFrame.GAME_HEIGHT/2);
         WIDTH = GameFrame.GAME_WIDTH;
         HEIGHT = GameFrame.GAME_HEIGHT;
         player = new Player(origin.x,300);
+        addObject(player);
         heart = new Heart(origin.x,origin.y);
+        addObject(heart);
         shield = null;
         emitter = new ParticleEmitter(TestParticle.class,500,500,1000);
         tentacle = new Tentacle(10,10,origin.x,origin.y,15);
@@ -41,7 +45,8 @@ public class MainMenu extends Level implements UsesBullets {
         System.out.println(Runtime.getRuntime().availableProcessors());
         bullets.clear();
         bulletDeleteQueue.clear();
-        objects.add(new MinorEye(250,500));
+
+        addObject(new MinorEye(250,500));
         return true;
 
     }
@@ -51,10 +56,8 @@ public class MainMenu extends Level implements UsesBullets {
         tentacle2.update();
         tentacle3.update();
         tentacle4.update();
-        player.update();
-        heart.update();
-        updateBullets();
-        deleteBullets();
+        //player.update();
+        //heart.update();
         updateObjects();
     }
 
@@ -104,8 +107,8 @@ public class MainMenu extends Level implements UsesBullets {
 
 
         g.setStroke(new BasicStroke(3));
-        heart.draw(g);
-        player.draw(g);
+        //heart.draw(g);
+        //player.draw(g);
         tentacle.draw(g);
         drawObjects(g);
 /*

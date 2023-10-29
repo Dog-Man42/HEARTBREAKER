@@ -1,14 +1,14 @@
 package Heartbreaker.objects;
 
 import Heartbreaker.engine.*;
-import Heartbreaker.engine.collision.Collision;
+import Heartbreaker.engine.collision.*;
 import Heartbreaker.scenes.MainMenu;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Point2D;
 
-public class Player extends BaseObject implements UsesPolar {
+public class Player extends BaseObject implements UsesPolar, Collider{
 
     private double xvel = 0;
     private double yvel = 0;
@@ -57,7 +57,7 @@ public class Player extends BaseObject implements UsesPolar {
         vertices = new Point2D.Double[]{ new Point2D.Double(-2,-3), new Point2D.Double(-0,3) , new Point2D.Double(2,-3)};
         transformedVertices = new Point2D.Double[vertices.length];
         transformedVertices = copyVertices(vertices);
-        this.hp = 5;
+        this.hp = 1000;
 
     }
     //input
@@ -142,7 +142,7 @@ public class Player extends BaseObject implements UsesPolar {
         xPosition += xvel;
         yPosition += yvel;
 
-        if(spacePressed) {
+        if(spacePressed || Math.abs(xvel) > 0.01 ||Math.abs(xvel) > 0.01) {
             radialPosition = cartesianToRadius(xPosition - currentScene.origin.x, yPosition - currentScene.origin.y);
             theta = cartesianToTheta(yPosition - currentScene.origin.y, xPosition - currentScene.origin.x);
         }
@@ -157,13 +157,13 @@ public class Player extends BaseObject implements UsesPolar {
         angularVelocity  = angularVelocity * .95;
         xvel = xvel * .95;
         yvel = yvel * .95;
-
-        if(Collision.polygonPolygon(currentScene.heart.realizePoints(),realizePoints())){
-            damage(1);
-            currentScene.damageHeart(1);
-            radialVelocity = 10;
-
+        if(Math.abs(xvel) <0.01){
+            xvel = 0;
         }
+        if(Math.abs(yvel) < 0.01){
+            yvel = 0;
+        }
+
 
         if(coolDown <= 0) {
 
@@ -291,7 +291,7 @@ public class Player extends BaseObject implements UsesPolar {
             GameFrame.soundManager.playClip(SoundManager.playerDamage);
             this.hit = true;
             this.hp -= dmg;
-            iframes = 15;
+            iframes = 30;
         }
     }
 
@@ -300,6 +300,70 @@ public class Player extends BaseObject implements UsesPolar {
     }
     public double getTheta(){
         return theta;
+    }
+
+    @Override
+    public void collided(CollisionData colData) {
+        if(colData.getCollider().getClass() == Heart.class){
+            //currentScene.damageHeart(1);
+            radialVelocity = 10;
+        } else {
+            if (!(colData.getCollider() instanceof Bullet)) {
+                //xvel = colData.getNormal().x * 10;
+                //yvel = colData.getNormal().y * 10;
+                //xPosition -= (colData.getNormal().x * colData.getDepth());
+                //yPosition -= (colData.getNormal().y * colData.getDepth());
+                radialPosition = cartesianToRadius((xPosition - currentScene.origin.x) + 2 * (colData.getNormal().x * colData.getDepth()), (yPosition - currentScene.origin.y) + 2 * (colData.getNormal().y * colData.getDepth()));
+                theta = cartesianToTheta((yPosition - currentScene.origin.y) + 2 * (colData.getNormal().x * colData.getDepth()), (xPosition - currentScene.origin.x) + 2 * (colData.getNormal().x * colData.getDepth()));
+            }
+        }
+        damage(colData.getCollider().getDamage());
+    }
+
+    @Override
+    public int getCanHit() {
+        if(hit){
+            return Collider.HITS_NONE;
+        }
+        return Collider.HITS_ENEMY;
+    }
+
+    @Override
+    public int getHitBy() {
+        if (hit){
+            return Collider.HIT_BY_NONE;
+        }
+        return Collider.HIT_BY_ENEMY;
+    }
+
+    @Override
+    public int getHitBoxType() {
+        return Collider.POLYGON;
+    }
+
+    @Override
+    public int getDamage() {
+        return 0;
+    }
+
+    @Override
+    public double getXVelocity() {
+        return xvel;
+    }
+
+    @Override
+    public double getYVelocity() {
+        return yvel;
+    }
+
+    @Override
+    public double getRadius() {
+        return 0;
+    }
+
+    @Override
+    public Point2D.Double[] getPoints() {
+        return realizePoints();
     }
 
 }

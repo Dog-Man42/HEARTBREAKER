@@ -27,6 +27,8 @@ public class Shield extends BaseObject {
         circles = new ShieldCircle[circleCount];
         for(int i = 0; i < circles.length; i++) {
             circles[i] = new ShieldCircle(0, 0);
+            circles[i].setDrawnByScene(false);
+            currentScene.addObject(circles[i]);
         }
     }
     public void update(){

@@ -2,17 +2,22 @@ package Heartbreaker.objects;
 
 import Heartbreaker.engine.GameFrame;
 import Heartbreaker.engine.SoundManager;
+import Heartbreaker.engine.collision.Collider;
+import Heartbreaker.engine.collision.CollisionData;
 
 import java.awt.geom.*;
 import java.awt.*;
 
-public class ShieldCircle extends BaseObject{
+public class ShieldCircle extends BaseObject implements Collider {
 
     private int hp;
     int radius;
     private boolean alive = true;
     private boolean hit = false;
     private int iframes = 0;
+    private double xVel = 0;
+    private double yVel = 0;
+
 
     public ShieldCircle(double xpos, double ypos){
         this.xPosition = xpos;
@@ -22,9 +27,11 @@ public class ShieldCircle extends BaseObject{
     }
 
     public void setXposition(double xpos){
+        xVel = xpos - xPosition;
         xPosition = xpos;
     }
     public void setYposition(double ypos){
+        yVel = ypos - yPosition;
         yPosition = ypos;
     }
     public boolean isAlive(){
@@ -51,6 +58,7 @@ public class ShieldCircle extends BaseObject{
     public int getHp(){
         return hp;
     }
+
 
     @Override
     public void draw(Graphics2D g){
@@ -81,6 +89,55 @@ public class ShieldCircle extends BaseObject{
     }
 
     @Override
-    public void update() {}
+    public void update() {
+    }
 
+    @Override
+    public void collided(CollisionData colData) {
+        damage(colData.getCollider().getDamage());
+    }
+
+    @Override
+    public Point2D.Double getPosition(){
+        return new Point2D.Double(currentScene.origin.x + xPosition, currentScene.origin.y + yPosition);
+    }
+    @Override
+    public int getCanHit() {
+        return Collider.HITS_PLAYER;
+    }
+
+    @Override
+    public int getHitBy() {
+        return Collider.HIT_BY_PLAYER;
+    }
+
+    @Override
+    public int getHitBoxType() {
+        return Collider.CIRCLE;
+    }
+
+    @Override
+    public int getDamage() {
+        return 0;
+    }
+
+    @Override
+    public double getXVelocity() {
+        return xVel;
+    }
+
+    @Override
+    public double getYVelocity() {
+        return yVel;
+    }
+
+    @Override
+    public double getRadius() {
+        return this.radius;
+    }
+
+    @Override
+    public Point2D.Double[] getPoints() {
+        return new Point2D.Double[0];
+    }
 }
