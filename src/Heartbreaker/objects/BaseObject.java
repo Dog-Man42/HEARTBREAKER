@@ -13,6 +13,8 @@ import java.awt.geom.Point2D;
 
 public abstract class BaseObject {
 
+    private boolean drawnByScene = true;
+
     /**
      * Stores the parent object if there is one
      */
@@ -363,4 +365,20 @@ public abstract class BaseObject {
      * @param g Graphics2D object
      */
      public abstract void draw(Graphics2D g);
+
+    /**
+     * Returns whether the scene draws this BaseObject when drawing the objects ArrayList
+     * @return if scene draws object
+     */
+    public boolean isDrawnByScene(){
+         return drawnByScene;
+     }
+
+    /**
+     * Sets if the scene can draw the object
+     * @param drawnByScene
+     */
+     public void setDrawnByScene(boolean drawnByScene){
+         this.drawnByScene = drawnByScene;
+     }
 }
