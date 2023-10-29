@@ -1,5 +1,7 @@
 package Heartbreaker.engine.vectors;
 
+import java.awt.geom.Point2D;
+
 /*
 Resources Used
     https://www.youtube.com/watch?v=lzI7QUyl66g&list=PLSlpr6o9vURwq3oxVZSimY8iC-cdd3kIs&index=1
@@ -8,11 +10,15 @@ public class Vector {
     public final double x;
     public final double y;
 
-    public final static Vector Zero = new Vector(0,0);
+    public final static Vector ZERO = new Vector(0,0);
 
     public Vector(double x, double y){
         this.x = x;
         this.y = y;
+    }
+    public Vector(Point2D p2d){
+        this.x = p2d.getX();
+        this.y = p2d.getY();
     }
 
     public static Vector sum(Vector a, Vector b) {
