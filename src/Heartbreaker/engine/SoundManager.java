@@ -11,15 +11,18 @@ public class SoundManager {
     private SoundLibrary soundLibrary;
     private ArrayList<Clip> playingClips;
 
+    public static final String deathMinorEye = "deathMinorEye.wav";
     public static final String flatline = "flatline.wav";
     public static final String heartbreak = "heartbreak.wav";
     public static final String heartDamage = "heartDamage.wav";
+    public static final String hurtMinorEye = "hurtMinorEye.wav";
     public static final String playerDamage = "playerDamage.wav";
     public static final String shieldOrbDamage = "shieldOrbDamage.wav";
     public static final String shieldOrbShrink = "shieldOrbShrink.wav";
     public static final String shieldOrbDestroy = "shieldOrbDestroy.wav";
     public static final String shootGrav = "shootGrav.wav";
     public static final String shootGeneric = "shootGeneric.wav";
+    public static final String shootLaser = "shootLaser.wav";
     public static final String shootShield = "shootShield.wav";
 
     SoundManager(){
