@@ -65,10 +65,9 @@ public class GameFrame extends JPanel implements Runnable{
                 GAME_WIDTH = e.getComponent().getWidth();
                 GAME_HEIGHT = e.getComponent().getHeight();
                 SCREEN_SIZE.setSize(GAME_WIDTH,GAME_HEIGHT);
-                /*
-                Odd Behaviour
+
                 currentScene.windowResized();
-                 */
+
             }
         });
         //this.addMouseListener(new MouseListener());
