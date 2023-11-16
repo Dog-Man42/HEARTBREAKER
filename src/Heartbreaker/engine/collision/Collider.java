@@ -19,10 +19,12 @@ public interface Collider {
     int POLYGON = 2;
     int COMPOUND = 3;
 
+
     void collided(CollisionData colData);
     int getCanHit();
     int getHitBy();
     int getHitBoxType();
+    boolean getStatic();
     int getDamage();
     double getXVelocity();
     double getYVelocity();
