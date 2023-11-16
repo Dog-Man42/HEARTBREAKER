@@ -22,14 +22,13 @@ public class GameWindow extends JFrame {
         }).build();
         DiscordRPC.discordInitialize("1174564288418033755", handlers, true);
 
-        presence = new DiscordRichPresence.Builder("whoops").setDetails("Testing Bullet Hell").build();
-        presence.state="yay";
-        presence.largeImageKey="cover";
+        presence = new DiscordRichPresence.Builder("Main Menu").setDetails("Testing Bullet Hell").build();
+        presence.largeImageKey="cover1";
         DiscordRPC.discordUpdatePresence(presence);
-        DiscordRPC.discordRunCallbacks();
+
 
         panel = new GameFrame();
-
+        DiscordRPC.discordRunCallbacks();
 
 
         this.add(panel) ;

@@ -95,7 +95,7 @@ public class GameFrame extends JPanel implements Runnable{
         long timer = System.currentTimeMillis();
         int frames = 0;
         double frameTimeSum = 0;
-        int secs = 9;
+
         while(true){
             long now = System.nanoTime();
             ns = 1000000000 / 60.0;
@@ -119,12 +119,7 @@ public class GameFrame extends JPanel implements Runnable{
                 }
             }
             if(System.currentTimeMillis() - timer >= 1000) {
-                if(secs > 5){
-                    DiscordRPC.discordUpdatePresence(GameWindow.presence);
-                    secs = 0;
-                } else {
-                    secs++;
-                }
+                DiscordRPC.discordUpdatePresence(GameWindow.presence);
                 timer += 1000;
                 FPS = frames;
                 //avgFrameTime = frameTimeSum / frames;
