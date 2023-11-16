@@ -89,58 +89,13 @@ public class Bullet extends BaseObject implements Collider{
             if (dieInFrames <= 0) {
                 if (playerBullet)
                     currentScene.missedCount++;
-                currentScene.addToBulletQueue(this);
+                currentScene.removeObject(this);
             } else {
                 dieInFrames--;
             }
         }
     }
 
-    /*
-    public void collisionDetection(){
-        if(dieNextFrame){
-            if(dieInFrames <= 0) {
-                if(playerBullet)
-                    currentScene.missedCount++;
-                currentScene.addToBulletQueue(this);
-            } else {
-                dieInFrames--;
-            }
-        } else {
-            if(playerBullet) {
-                if (calculateDistance(xPosition, yPosition, currentScene.origin.x, currentScene.origin.y) <= 250) {
-                    if (Collision.polygonPolygon(currentScene.heart.realizePoints(),realizePoints())) {
-                        currentScene.heartCount++;
-                        currentScene.addToBulletQueue(this);
-                        currentScene.damageHeart(damage);
-                    }
-                }
-                if(currentScene.shield != null) {
-                    ShieldCircle[] circles = currentScene.shield.getCircles();
-                    for(int i = 0; i < circles.length; i++){
-                        if(circles[i].isAlive()){
-                            Point2D.Double circleCenter = new Point2D.Double(circles[i].getXPosition() +
-                                    currentScene.origin.x,circles[i].getYPosition() + currentScene.origin.y);
-                            if(Collision.circlePolygon(circleCenter,20, realizePoints())){
-                                //currentScene.addToBulletQueue(this);
-                                currentScene.shieldHitCout++;
-                                circles[i].damage(damage);
-                                currentScene.addToBulletQueue(this);
-                            }
-                        }
-                    }
-                }
-            } else {
-                if (Collision.polygonPolygon(realizePoints(), currentScene.player.realizePoints())) {
-                    currentScene.player.damage(1);
-                    currentScene.addToBulletQueue(this);
-                    dieNextFrame = true;
-                    dieInFrames = 10;
-                }
-            }
-        }
-    }
-     */
 
     public boolean isPlayerBullet() {
         return playerBullet;
@@ -171,6 +126,11 @@ public class Bullet extends BaseObject implements Collider{
     @Override
     public int getHitBoxType() {
         return Collider.POLYGON;
+    }
+
+    @Override
+    public boolean getStatic() {
+        return false;
     }
 
     @Override

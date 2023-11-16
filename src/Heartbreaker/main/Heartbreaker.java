@@ -6,7 +6,7 @@ import Heartbreaker.engine.*;
 
 public class Heartbreaker {
     static MidiPlayer track;
-    public static final String version = "Version: 0.0.2a";
+    public static final String version = "Version: 0.0.5a";
     public static boolean DEBUG_MODE = false;
     public static void main(String[] args) throws Exception {
 
