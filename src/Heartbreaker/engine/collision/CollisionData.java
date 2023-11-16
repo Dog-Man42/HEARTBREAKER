@@ -7,6 +7,7 @@ public class CollisionData {
     private double depth;
     private Vector normal;
     private int collisionType;
+    private int sign = 0;
     private Collider collider;
 
 

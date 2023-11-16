@@ -34,10 +34,10 @@ public class GravBullet extends Bullet implements UsesPolar {
         playerBullet = player;
         if(player){
             hits = Collider.HITS_ENEMY;
-            hitBy = Collider.HIT_BY_NONE;
+            hitBy = Collider.HIT_BY_ENEMY;
         } else {
             hits = Collider.HITS_PLAYER;
-            hitBy = Collider.HIT_BY_NONE;
+            hitBy = Collider.HIT_BY_PLAYER;
         }
         scale = 10;
         rotation = angle;
@@ -108,53 +108,6 @@ public class GravBullet extends Bullet implements UsesPolar {
 
 
     }
-/*
-    public void collisionDetection(){
-        if(dieNextFrame){
-            if(dieInFrames <= 0) {
-                currentScene.missedCount++;
-                currentScene.addToBulletQueue(this);
-            } else {
-                dieInFrames--;
-            }
-        } else {
-            if (playerBullet) {
-                if (calculateDistance(xPosition, yPosition, currentScene.origin.x, currentScene.origin.y) <= 250) {
-                    if (Collision.circlePolygon(new Point2D.Double(xPosition,yPosition),scale/2, currentScene.heart.realizePoints())) {
-                        currentScene.heartCount++;
-                        currentScene.addToBulletQueue(this);
-                        currentScene.damageHeart(damage);
-                    }
-                }
-                if(currentScene.shield != null) {
-                    ShieldCircle[] circles = currentScene.shield.getCircles();
-                    for(int i = 0; i < circles.length; i++){
-                        if(circles[i].isAlive()){
-                            Point2D.Double circleCenter = new Point2D.Double(circles[i].getXPosition() +
-                                    currentScene.origin.x,circles[i].getYPosition() + currentScene.origin.y);
-                            if(Collision.circleCircle(circleCenter,20, new Point2D.Double(xPosition,yPosition), scale/2)){
-                                //currentScene.addToBulletQueue(this);
-                                currentScene.shieldHitCout++;
-                                circles[i].damage(damage);
-                                age = ageLimit-60;
-                                playerBullet = false;
-                                radialVelocity *= -1;
-                                angularVelocity *= -1;
-                            }
-                        }
-                    }
-                }
-            } else {
-                if (Collision.circlePolygon(new Point2D.Double(xPosition,yPosition),scale/2, currentScene.player.realizePoints())) {
-                    currentScene.player.damage(2);
-                    currentScene.addToBulletQueue(this);
-                    dieNextFrame = true;
-                    dieInFrames = 10;
-                }
-            }
-        }
-    }
-    */
 
     public void draw(Graphics2D g){
         g.setColor(Color.cyan);

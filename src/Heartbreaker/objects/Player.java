@@ -300,10 +300,12 @@ public class Player extends Entity implements UsesPolar, Collider{
             radialVelocity = 10;
         } else {
             if (!(colData.getCollider() instanceof Bullet)) {
-                xvel = colData.getNormal().x * 3;
-                yvel = colData.getNormal().y * 3;
-                xPosition -= (colData.getNormal().x * colData.getDepth());
-                yPosition -= (colData.getNormal().y * colData.getDepth());
+                xvel = colData.getNormal().x * 2;
+                yvel = colData.getNormal().y * 2;
+                xPosition -= (colData.getNormal().x * (colData.getDepth()));
+                yPosition -= (colData.getNormal().y * (colData.getDepth()));
+                //radialVelocity = 0;
+                //angularVelocity = 0;
                 radialPosition = cartesianToRadius((xPosition - currentScene.origin.x) + 2 * (colData.getNormal().x * colData.getDepth()), (yPosition - currentScene.origin.y) + 2 * (colData.getNormal().y * colData.getDepth()));
                 theta = cartesianToTheta((yPosition - currentScene.origin.y) + 2 * (colData.getNormal().x * colData.getDepth()), (xPosition - currentScene.origin.x) + 2 * (colData.getNormal().x * colData.getDepth()));
             }

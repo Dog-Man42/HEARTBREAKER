@@ -26,10 +26,10 @@ public class Bullet extends BaseObject implements Collider{
         playerBullet = player;
         if(player){
             hits = Collider.HITS_ENEMY;
-            hitBy = Collider.HIT_BY_NONE;
+            hitBy = Collider.HIT_BY_ENEMY;
         } else {
             hits = Collider.HITS_PLAYER;
-            hitBy = Collider.HIT_BY_NONE;
+            hitBy = Collider.HIT_BY_PLAYER;
         }
         xPosition = xpos;
         yPosition = ypos;

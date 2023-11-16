@@ -40,14 +40,11 @@ public class CollisionManager {
 
                 }
                 if(colData != null){
-                    if(collider1.getHitBy() != Collider.HIT_BY_NONE) {
-                        colData.setCollider(collider2);
-                        collider1.collided(CollisionData.invertNormal(colData));
-                    }
-                    if(collider1.getHitBy() != Collider.HIT_BY_NONE) {
-                        colData.setCollider(collider1);
-                        collider2.collided(colData);
-                    }
+                    //Works for now because the player is the only collider that does collision resolution
+                    colData.setCollider(collider2);
+                    collider1.collided(colData);
+                    colData.setCollider(collider1);
+                    collider2.collided(colData);
                 }
             }
         }
