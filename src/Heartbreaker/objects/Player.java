@@ -317,7 +317,9 @@ public class Player extends BaseObject implements UsesPolar, Collider{
                 theta = cartesianToTheta((yPosition - currentScene.origin.y) + 2 * (colData.getNormal().x * colData.getDepth()), (xPosition - currentScene.origin.x) + 2 * (colData.getNormal().x * colData.getDepth()));
             }
         }
+        if(!(hit || iframes > 0)){
         damage(colData.getCollider().getDamage());
+        }
     }
 
     @Override
