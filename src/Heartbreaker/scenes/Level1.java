@@ -16,7 +16,7 @@ public class Level1 extends Level {
 
 
     public Level1(){
-        super();
+        super(false);
     }
 
 
@@ -106,7 +106,7 @@ public class Level1 extends Level {
         g.setFont(new Font("Consolas",Font.PLAIN,30));
         g.drawString("SCORE: " + score,0,80);
         double mod = (heartCount *.6) + (shieldHitCout*.2);
-        double ds = (System.currentTimeMillis() - startTime) / 2000;
+        double ds = (System.currentTimeMillis() - startTime) / 2000.0;
         g.drawString("Accuracy Mod: " + mod/(ds + missedCount*.25 + 1),0,100);
     }
 
@@ -141,10 +141,10 @@ public class Level1 extends Level {
         score += (1_000_000_000 / time) * 10;
 
         double mod = (heartCount *.6) + (shieldHitCout*.2);
-        double ds = (System.currentTimeMillis() - startTime) / 2000;
+        double ds = (System.currentTimeMillis() - startTime) / 2000.0;
         score += 10000 * (mod/(ds + missedCount*.25 + 1));
-        if(player.hp > 0){
-            score -= ((5 / player.hp) - 1) * 500;
+        if(player.getHP() > 0){
+            score -= ((5 / player.getHP()) - 1) * 500;
             if(score > GameFrame.highScore){
                 GameFrame.highScore = score;
             }

@@ -8,6 +8,7 @@ import Heartbreaker.main.Heartbreaker;
 import Heartbreaker.objects.*;
 
 
+
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -21,7 +22,7 @@ public class MainMenu extends Level {
     private Tentacle tentacle4;
 
     public MainMenu(){
-        super();
+        super(false);
     }
 
     public boolean initialize() {
@@ -42,7 +43,6 @@ public class MainMenu extends Level {
         tentacle3.setRotation(180);
         tentacle4.setRotation(270);
 
-        System.out.println(Runtime.getRuntime().availableProcessors());
         bullets.clear();
         bulletDeleteQueue.clear();
 

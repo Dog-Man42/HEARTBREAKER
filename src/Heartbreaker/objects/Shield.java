@@ -76,7 +76,7 @@ public class Shield extends BaseObject {
                 if (cooldown <= 0 && !flatlined) {
                     playShoot = true;
 
-                    if (circles[i].getHp() <= 15) {
+                    if (circles[i].getHP() <= 15) {
                         if (cooldown % 5 == 0) {
                             currentScene.spawnBullet(((midX + point.x)), ((midY + point.y)), deltaX / 4, deltaY / 4, Math.toDegrees(-Math.atan2(point.x, point.y)), 2, 320, false);
                         }

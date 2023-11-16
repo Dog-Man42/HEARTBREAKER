@@ -12,6 +12,8 @@ import java.util.ArrayList;
 
 public abstract class Level extends Scene{
 
+    public final boolean SCROLLABLE;
+
     public int WIDTH = GameFrame.GAME_WIDTH;
     public int HEIGHT = GameFrame.GAME_HEIGHT;
     public int DIAGONAL = (int)Math.round(Math.sqrt(WIDTH * WIDTH + HEIGHT * HEIGHT));
@@ -33,26 +35,12 @@ public abstract class Level extends Scene{
     public ArrayList<Bullet> bulletDeleteQueue = new ArrayList<>();
 
 
-    public Level(){
+    public Level(boolean scrollable){
+        SCROLLABLE = scrollable;
         collisionManager = new CollisionManager();
     }
 
 
-    public abstract boolean initialize();
-
-    public void addToBulletQueue(Bullet bullet){
-        bulletDeleteQueue.add(bullet);
-    }
-    public void deleteBullets(){
-        if(bulletDeleteQueue.size() > 0) {
-            for (int i = bulletDeleteQueue.size() - 1; i >= 0; i--) {
-                bullets.remove(bulletDeleteQueue.get(i));
-                collisionManager.removeCollider(bulletDeleteQueue.get(i));
-                bulletDeleteQueue.remove(bulletDeleteQueue.get(i));
-
-            }
-        }
-    }
     public void drawBullets(Graphics2D g){
         if(bullets.size() > 0){
             for(int i = bullets.size() - 1; i >= 0; i--){

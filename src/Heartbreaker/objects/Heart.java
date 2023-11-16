@@ -12,10 +12,9 @@ import Heartbreaker.main.Heartbreaker;
 import Heartbreaker.scenes.Level1;
 import Heartbreaker.scenes.MainMenu;
 
-public class Heart extends BaseObject implements Collider {
+public class Heart extends Entity implements Collider {
 
     private double frames = 0;
-    int hp = 200;
     double damage = 0;
     double bpm = 60;
     Random random = new Random();
@@ -24,9 +23,9 @@ public class Heart extends BaseObject implements Collider {
     private BrokenHeart left;
     private BrokenHeart right;
     private boolean dead = false;
-    private int iframes = 0;
 
     public Heart(int x, int y){
+        super(200,10);
         Heartbreaker.startTrack();
         this.xPosition = x;
         this.yPosition = y;
@@ -57,7 +56,7 @@ public class Heart extends BaseObject implements Collider {
     public void move() {}
     public void update(){
         //frames += .15;
-        frames ++;
+        frames++;
 
         double beat_duration = 60 / bpm;
         double totalTime = frames / 60;
@@ -80,10 +79,10 @@ public class Heart extends BaseObject implements Collider {
     }
     public void damage(int dmg) {
 
-        if (iframes <= 0) {
+        if (getIFrames() <= 0) {
             if (!flatlined) {
                 GameFrame.soundManager.playClip(SoundManager.heartDamage);
-                iframes = 10;
+                maxIframes();
                 currentScene.score += 100 * dmg;
                 damage += .5 * dmg;
                 bpm += .5 * dmg;
@@ -93,7 +92,7 @@ public class Heart extends BaseObject implements Collider {
                 }
                 Heartbreaker.setBpm((float) bpm);
                 if (bpm >= 180) {
-                    iframes = 30;
+                    setIframes(60);
                     //GameFrame.setCurrentScene(new MainMenu());
                     bpm = 0;
                     graph.setBPM(bpm);
@@ -118,12 +117,12 @@ public class Heart extends BaseObject implements Collider {
     
 
     public void draw(Graphics2D g){
-        if(iframes <= 0) {
+        if(getIFrames() <= 0) {
             g.setColor(Color.getHSBColor(0f, .7f, .7f));
         } else {
             g.setColor(Color.getHSBColor(0f, .2f, .9f));
             scale *= 1.25;
-            iframes--;
+            decrementIFrames();
         }
         if(!dead) {
             g.drawPolygon(realizePoly(transformedVertices));
@@ -161,6 +160,11 @@ public class Heart extends BaseObject implements Collider {
     @Override
     public int getHitBoxType() {
         return Collider.POLYGON;
+    }
+
+    @Override
+    public boolean getStatic() {
+        return true;
     }
 
     @Override

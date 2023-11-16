@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Point2D;
 
-public class Player extends BaseObject implements UsesPolar, Collider{
+public class Player extends Entity implements UsesPolar, Collider{
 
     private double xvel = 0;
     private double yvel = 0;
@@ -42,13 +42,11 @@ public class Player extends BaseObject implements UsesPolar, Collider{
     private boolean leftClicked = false;
     private boolean rightClicked = false;
 
-    private boolean hit = false;
-    public int hp;
-    private int iframes = 0;
 
     private Point2D mousePosition = new Point2D.Double(0,0);
 
     public Player(int x, int y){
+        super(20,20);
         this.xPosition = x;
         this.yPosition = y;
         radialPosition = y;
@@ -57,7 +55,6 @@ public class Player extends BaseObject implements UsesPolar, Collider{
         vertices = new Point2D.Double[]{ new Point2D.Double(-2,-3), new Point2D.Double(-0,3) , new Point2D.Double(2,-3)};
         transformedVertices = new Point2D.Double[vertices.length];
         transformedVertices = copyVertices(vertices);
-        this.hp = 1000;
 
     }
     //input
@@ -191,26 +188,25 @@ public class Player extends BaseObject implements UsesPolar, Collider{
 
     public void draw(Graphics2D g){
 
-        //if(Collision.polygonPolygon(currentScene.heart.realizePoints(),realizePoints())){
-        if(hit || iframes > 0){
+        if(isHit() || getIFrames() > 0){
             double temp = scale;
-            scale += iframes % 4;
+            scale += getIFrames() % 4;
             g.setColor(Color.red);
-            iframes--;
-            hit = false;
+            decrementIFrames();
+            setHit(false);
             g.drawPolygon(realizePoly(transformedVertices));
             scale = temp;
         } else {
             g.setColor(Color.blue);
             g.drawPolygon(realizePoly(transformedVertices));
         }
-        if(hp <= 0){
+        if(getHP() <= 0){
             GameFrame.setCurrentScene(new MainMenu());
         }
 
         g.setStroke(new BasicStroke(2));
         g.setFont(new Font("Consolas",Font.PLAIN,40));
-        g.drawString("HP: " + hp, 0,GameFrame.GAME_HEIGHT - 40);
+        g.drawString("HP: " + getHP(), 0,GameFrame.GAME_HEIGHT - 40);
     }
 
     public void checkKeys(){
@@ -282,16 +278,11 @@ public class Player extends BaseObject implements UsesPolar, Collider{
     }
 
 
-    public boolean isHit() {
-        return hit;
-    }
 
     public void damage(int dmg) {
-        if(iframes <= 0) {
+        if(getIFrames() <= 0) {
+            super.damage(dmg);
             GameFrame.soundManager.playClip(SoundManager.playerDamage);
-            this.hit = true;
-            this.hp -= dmg;
-            iframes = 30;
         }
     }
 
@@ -309,38 +300,48 @@ public class Player extends BaseObject implements UsesPolar, Collider{
             radialVelocity = 10;
         } else {
             if (!(colData.getCollider() instanceof Bullet)) {
-                //xvel = colData.getNormal().x * 10;
-                //yvel = colData.getNormal().y * 10;
-                //xPosition -= (colData.getNormal().x * colData.getDepth());
-                //yPosition -= (colData.getNormal().y * colData.getDepth());
+                xvel = colData.getNormal().x * 3;
+                yvel = colData.getNormal().y * 3;
+                xPosition -= (colData.getNormal().x * colData.getDepth());
+                yPosition -= (colData.getNormal().y * colData.getDepth());
                 radialPosition = cartesianToRadius((xPosition - currentScene.origin.x) + 2 * (colData.getNormal().x * colData.getDepth()), (yPosition - currentScene.origin.y) + 2 * (colData.getNormal().y * colData.getDepth()));
                 theta = cartesianToTheta((yPosition - currentScene.origin.y) + 2 * (colData.getNormal().x * colData.getDepth()), (xPosition - currentScene.origin.x) + 2 * (colData.getNormal().x * colData.getDepth()));
             }
         }
-        if(!(hit || iframes > 0)){
-        damage(colData.getCollider().getDamage());
+        if(!(isHit() || getIFrames() > 0)){
+            damage(colData.getCollider().getDamage());
         }
     }
 
     @Override
     public int getCanHit() {
-        if(hit){
+        /*
+        if(isHit()){
             return Collider.HITS_NONE;
         }
+
+         */
         return Collider.HITS_ENEMY;
     }
 
     @Override
     public int getHitBy() {
-        if (hit){
+        /*
+        if (isHit()){
             return Collider.HIT_BY_NONE;
         }
+         */
         return Collider.HIT_BY_ENEMY;
     }
 
     @Override
     public int getHitBoxType() {
         return Collider.POLYGON;
+    }
+
+    @Override
+    public boolean getStatic() {
+        return false;
     }
 
     @Override

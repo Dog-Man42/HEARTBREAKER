@@ -9,24 +9,20 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.Random;
 
-public class MinorEye extends BaseObject implements Collider {
+public class MinorEye extends Entity {
 
     double frame = 0;
     double radius;
-
     double irisXPos = 0;
     double irisYPos = 0;
-
     double irisRadius;
     double pupilXRadius;
     double pupilYRadius;
     boolean firing = false;
-    private int iframes = 0;
-    private boolean hit;
-    private float hp = 15;
 
     Random rand;
     public MinorEye(double x, double y){
+        super(15,20);
         this.xPosition = x;
         this.yPosition = y;
         radius = 4;
@@ -40,8 +36,8 @@ public class MinorEye extends BaseObject implements Collider {
     @Override
     public void update() {
         frame++;
-        setXPosition(getXPosition() + 4*Math.sin(frame/10));
-        setYPosition(getYPosition() + 1.5 * (Math.sin((frame/10)*2) + Math.cos((frame/10)/2.0)));
+        //setXPosition(getXPosition() + 4*Math.sin(frame/10));
+        //setYPosition(getYPosition() + 1.5 * (Math.sin((frame/10)*2) + Math.cos((frame/10)/2.0)));
         scale = 6 + (1.5*Math.sin(frame/15.0)+1.5);
         double theta = -Math.atan2(currentScene.player.getXPosition() - xPosition, currentScene.player.getYPosition() - yPosition);
         Point2D.Double temp = rotatePoint(theta,new Point2D.Double(0,1));
@@ -69,17 +65,18 @@ public class MinorEye extends BaseObject implements Collider {
 
 
 
+
     }
 
     @Override
     public void draw(Graphics2D g) {
 
-        if(hit || iframes > 0){
+        if(isHit() || getIFrames() > 0){
             double temp = scale;
-            scale += iframes % 4;
+            scale += getIFrames() % 4;
             g.setColor(Color.red);
-            iframes--;
-            hit = false;
+            setIframes(getIFrames() - 1);
+            setHit(false);
             g.drawOval((int) (getXPosition() - (radius * scale)), (int) (getYPosition() - (radius * scale)), (int) (radius*2 * scale), (int) (radius*2 * scale));
             if(firing){
                 g.setColor(Color.YELLOW);
@@ -111,15 +108,16 @@ public class MinorEye extends BaseObject implements Collider {
     @Override
     public void collided(CollisionData colData) {
         int dmg = colData.getCollider().getDamage();
-        if(iframes <= 0) {
-            hit = true;
-            if(hp <= 0){
+        if(!isHit() && getIFrames() <= 0) {
+            damage(dmg);
+            //setXPosition(getXPosition() - colData.getNormal().x * colData.getDepth());
+            //setYPosition(getYPosition() - colData.getNormal().x * colData.getDepth());
+            if(getHP() <= 0){
                 currentScene.score += 10 * dmg;
                 currentScene.removeObject(this);
                 GameFrame.soundManager.playClip(SoundManager.deathMinorEye);
             }
-            hp -= dmg;
-            iframes = 20;
+
             currentScene.score += 2 * dmg;
             GameFrame.soundManager.playClip(SoundManager.hurtMinorEye);
         }

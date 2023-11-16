@@ -48,7 +48,10 @@ public class GameFrame extends JPanel implements Runnable{
     public static int highScore = 0;
     public static final LoadingScreen loadingScreen = new LoadingScreen();
 
-    private static ArrayList<Scene> renderLayers = new ArrayList<>();
+    public static ArrayList<Scene> renderLayers = new ArrayList<>();
+
+    //I think i have to reinvent the button :( because the swing ones are acting weird
+    public static ArrayList<JComponent> uiComponents = new ArrayList<>();
 
 
 
@@ -74,7 +77,7 @@ public class GameFrame extends JPanel implements Runnable{
         //this.addMouseListener(new MouseListener());
         this.setPreferredSize(SCREEN_SIZE);
 
-        currentScene.initialize();
+
         soundManager = new SoundManager();
 
 
@@ -83,6 +86,7 @@ public class GameFrame extends JPanel implements Runnable{
         loadingScreen.setPreferredSize(new Dimension(GAME_WIDTH, GAME_HEIGHT));
         gameThread = new Thread(this);
         gameThread.start();
+        currentScene.initialize();
 
 
     }
@@ -103,6 +107,7 @@ public class GameFrame extends JPanel implements Runnable{
                 long frameStart = System.nanoTime();
                 mouseUpdated = true;
                 if(!LOADING) {
+
                     update();
                 }
                 frames++;
@@ -134,8 +139,8 @@ public class GameFrame extends JPanel implements Runnable{
     }
 
     @Override
-    protected void paintComponent(Graphics g2){
-        super.paintComponent(g2);
+    public void paintComponent(Graphics g2){
+        //super.paintComponent(g2);
         bufferedImage = new BufferedImage(getWidth(),getHeight(),BufferedImage.TYPE_3BYTE_BGR);
         graphics2D = bufferedImage.createGraphics();
 
@@ -172,7 +177,7 @@ public class GameFrame extends JPanel implements Runnable{
         GameWindow.panel.repaint();
 
         // Start the scene initialization in the background
-        SwingWorker<Void, String> sceneInitializer = new SwingWorker<Void, String>() {
+        SwingWorker<Void, String> sceneInitializer = new SwingWorker<>() {
             @Override
             protected Void doInBackground() throws Exception {
                 LOADING = true;
@@ -183,7 +188,6 @@ public class GameFrame extends JPanel implements Runnable{
                 // Initialize the current scene
                 currentScene = level;
                 currentScene.initialize();
-
                 LOADING = false;
 
                 // Hide the loading screen
@@ -252,6 +256,8 @@ public class GameFrame extends JPanel implements Runnable{
         public void mouseReleased(MouseEvent e) {
             currentScene.mouseReleased(e);
         }
+
+
     }
 
 

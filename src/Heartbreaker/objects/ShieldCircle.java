@@ -8,21 +8,18 @@ import Heartbreaker.engine.collision.CollisionData;
 import java.awt.geom.*;
 import java.awt.*;
 
-public class ShieldCircle extends BaseObject implements Collider {
+public class ShieldCircle extends Entity implements Collider {
 
-    private int hp;
     int radius;
     private boolean alive = true;
-    private boolean hit = false;
-    private int iframes = 0;
     private double xVel = 0;
     private double yVel = 0;
 
 
     public ShieldCircle(double xpos, double ypos){
+        super(40,20);
         this.xPosition = xpos;
         this.yPosition = ypos;
-        this.hp = 40;
         this.radius = 20;
     }
 
@@ -38,12 +35,10 @@ public class ShieldCircle extends BaseObject implements Collider {
         return alive;
     }
     public void damage(int dmg){
-        if(iframes <= 0) {
-            hit = true;
-            hp -= dmg;
-            iframes = 10;
+        if(getIFrames() <= 0) {
+            super.damage(dmg);
 
-            if (hp <= 20 && radius >= 20) {
+            if (getHP() <= 20 && radius >= 20) {
                 radius = 10;
                 currentScene.shield.damage += .5;
                 currentScene.score += 100 * dmg;
@@ -55,31 +50,27 @@ public class ShieldCircle extends BaseObject implements Collider {
             }
         }
     }
-    public int getHp(){
-        return hp;
-    }
-
 
     @Override
     public void draw(Graphics2D g){
 
         int midX = currentScene.origin.x;
         int midY = currentScene.origin.y;
-        if(iframes > 0){
-            iframes--;
+        if(getIFrames() > 0){
+            decrementIFrames();
         }
 
-        if(hit || iframes > 0){
+        if(isHit() || getIFrames() > 0){
             g.setColor(Color.red);
-            hit = false;
-            if(hp <= 0){
+            setHit(false);
+            if(getHP() <= 0){
                 alive = false;
                 currentScene.score += 10000;
                 GameFrame.soundManager.playClip(SoundManager.shieldOrbDestroy);
                 currentScene.shield.damage += 5;
             }
         } else {
-            if(hp > 20) {
+            if(getHP() > 20) {
                 g.setColor(Color.green);
             } else {
                 g.setColor(Color.orange);
@@ -117,8 +108,13 @@ public class ShieldCircle extends BaseObject implements Collider {
     }
 
     @Override
+    public boolean getStatic() {
+        return false;
+    }
+
+    @Override
     public int getDamage() {
-        return 0;
+        return 1;
     }
 
     @Override
