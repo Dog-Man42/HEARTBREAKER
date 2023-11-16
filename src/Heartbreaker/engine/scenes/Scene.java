@@ -25,8 +25,8 @@ public abstract class Scene {
     public void updateScene(){}
 
     public void updateObjects(){
-        System.out.println("Object Count: " + objects.size());
-        System.out.println("Collider Count: " + collisionManager.size());
+        //System.out.println("Object Count: " + objects.size());
+        //System.out.println("Collider Count: " + collisionManager.size());
         if(objects.size() > 0){
             int length = objects.size();
             for(int i = 0; i < length; i++){

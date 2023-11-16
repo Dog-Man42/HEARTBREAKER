@@ -4,6 +4,7 @@ import Heartbreaker.engine.scenes.Scene;
 import Heartbreaker.main.Heartbreaker;
 import Heartbreaker.objects.FrameTimeGraph;
 import Heartbreaker.scenes.*;
+import net.arikia.dev.drpc.DiscordRPC;
 
 
 import java.awt.*;
@@ -94,6 +95,7 @@ public class GameFrame extends JPanel implements Runnable{
         long timer = System.currentTimeMillis();
         int frames = 0;
         double frameTimeSum = 0;
+        int secs = 9;
         while(true){
             long now = System.nanoTime();
             ns = 1000000000 / 60.0;
@@ -117,6 +119,12 @@ public class GameFrame extends JPanel implements Runnable{
                 }
             }
             if(System.currentTimeMillis() - timer >= 1000) {
+                if(secs > 5){
+                    DiscordRPC.discordUpdatePresence(GameWindow.presence);
+                    secs = 0;
+                } else {
+                    secs++;
+                }
                 timer += 1000;
                 FPS = frames;
                 //avgFrameTime = frameTimeSum / frames;
@@ -135,9 +143,12 @@ public class GameFrame extends JPanel implements Runnable{
         super.paintComponent(g2);
         bufferedImage = new BufferedImage(getWidth(),getHeight(),BufferedImage.TYPE_3BYTE_BGR);
         graphics2D = bufferedImage.createGraphics();
+
         graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
+
         if(!LOADING) {
+
             draw(graphics2D);
         } else {
             loadingScreen.draw(graphics2D);

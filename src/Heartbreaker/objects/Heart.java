@@ -134,6 +134,10 @@ public class Heart extends BaseObject implements Collider {
         graph.draw(g);
     }
 
+    public double getBpm(){
+        return bpm;
+    }
+
 
     @Override
     public void collided(CollisionData colData) {

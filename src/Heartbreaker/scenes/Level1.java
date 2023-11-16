@@ -79,6 +79,8 @@ public class Level1 extends Level {
 
     @Override
     public void draw(Graphics2D g){
+        GameWindow.presence.state="BPM(Damage): " + heart.getBpm() + "/180";
+
         long drawNano = System.currentTimeMillis();
         g.setStroke(new BasicStroke(1));
         radialGrid(g);
