@@ -118,11 +118,20 @@ public class GravBullet extends Bullet implements UsesPolar {
     @Override
     public void collided(CollisionData colData) {
         if(colData.getCollider().getClass() == ShieldCircle.class){
+            radialVelocity *= -1;
+            angularVelocity *= -1;
+            if(playerBullet){
+                hits = Collider.HITS_PLAYER;
+                hitBy = Collider.HIT_BY_PLAYER;
+            }
+            return;
 
         }
-        currentScene.removeObject(this);
-        dieNextFrame = true;
-        dieInFrames = 10;
+        if(!(colData.getCollider() instanceof Bullet)) {
+            currentScene.removeObject(this);
+            dieNextFrame = true;
+            dieInFrames = 10;
+        }
     }
     @Override
     public int getCanHit() {
