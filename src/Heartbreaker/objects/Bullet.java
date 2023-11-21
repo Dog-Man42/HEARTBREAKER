@@ -12,6 +12,7 @@ public class Bullet extends BaseObject implements Collider{
 
     private double xvel;
     private double yvel;
+    private double speed;
     private int age = 0;
     private int ageLimit;
     private Polygon polygon;
@@ -19,8 +20,8 @@ public class Bullet extends BaseObject implements Collider{
     private boolean dieNextFrame;
     private int dieInFrames= -1;
     protected int damage = 1;
-    private int hits;
-    private int hitBy;
+    protected int hits;
+    protected int hitBy;
 
     public Bullet(double xpos,double ypos, double shooterXvel, double shooterYvel, double angle,double speed, int limit,boolean player){
         playerBullet = player;
@@ -39,6 +40,7 @@ public class Bullet extends BaseObject implements Collider{
 
         xvel = Math.sin(Math.toRadians(angle)) * -speed;
         yvel = Math.cos(Math.toRadians(angle)) * speed;
+
         if(shooterXvel != 0 && shooterYvel != 0) {
             xvel += shooterXvel;
             yvel += shooterYvel;
@@ -106,11 +108,22 @@ public class Bullet extends BaseObject implements Collider{
         g.drawPolygon(polygon);
     }
 
+    public void setXvel(double xvel){
+        this.xvel = xvel;
+    }
+
+    public void setYvel(double yvel){
+        this.yvel = yvel;
+    }
+
+
     @Override
     public void collided(CollisionData colData) {
-        currentScene.removeObject(this);
-        dieNextFrame = true;
-        dieInFrames = 10;
+        if(!(colData.getCollider() instanceof Bullet)){
+            currentScene.removeObject(this);
+            dieNextFrame = true;
+            dieInFrames = 10;
+        }
     }
 
     @Override
