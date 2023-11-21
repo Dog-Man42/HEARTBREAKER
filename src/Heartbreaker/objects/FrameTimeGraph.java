@@ -26,11 +26,10 @@ public class FrameTimeGraph extends BaseObject {
         }
         for (int i = vertices.length - 1; i >= 0; i--) {
             if (i == 0) {
-                histogram[0] = frametime * -100;
+                histogram[0] = frametime * -25;
             } else {
                 histogram[i] = histogram[i - 1];
             }
-            //transformedVertices[i].setLocation(i/2, -10 * (Math.abs(-Math.sin(time)) * (Math.abs((-Math.cos(time - 1.5) +Math.tan(time/2) - 4.5)) - 5.4)) + 0);
             transformedVertices[i].setLocation(i, histogram[i]);
         }
     }
@@ -48,6 +47,11 @@ public class FrameTimeGraph extends BaseObject {
             g.drawString("Max Frametime Milliseconds " + maxTime,0,Math.round(yPosition - 10));
 
             g.drawLine((int) Math.round(line[i].x),(int) Math.round(yPosition),(int) Math.round(line[i].x),(int) Math.round(line[i].y));
+        }
+        for(int i = 1; i < 11; i++){
+            g.drawLine((int) line[vertices.length-1].x - 20, (int) Math.round(yPosition) -50 * i,(int) line[vertices.length-1].x + 10,(int) Math.round(yPosition) - 50 * i);
+            g.setFont(new Font(Font.MONOSPACED,Font.ROMAN_BASELINE,15));
+            g.drawString(i + "ms",(int) line[vertices.length-1].x + 10,(int) Math.round(yPosition) -50 * i);
         }
 
 
