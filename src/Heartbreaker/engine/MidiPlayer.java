@@ -2,20 +2,24 @@ package Heartbreaker.engine;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 
-import javax.sound.midi.MetaEventListener;
-import javax.sound.midi.MetaMessage;
-import javax.sound.midi.MidiSystem;
-import javax.sound.midi.Sequencer;
-
+import javax.sound.midi.*;
 
 
 public class MidiPlayer {
     private float BPM = 60;
     private Sequencer sequencer;
     public void init() throws Exception {
-        sequencer = MidiSystem.getSequencer();
+        InputStream fontFile = new BufferedInputStream(getClass().getResourceAsStream("/Heartbreaker/midi/Pokemon_DPPt_GM_SoundfontFix.sf2"));
+
+        Soundbank font = MidiSystem.getSoundbank(fontFile);
+        sequencer = MidiSystem.getSequencer(false);
+        Synthesizer synthesizer = MidiSystem.getSynthesizer();
         sequencer.addMetaEventListener(new listener());
         sequencer.open();
+        synthesizer.open();
+        synthesizer.loadAllInstruments(font);
+        sequencer.getTransmitter().setReceiver(synthesizer.getReceiver());
+
 
         InputStream is = new BufferedInputStream(getClass().getResourceAsStream("/Heartbreaker/midi/Heartbreaker.mid"));
         sequencer.setSequence(is);
