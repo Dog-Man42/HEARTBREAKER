@@ -40,7 +40,6 @@ public class CollisionManager {
 
                 }
                 if(colData != null){
-                    //Works for now because the player is the only collider that does collision resolution
                     colData.setCollider(collider2);
                     collider1.collided(colData);
                     colData.setCollider(collider1);

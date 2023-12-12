@@ -95,14 +95,13 @@ public class GameFrame extends JPanel implements Runnable{
         //Game Loop
         long lastTime = System.nanoTime();
         double amountOfTicks = targetFPS;
-        double ns;
+        double ns = 1000000000 / 60.0;
         long timer = System.currentTimeMillis();
         int frames = 0;
         double frameTimeSum = 0;
 
         while(true){
             long now = System.nanoTime();
-            ns = 1000000000 / 60.0;
             if(now - lastTime > ns) {
                 long frameStart = System.nanoTime();
                 mouseUpdated = true;
@@ -146,7 +145,6 @@ public class GameFrame extends JPanel implements Runnable{
 
         graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
-
         if(!LOADING) {
 
             draw(graphics2D);

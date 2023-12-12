@@ -14,6 +14,7 @@ import net.arikia.dev.drpc.callbacks.ReadyCallback;
 public class GameWindow extends JFrame {
     public static GameFrame panel;
     public static DiscordRichPresence presence;
+    private static boolean playing = false;
 
     public GameWindow(String title) {
 
@@ -46,5 +47,11 @@ public class GameWindow extends JFrame {
 
         this.setVisible(true);
         this.setLocationRelativeTo(null);
+    }
+
+    public void start(){
+        while(playing){
+
+        }
     }
 }
