@@ -122,52 +122,5 @@ public class MainMenu extends Level {
 
 
 
-
-    }
-    public BufferedImage drawCircle(Graphics2D g){
-        BufferedImage image = GameFrame.bufferedImage;
-        int r = 200;
-        double diagonal = Math.sqrt(Math.pow(WIDTH,2) + Math.pow(HEIGHT,2));
-        for (int x = 0; x < WIDTH; x++) {
-            for (int y = 0; y < HEIGHT; y++) {
-                int dx = x- origin.x;
-                int dy = y - origin.y;
-                double distance = Math.sqrt(dx*dx + dy*dy);
-
-                if(distance < r){
-                    double dz = Math.sqrt(r * r - dx * dx - dy * dy);
-                    Vector3 vec = new Vector3(dx,dy,dz);
-
-                    Vector3 normal = Vector3Math.normalize(vec);
-                    double dp = Math.abs(player.getRadialPosition());
-                    Vector3 light = new Vector3(player.getXPosition(), player.getYPosition(), r*r / dp);
-                    Vector3 direction = Vector3Math.normalize(Vector3.difference(light,new Vector3(x,y,dz)));
-                    double shade =  Vector3Math.dot(normal,direction);
-                    if(shade >= 0.01) {
-                        // Calculate light falloff
-                        double lightDistance = Vector3Math.length(Vector3.difference(light, new Vector3(x, y, dz)));
-                        double falloff = Math.max(1.0 - lightDistance / 5000, 0);
-                        //shade *= falloff;
-                        //normal shading
-                        int red = (int) Math.round(255 * (normal.x * 0.5 + 0.5) * shade);
-                        int green = (int) Math.round(255 * (normal.y * 0.5 + 0.5) * shade);
-                        int blue = (int) Math.round(255 * (normal.z * 0.5 + 0.5) * shade);
-                        //gray = (int) Math.round(255 * (0.5 * 0.5 + 0.5) * shade);
-                        red = Math.min(Math.max(red, 0), 255);
-                        green = Math.min(Math.max(green, 0), 255);
-                        blue = Math.min(Math.max(blue, 0), 255);
-
-                        int rgb = (255 << 24) | (red << 16) | (green << 8) | blue;
-                        image.setRGB(x, y, rgb);
-                    } else {
-                        int rgb = (255 << 24) | (0) | 0;
-                        image.setRGB(x, y, rgb);
-                    }
-                } else {
-                    image.setRGB(x,y,0);
-                }
-            }
-        }
-        return image;
     }
 }
