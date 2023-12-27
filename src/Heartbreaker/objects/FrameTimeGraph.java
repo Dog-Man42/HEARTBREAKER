@@ -4,7 +4,7 @@ import Heartbreaker.engine.GameFrame;
 import java.awt.geom.*;
 import java.awt.*;
 
-public class FrameTimeGraph extends BaseObject {
+public class FrameTimeGraph extends GameObject {
     private double[] histogram;
     private double maxTime = 0;
 

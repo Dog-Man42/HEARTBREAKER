@@ -4,7 +4,7 @@ import java.awt.*;
 import java.util.Random;
 
 
-public class Tentacle extends BaseObject {
+public class Tentacle extends GameObject {
     private double frames = 0;
     private double[] angles;
     private double[] angularVels;

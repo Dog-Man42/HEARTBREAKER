@@ -3,7 +3,7 @@ package Heartbreaker.objects;
 import java.awt.*;
 import java.awt.geom.Point2D;
 
-public class TentacleSegment extends BaseObject{
+public class TentacleSegment extends GameObject {
 
     private int radius;
 

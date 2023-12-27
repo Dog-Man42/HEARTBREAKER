@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.geom.*;
 
 
-public class Shield extends BaseObject {
+public class Shield extends GameObject {
     private double frames = 0;
     private double theta = 0;
     private int cooldown = 60;

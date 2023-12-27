@@ -5,19 +5,42 @@ import Heartbreaker.engine.vectors.*;
 import java.awt.geom.*;
 
 /*
-Resources Used:
+References:
     https://www.youtube.com/watch?v=emfGoBgE020&list=PLSlpr6o9vURwq3oxVZSimY8iC-cdd3kIs&index=4
     https://www.youtube.com/watch?v=Zgf1DYrmSnk&list=PLSlpr6o9vURwq3oxVZSimY8iC-cdd3kIs&index=6
     https://www.youtube.com/watch?v=vWs33LVrs74&list=PLSlpr6o9vURwq3oxVZSimY8iC-cdd3kIs&index=8
  */
 
 
+/**
+ * Collision is the class that {@link CollisionManager} uses to determine if two colliders have collided
+ *
+ * @author tuckt
+ */
+
 public class Collision {
 
+    // Collision Types
+
+    /** Circle colliding with Circle */
     static final int CIRCLE_CIRCLE = 0;
+
+    /** Polygon colliding with Polygon */
     static final int POLY_POLY = 1;
+
+    /** Circle colliding with Polygon */
     static final int CIRCLE_POLY = 2;
 
+
+    /**
+     * Determines if two circle type Colliders are colliding.
+     *
+     * @param centerA Center of Collider A's hitbox
+     * @param radiusA Radius of Collider A's hitbox
+     * @param centerB Center of Collider B's hitbox
+     * @param radiusB Radius of COllider B's hitbox
+     * @return CollisionData with type Circle_Circle if colliding, otherwise null
+     */
     public static CollisionData circleCircle(Point2D centerA, double radiusA, Point2D centerB, double radiusB){
 
         Vector normal = Vector.ZERO;
@@ -36,6 +59,14 @@ public class Collision {
         return new CollisionData(depth,normal,CIRCLE_CIRCLE);
     }
 
+    /**
+     * Determines if a circle Collider and Polygon collider are colliding using Separating Axis Theorem.
+     *
+     * @param circleCenter Center of circle Collider
+     * @param radius Radius of circle Collider
+     * @param verts Verticies of Polygon collider
+     * @return CollisionData with type Circle_Poly if colliding, otherwise null
+     */
     public static CollisionData circlePolygon(Point2D circleCenter, double radius, Point2D[] verts){
 
         Vector normal = Vector.ZERO;
@@ -107,6 +138,12 @@ public class Collision {
         return new CollisionData(depth,normal,CIRCLE_POLY);
     }
 
+    /**
+     * Finds the vertex closes to the center of the circle
+     * @param center circle center
+     * @param verts verticies of a polygon
+     * @return index of vertex
+     */
     private static int findClosetVert(Point2D center, Point2D[] verts){
         int result = -1;
         double minDistance = Double.MAX_VALUE;
@@ -123,6 +160,14 @@ public class Collision {
         return result;
     }
 
+    /**
+     * Projects a circle onto an axis for Separating Axis Theorem.
+     *
+     * @param center center of circle
+     * @param radius radius of circle
+     * @param axis axis to project too
+     * @return The minimum point of the cirlce and the maximum point of the circle on the projection
+     */
     private static double[] projectCircle(Point2D center, double radius, Vector axis){
         Vector direction = VectorMath.normalize(axis);
         Vector directionAndRadius = Vector.multiply(direction,radius);
@@ -142,6 +187,13 @@ public class Collision {
         return new double[] {min,max};
     }
 
+    /**
+     * Determines if two polygon Colliders are colliding using Separating Axis Theorem.
+     *
+     * @param vertsA Vertices of Polygon A
+     * @param vertsB Vertices of Polygon B
+     * @return CollisionData with type Poly_Poly if colliding, otherwise null
+     */
     public static CollisionData polygonPolygon(Point2D[] vertsA, Point2D[] vertsB){
 
         Vector normal = Vector.ZERO;
@@ -221,6 +273,11 @@ public class Collision {
         return new CollisionData(depth,normal,POLY_POLY);
     }
 
+    /**
+     * Determines the center of a polygon by averaging the x and y components of its vertices separately.
+     * @param verts The Vertices of a polygon
+     * @return A vector representing the center of a polygon
+     */
     private static Vector findArithmeticMean(Point2D[] verts){
         double sumX = 0;
         double sumY = 0;
@@ -234,6 +291,12 @@ public class Collision {
         return new Vector(sumX / (double)verts.length, sumY / (double)verts.length);
     }
 
+    /**
+     * Projects the vertices of a polygon onto an axis and determines the minimum point and the maximum point.
+     * @param verts Vertices of a polygon.
+     * @param axis Axis to project onto.
+     * @return minimum value at index 0 and maximum value at index 1.
+     */
     private static double[] projectVerts(Point2D[] verts, Vector axis){
         double max = Double.MIN_VALUE;
         double min = Double.MAX_VALUE;

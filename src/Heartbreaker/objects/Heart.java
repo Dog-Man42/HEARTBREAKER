@@ -82,7 +82,7 @@ public class Heart extends Entity implements Collider {
         if (getIFrames() <= 0) {
             if (!flatlined) {
                 GameFrame.soundManager.playClip(SoundManager.heartDamage);
-                maxIframes();
+                maxOutIframes();
                 currentScene.score += 100 * dmg;
                 damage += .5 * dmg;
                 bpm += .5 * dmg;

@@ -2,9 +2,8 @@ package Heartbreaker.objects;
 
 import java.awt.geom.Point2D;
 import java.awt.*;
-import java.awt.geom.Point2D;
 
-public class BrokenHeart extends BaseObject{
+public class BrokenHeart extends GameObject {
 
     int side;
 

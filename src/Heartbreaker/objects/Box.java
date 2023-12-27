@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.geom.*;
 
 
-public class Box extends BaseObject {
+public class Box extends GameObject {
      private double frames = 0;
 
 

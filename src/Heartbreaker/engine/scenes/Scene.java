@@ -13,8 +13,8 @@ public abstract class Scene {
     public Point origin;
     public CollisionManager collisionManager;
 
-    private ArrayList<BaseObject> objects = new ArrayList<>();
-    private ArrayList<BaseObject> killedObjects = new ArrayList<>();
+    private ArrayList<GameObject> objects = new ArrayList<>();
+    private ArrayList<GameObject> killedObjects = new ArrayList<>();
 
 
     public void windowResized(){
@@ -31,7 +31,7 @@ public abstract class Scene {
         if(objects.size() > 0){
             int length = objects.size();
             for(int i = 0; i < length; i++){
-                BaseObject object = objects.get(i);
+                GameObject object = objects.get(i);
                 if(!killedObjects.contains(object)){
                     object.update();
                 }
@@ -45,7 +45,7 @@ public abstract class Scene {
     public void drawObjects(Graphics2D g){
         if(objects.size() > 0){
             for(int i = objects.size() - 1; i >= 0; i--){
-                BaseObject object = objects.get(i);
+                GameObject object = objects.get(i);
                 if(object.isDrawnByScene()) {
                     object.draw(g);
                 }
@@ -53,19 +53,20 @@ public abstract class Scene {
         }
     }
 
-    public void addObject(BaseObject baseObject){
-        objects.add(baseObject);
-        if(baseObject instanceof Collider){
-            collisionManager.addCollider((Collider) baseObject);
+    public void addObject(GameObject gameObject){
+        objects.add(gameObject);
+        if(gameObject instanceof Collider){
+            collisionManager.addCollider((Collider) gameObject);
         }
     }
-    public void removeObject(BaseObject baseObject){
-        killedObjects.add(baseObject);
+    public void removeObject(GameObject gameObject){
+        killedObjects.add(gameObject);
     }
+
     public void clearRemovedObjects(){
         if(killedObjects.size() > 0 ){
             for(int i = killedObjects.size() - 1; i >= 0; i--){
-                BaseObject object = killedObjects.get(i);
+                GameObject object = killedObjects.get(i);
                 objects.remove(object);
                 if(object instanceof Collider){
                     collisionManager.removeCollider((Collider) object);
@@ -74,7 +75,7 @@ public abstract class Scene {
             }
         }
     }
-    public ArrayList<BaseObject> getObjects(){
+    public ArrayList<GameObject> getObjects(){
         return objects;
     }
 

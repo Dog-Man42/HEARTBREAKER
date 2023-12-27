@@ -143,6 +143,7 @@ public class GravBullet extends Bullet implements UsesPolar {
         return hitBy;
     }
     @Override
+
     public int getDamage() {
         return damage;
     }

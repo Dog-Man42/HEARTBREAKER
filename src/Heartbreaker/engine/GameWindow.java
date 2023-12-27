@@ -11,7 +11,7 @@ import net.arikia.dev.drpc.*;
 import net.arikia.dev.drpc.callbacks.ReadyCallback;
 //https://github.com/Vatuu/discord-rpc
 
-public class GameWindow extends JFrame {
+public class GameWindow extends JFrame{
     public static GameFrame panel;
     public static DiscordRichPresence presence;
     private static boolean playing = false;

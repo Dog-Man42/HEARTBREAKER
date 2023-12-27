@@ -5,7 +5,7 @@ import Heartbreaker.engine.GameFrame;
 import java.awt.geom.*;
 import java.awt.*;
 
-public class HeartGraph extends BaseObject{
+public class HeartGraph extends GameObject {
     private Heart heart;
     private double bpm = 60;
     private double frames = 0;

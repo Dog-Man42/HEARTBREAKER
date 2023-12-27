@@ -5,12 +5,20 @@ import java.util.ArrayList;
 
 public class CollisionManager {
 
+    /** An ArrayList containing all colliders in a scene */
     private ArrayList<Collider> colliders;
 
+    /** Default constructor that initializes colliders */
     public CollisionManager(){
         colliders = new ArrayList<>();
     }
 
+    /**
+     * Updates all colliders by comparing each Collider with every other Collider, determining if they can collide based
+     * on what they can hit and can be hit by. If they are allowed to collide, then {@link Collision} will determine if there
+     * is an intersection between the two Colliders. If they do intersect, then a {@link CollisionData} object is created and is sent to
+     * each collider through {@link Collider#collided(CollisionData)}.
+     */
     public void updateColliders(){
         for(int i = 0; i < colliders.size(); i++){
             Collider collider1 = colliders.get(i);
@@ -27,10 +35,10 @@ public class CollisionManager {
                         if(collider1.getHitBoxType() == Collider.POLYGON){
                             colData = Collision.polygonPolygon(collider1.getPoints(),collider2.getPoints());
                         }
-                        //double compound hitbox will go here and may god have mercy on my soul when I add that.
-                        //This method will have a cursed big O notation
+                        //TODO Add double-compound collisions when needed
                     } else {
                         //Currently, if they are not the same hitbox type, then it is as Circle Polygon collision
+                        //Todo Add Circle-Compound and Poly-Compound collisions when needed.
                         if(collider1.getHitBoxType() == Collider.CIRCLE){
                             colData = Collision.circlePolygon(collider1.getPosition(),collider1.getRadius(),collider2.getPoints());
                         } else {
@@ -49,6 +57,13 @@ public class CollisionManager {
         }
     }
 
+    /**
+     * Determines whether two given colliders are allowed to collide with each other.
+     *
+     * @param collider1 Collider 1
+     * @param collider2 Collider 2
+     * @return True if colliders are allowed to collide with each other
+     */
     public static boolean canCollide(Collider collider1, Collider collider2){
         boolean hNone1 = collider1.getCanHit() == Collider.HIT_BY_NONE;
         boolean hNone2 = collider2.getCanHit() == Collider.HIT_BY_NONE;
@@ -68,10 +83,12 @@ public class CollisionManager {
         return false;
     }
 
+    /** Adds a collider to {@link #colliders} */
     public void addCollider(Collider collider){
         colliders.add(collider);
     }
 
+    /** Removes a collider from {@link #colliders} */
     public boolean removeCollider(Collider collider){
         if(collider == null){
             return false;
@@ -81,14 +98,17 @@ public class CollisionManager {
         }
     }
 
+    /** Clears {@link #colliders} */
     public void clear(){
         colliders.clear();
     }
 
+    /** @return Returns the size of {@link #colliders} */
     public int size(){
         return colliders.size();
     }
 
+    /** @returns Returns an ArrayList containing all Colliders */
     public ArrayList<Collider> getColliders(){
         return colliders;
     }

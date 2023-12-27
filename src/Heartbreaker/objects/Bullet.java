@@ -4,11 +4,10 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 
 import Heartbreaker.engine.collision.Collider;
-import Heartbreaker.engine.collision.Collision;
 import Heartbreaker.engine.collision.CollisionData;
 import Heartbreaker.engine.vectors.*;
 
-public class Bullet extends BaseObject implements Collider{
+public class Bullet extends GameObject implements Collider{
 
     private double xvel;
     private double yvel;

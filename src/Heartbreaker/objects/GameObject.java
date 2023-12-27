@@ -8,17 +8,19 @@ import java.awt.geom.Point2D;
 
 
 /**
- * @author Tucker Agee
+ * GameObject is the base abstract class for all objects to be updated and rendered by engine each frame.
+ *
+ * @author tuckt
  */
 
-public abstract class BaseObject {
+public abstract class GameObject {
 
     private boolean drawnByScene = true;
 
     /**
      * Stores the parent object if there is one
      */
-    private BaseObject parent;
+    private GameObject parent;
 
     /**
      * x-position of the object
@@ -119,7 +121,7 @@ public abstract class BaseObject {
     }
 
     /**
-     * Calculates the distance between x1,y1 and x2,y2.
+     * Calculates the distance between x1, y1 and x2, y2.
      *
      * @param x1 x position of point 1
      * @param y1 y position of point 1
@@ -308,13 +310,13 @@ public abstract class BaseObject {
     public void setRotation(double theta){this.rotation = theta;}
 
     /**
-     * Sets the parent of this BaseObject
+     * Sets the parent of this GameObject
      *
      * @param p new parent
      * @param keepTransforms adds parent's transforms to this object before changing parent
      * @throws NullPointerException keepTransforms is true and parent null
      */
-    public void setParent(BaseObject p, boolean keepTransforms){
+    public void setParent(GameObject p, boolean keepTransforms){
         if(keepTransforms){
             if(parent == null){
                 throw new NullPointerException();
@@ -348,9 +350,9 @@ public abstract class BaseObject {
 
     /**
      * Returns the parent Object
-     * @return BaseObject
+     * @return GameObject
      */
-    public BaseObject getParent(){
+    public GameObject getParent(){
         return parent;
     }
 
@@ -367,7 +369,7 @@ public abstract class BaseObject {
      public abstract void draw(Graphics2D g);
 
     /**
-     * Returns whether the scene draws this BaseObject when drawing the objects ArrayList
+     * Returns whether the scene draws this GameObject when drawing the objects ArrayList
      * @return if scene draws object
      */
     public boolean isDrawnByScene(){
