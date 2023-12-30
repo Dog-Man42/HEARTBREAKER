@@ -4,7 +4,6 @@ import Heartbreaker.engine.scenes.Scene;
 import Heartbreaker.main.Heartbreaker;
 import Heartbreaker.objects.FrameTimeGraph;
 import Heartbreaker.scenes.*;
-import net.arikia.dev.drpc.DiscordRPC;
 
 
 import java.awt.*;
@@ -123,7 +122,6 @@ public class GameFrame extends JPanel implements Runnable{
                 }
             }
             if(System.currentTimeMillis() - timer >= 1000) {
-                DiscordRPC.discordUpdatePresence(GameWindow.presence);
                 timer += 1000;
                 FPS = frames;
                 //avgFrameTime = frameTimeSum / frames;

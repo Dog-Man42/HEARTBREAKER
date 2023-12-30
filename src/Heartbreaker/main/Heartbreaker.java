@@ -19,19 +19,12 @@ public class Heartbreaker {
         track = new MidiPlayer();
         track.init();
         track.setBpmTo(60f);
-        String key;
-        try (BufferedReader br = new BufferedReader(new FileReader("src/key.txt"))){
-            key = br.readLine();
-        } catch(Exception e) {
-            e.printStackTrace();
-            key = null;
-            System.out.println("Application Key not found.");
-        }
-        
-        
-        
-        GameWindow window = new GameWindow("HEARTBREAKER", key);
+        GameWindow window = new GameWindow("HEARTBREAKER");
         window.start();
+
+        
+        
+
     }
     public static void setBpm(float bpm){
         track.setBpmTo(bpm);
