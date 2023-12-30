@@ -27,19 +27,25 @@ public class Level1 extends Level {
 
         clearObjects();
         collisionManager.clear();
-        spawnPlayer();
-        spawnHeart();
-        spawnShield();
+
+        player = new Player(0,300);
+        heart = new Heart(origin.x,origin.y);
+        shield = new Shield(origin.x,origin.y);
+
         addObject(player);
         addObject(heart);
         addObject(shield);
-        boxes = new ArrayList<>();
+
+
+        /* Testing
         Random rand = new Random();
         addObject(new MinorEye(rand.nextInt(0,GameFrame.GAME_WIDTH),rand.nextInt(0,GameFrame.GAME_HEIGHT)));
         addObject(new MinorEye(rand.nextInt(0,GameFrame.GAME_WIDTH),rand.nextInt(0,GameFrame.GAME_HEIGHT)));
         addObject(new MinorEye(rand.nextInt(0,GameFrame.GAME_WIDTH),rand.nextInt(0,GameFrame.GAME_HEIGHT)));
         addObject(new MinorEye(rand.nextInt(0,GameFrame.GAME_WIDTH),rand.nextInt(0,GameFrame.GAME_HEIGHT)));
+        */
         return true;
+
     }
 
 
@@ -50,37 +56,14 @@ public class Level1 extends Level {
                 GameFrame.setCurrentScene(new MainMenu());
             }
         }
-        long updateNano = System.currentTimeMillis();
-        /*
-        player.update();
-        heart.update();
-        if(shield != null)
-            shield.update();
-
-        if(boxes.size() > 0){
-            for(Box box : boxes){
-                box.update();
-            }
-        }
-
-         */
         updateObjects();
     }
 
-    public void spawnPlayer(){
-        player = new Player(0,300);
-    }
-    public void spawnBox(double x, double y){
-        boxes.add(new Heartbreaker.objects.Box(x,y,5));
-    }
-    public void spawnHeart(){heart = new Heart(origin.x,origin.y);}
-    public void spawnShield(){shield = new Shield(origin.x,origin.y);}
-
-
     @Override
     public void draw(Graphics2D g){
-        GameWindow.presence.state="BPM(Damage): " + heart.getBpm() + "/180";
-
+        if(GameWindow.hasID()) {
+            GameWindow.presence.state = "BPM(Damage): " + heart.getBpm() + "/180";
+        }
         long drawNano = System.currentTimeMillis();
         g.setStroke(new BasicStroke(1));
         radialGrid(g);
@@ -91,13 +74,10 @@ public class Level1 extends Level {
                 box.draw(g);
             }
         }
-        //drawBullets(g);
-        //player.draw(g);
-        //heart.draw(g);
+
         drawObjects(g);
         g.setColor(Color.RED);
-        //g.drawLine(0,GAME_HEIGHT/2,GAME_WIDTH,GAME_HEIGHT/2);
-        //g.drawLine(GAME_WIDTH/2,0,GAME_WIDTH/2,GAME_HEIGHT);
+
 
         g.setColor(Color.white);
         g.setFont(new Font("Consolas",Font.PLAIN,20));
@@ -154,8 +134,5 @@ public class Level1 extends Level {
         beaten = true;
         beatTime = System.currentTimeMillis();
     }
-
-
-
 
 }

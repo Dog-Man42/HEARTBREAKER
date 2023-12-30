@@ -15,11 +15,7 @@ import java.awt.image.BufferedImage;
 
 public class MainMenu extends Level {
 
-    private ParticleEmitter emitter;
-    private Tentacle tentacle;
-    private Tentacle tentacle2;
-    private Tentacle tentacle3;
-    private Tentacle tentacle4;
+
 
     public MainMenu(){
         super(false);
@@ -34,35 +30,15 @@ public class MainMenu extends Level {
         heart = new Heart(origin.x,origin.y);
         addObject(heart);
         shield = null;
-        emitter = new ParticleEmitter(TestParticle.class,500,500,1000);
-        tentacle = new Tentacle(10,10,origin.x,origin.y,15);
-        tentacle2 = new Tentacle(5,5,origin.x,origin.y,15);
-        tentacle3 = new Tentacle(5,5,origin.x,origin.y,15);
-        tentacle4 = new Tentacle(5,5,origin.x,origin.y,15);
-        tentacle2.setRotation(90);
-        tentacle3.setRotation(180);
-        tentacle4.setRotation(270);
 
         bullets.clear();
         bulletDeleteQueue.clear();
-
-        addObject(new MinorEye(250,500));
         return true;
 
     }
 
     public void updateScene(){
-        tentacle.update();
-        tentacle2.update();
-        tentacle3.update();
-        tentacle4.update();
-        //player.update();
-        //heart.update();
         updateObjects();
-    }
-
-    public void damageHeart(int dmg){
-        GameFrame.setCurrentScene(new Level1());
     }
 
     @Override
@@ -109,16 +85,10 @@ public class MainMenu extends Level {
         g.setStroke(new BasicStroke(3));
         //heart.draw(g);
         //player.draw(g);
-        tentacle.draw(g);
         drawObjects(g);
-/*
-        tentacle2.draw(g);
-        tentacle3.draw(g);
-        tentacle4.draw(g);
 
- */
 
-        drawBullets(g);
+
 
 
 

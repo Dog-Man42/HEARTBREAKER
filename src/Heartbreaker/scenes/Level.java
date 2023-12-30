@@ -29,8 +29,6 @@ public abstract class Level extends Scene{
     public static Shield shield;
     public static Box box;
 
-
-
     public ArrayList<Bullet> bullets = new ArrayList<>();
     public ArrayList<Bullet> bulletDeleteQueue = new ArrayList<>();
 
@@ -40,33 +38,14 @@ public abstract class Level extends Scene{
         collisionManager = new CollisionManager();
     }
 
-
-    public void drawBullets(Graphics2D g){
-        if(bullets.size() > 0){
-            for(int i = bullets.size() - 1; i >= 0; i--){
-                bullets.get(i).draw(g);
-            }
-        }
-    }
     public void spawnBullet(double x, double y,double xVel, double yVel, double angle, double speed, int age,boolean player){
         addObject(new Bullet(x,y,xVel,yVel,angle,speed,age,player));
     }
     public void spawnGravBullet(double x, double y,double xVel, double yVel, double angle, double speed, int age, boolean player){
         addObject(new GravBullet(x,y,xVel,yVel,angle,speed,age,player));
     }
-    public void updateBullets(){
-        if(bullets.size() > 0){
-            for(int i = bullets.size() - 1; i >= 0; i--){
-                if(!bulletDeleteQueue.contains(bullets.get(i))) {
-                    bullets.get(i).update();
-                }
-
-            }
-        }
-    }
 
     public abstract void draw(Graphics2D g);
-
 
     //input Management
     public void keyPressed(KeyEvent e){
@@ -89,20 +68,6 @@ public abstract class Level extends Scene{
     public void mouseReleased(MouseEvent e) {
         if(player != null)
             player.mouseReleased(e);
-    }
-
-
-    //Heart Management
-    public static Heart getHeart(){
-        return heart;
-    }
-    public void damageHeart(int dmg){
-        if(heart != null) {
-            heart.damage(dmg);
-        }
-        if(shield != null){
-            shield.damage(dmg);
-        }
     }
 
     public abstract void levelBeaten();
