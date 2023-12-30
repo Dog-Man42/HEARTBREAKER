@@ -9,17 +9,9 @@ public class MidiPlayer {
     private float BPM = 60;
     private Sequencer sequencer;
     public void init() throws Exception {
-        InputStream fontFile = new BufferedInputStream(getClass().getResourceAsStream("/Heartbreaker/midi/Pokemon_DPPt_GM_SoundfontFix.sf2"));
-
-        Soundbank font = MidiSystem.getSoundbank(fontFile);
-        sequencer = MidiSystem.getSequencer(false);
-        Synthesizer synthesizer = MidiSystem.getSynthesizer();
+        sequencer = MidiSystem.getSequencer();
         sequencer.addMetaEventListener(new listener());
         sequencer.open();
-        synthesizer.open();
-        synthesizer.loadAllInstruments(font);
-        sequencer.getTransmitter().setReceiver(synthesizer.getReceiver());
-
 
         InputStream is = new BufferedInputStream(getClass().getResourceAsStream("/Heartbreaker/midi/Heartbreaker.mid"));
         sequencer.setSequence(is);
