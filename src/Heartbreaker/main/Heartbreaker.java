@@ -19,7 +19,18 @@ public class Heartbreaker {
         track = new MidiPlayer();
         track.init();
         track.setBpmTo(60f);
-        GameWindow window = new GameWindow("HEARTBREAKER");
+        String key;
+        try (BufferedReader br = new BufferedReader(new FileReader("src/key.txt"))){
+            key = br.readLine();
+        } catch(Exception e) {
+            e.printStackTrace();
+            key = null;
+            System.out.println("notfound");
+        }
+        
+        
+        
+        GameWindow window = new GameWindow("HEARTBREAKER", key);
         window.start();
 
         
