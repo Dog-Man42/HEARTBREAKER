@@ -1,5 +1,7 @@
 package Heartbreaker.objects;
 
+import Heartbreaker.engine.GameObject;
+
 import java.awt.*;
 import java.util.Random;
 
@@ -21,9 +23,9 @@ public class Tentacle extends GameObject {
 
 
     public Tentacle(int length, int segmentRadius, double x, double y, double scale) {
-        this.xPosition = x;
-        this.yPosition = y;
-        this.scale = scale;
+        setXPosition(x);
+        setYPosition(y);
+        setScale(scale);
         this.segmentLength = segmentRadius * 3;
 
         segments = new TentacleSegment[length];
@@ -39,7 +41,7 @@ public class Tentacle extends GameObject {
     }
 
     public void update() {
-        rotation+=10d;
+        setRotation(getRotation()+10);
         boolean slow;
 
         for(int i = 0; i < segments.length; i++){
@@ -70,12 +72,12 @@ public class Tentacle extends GameObject {
                 angularVels[i] += (random.nextDouble(-10, 10)/(25.0/i) + angularVels[i-1]/2) * angularAccel;
                 angularVels[i-1] += (angularVels[i] - angularVels[i-1])/i * angularAccel;
 
-                segments[i].setPosition(rotatePointAroundPoint(relativeRotation,segments[i].getPosition(false),segments[i-1].getPosition(false)));
+                segments[i].setPosition(rotatePointAroundPoint(relativeRotation,segments[i].getLocalPos(),segments[i-1].getLocalPos()));
 
 
                 // Normalize the line segment to maintain its length
-                double dx = segments[i].getXPosition(false) -segments[i-1].getXPosition(false);
-                double dy = segments[i].getYPosition(false) -segments[i-1].getYPosition(false);
+                double dx = segments[i].getLocalXPos() -segments[i-1].getLocalXPos();
+                double dy = segments[i].getLocalYPos() -segments[i-1].getLocalYPos();
                 double length = Math.sqrt(dx * dx + dy * dy);
 
                 if (length > 0) {
@@ -83,12 +85,12 @@ public class Tentacle extends GameObject {
                     dx *= scaleFactor;
                     dy *= scaleFactor;
 
-                    segments[i].setXPosition(segments[i-1].getXPosition(false) + dx);
-                    segments[i].setYPosition(segments[i-1].getYPosition(false) + dy);
+                    segments[i].setXPosition(segments[i-1].getLocalXPos() + dx);
+                    segments[i].setYPosition(segments[i-1].getLocalYPos() + dy);
                 }
             } else {
                 angularVels[i] += (random.nextDouble(-1, 1) * angularAccel);
-                segments[i].setPosition(rotatePoint(Math.toRadians(angles[i]),segments[i].getPosition(false)));
+                segments[i].setPosition(rotatePoint(Math.toRadians(angles[i]),segments[i].getLocalPos()));
             }
 
             //System.out.println(this);
@@ -101,7 +103,7 @@ public class Tentacle extends GameObject {
         for(int i = 0; i < segments.length; i++) {
             if(i > 0){
                 g.setColor(Color.GREEN);
-                g.drawLine((int) segments[i-1].getXPosition(true), (int) segments[i-1].getYPosition(true), (int) segments[i].getXPosition(true),(int) segments[i].getYPosition(true));
+                g.drawLine((int) segments[i-1].getLocalXPos(), (int) segments[i-1].getLocalYPos(), (int) segments[i].getLocalXPos(),(int) segments[i].getLocalYPos());
             }
             segments[i].draw(g);
         }

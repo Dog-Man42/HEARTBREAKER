@@ -13,7 +13,6 @@ import java.util.ArrayList;
 public abstract class Level extends Scene{
 
     public final boolean SCROLLABLE;
-
     public int WIDTH = GameFrame.GAME_WIDTH;
     public int HEIGHT = GameFrame.GAME_HEIGHT;
     public int DIAGONAL = (int)Math.round(Math.sqrt(WIDTH * WIDTH + HEIGHT * HEIGHT));
@@ -27,10 +26,7 @@ public abstract class Level extends Scene{
     public static Player player;
     public static Heart heart;
     public static Shield shield;
-    public static Box box;
 
-    public ArrayList<Bullet> bullets = new ArrayList<>();
-    public ArrayList<Bullet> bulletDeleteQueue = new ArrayList<>();
 
 
     public Level(boolean scrollable){

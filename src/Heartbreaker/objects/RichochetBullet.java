@@ -18,15 +18,15 @@ public class RichochetBullet extends Bullet{
     @Override
     public void collided(CollisionData colData){
         if(hp <= 0){
-            currentScene.removeObject(this);
+            getScene().removeObject(this);
         } else {
-            xPosition -= (-colData.getNormal().x * colData.getDepth());
-            yPosition -= (-colData.getNormal().y * colData.getDepth());
+            changeXPos(-(-colData.getNormal().x * colData.getDepth()));
+            changeYPos(-(-colData.getNormal().y * colData.getDepth()));
             double speed = VectorMath.length(new Vector(getXVelocity(),getYVelocity()));
             setXvel(speed * colData.getNormal().x);
             setYvel(speed * colData.getNormal().y);
             Vector v = VectorMath.normalize(new Vector(getXVelocity(), getYVelocity()));
-            rotation = Math.toDegrees(-Math.atan2(v.x, v.y));
+            setRotation(Math.toDegrees(-Math.atan2(v.x, v.y)));
             hp--;
         }
     }
@@ -43,7 +43,7 @@ public class RichochetBullet extends Bullet{
     @Override
     public void draw(Graphics2D g){
         g.setColor(Color.ORANGE);
-        g.drawPolygon(realizePoly(transformedVertices));
+        g.drawPolygon(realizePoly());
     }
 
 

@@ -18,18 +18,18 @@ public class ShieldCircle extends Entity implements Collider {
 
     public ShieldCircle(double xpos, double ypos){
         super(40,20);
-        this.xPosition = xpos;
-        this.yPosition = ypos;
+        setXposition(xpos);
+        setYposition(ypos);
         this.radius = 20;
     }
 
     public void setXposition(double xpos){
-        xVel = xpos - xPosition;
-        xPosition = xpos;
+        xVel = xpos - getXPosition();
+        setXPosition(xpos);
     }
     public void setYposition(double ypos){
-        yVel = ypos - yPosition;
-        yPosition = ypos;
+        yVel = ypos - getYPosition();
+        setYPosition(ypos);
     }
     public boolean isAlive(){
         return alive;
@@ -40,12 +40,12 @@ public class ShieldCircle extends Entity implements Collider {
 
             if (getHP() <= 20 && radius >= 20) {
                 radius = 10;
-                currentScene.shield.damage += .5;
-                currentScene.score += 100 * dmg;
+                getScene().shield.damage += .5;
+                getScene().score += 100 * dmg;
                 GameFrame.soundManager.playClip(SoundManager.shieldOrbShrink);
             } else {
-                currentScene.shield.damage += .25;
-                currentScene.score += 1 * dmg;
+                getScene().shield.damage += .25;
+                getScene().score += 1 * dmg;
                 GameFrame.soundManager.playClip(SoundManager.shieldOrbDamage);
             }
         }
@@ -54,8 +54,8 @@ public class ShieldCircle extends Entity implements Collider {
     @Override
     public void draw(Graphics2D g){
 
-        int midX = currentScene.origin.x;
-        int midY = currentScene.origin.y;
+        int midX = getScene().origin.x;
+        int midY = getScene().origin.y;
         if(getIFrames() > 0){
             decrementIFrames();
         }
@@ -65,9 +65,9 @@ public class ShieldCircle extends Entity implements Collider {
             setHit(false);
             if(getHP() <= 0){
                 alive = false;
-                currentScene.score += 10000;
+                getScene().score += 10000;
                 GameFrame.soundManager.playClip(SoundManager.shieldOrbDestroy);
-                currentScene.shield.damage += 5;
+                getScene().shield.damage += 5;
             }
         } else {
             if(getHP() > 20) {
@@ -76,7 +76,7 @@ public class ShieldCircle extends Entity implements Collider {
                 g.setColor(Color.orange);
             }
         }
-        g.drawOval((int) ((midX + xPosition) - radius),(int) ((midY + yPosition) - radius),2 * radius,2 * radius);
+        g.drawOval((int) ((midX + getXPosition()) - radius),(int) ((midY + getYPosition()) - radius),2 * radius,2 * radius);
     }
 
     @Override
@@ -90,7 +90,7 @@ public class ShieldCircle extends Entity implements Collider {
 
     @Override
     public Point2D.Double getPosition(){
-        return new Point2D.Double(currentScene.origin.x + xPosition, currentScene.origin.y + yPosition);
+        return new Point2D.Double(getScene().origin.x + getXPosition(), getScene().origin.y + getYPosition());
     }
     @Override
     public int getCanHit() {

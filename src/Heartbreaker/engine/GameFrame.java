@@ -1,5 +1,6 @@
 package Heartbreaker.engine;
 
+import Heartbreaker.engine.scenes.DefaultScene;
 import Heartbreaker.engine.scenes.Scene;
 import Heartbreaker.main.Heartbreaker;
 import Heartbreaker.objects.FrameTimeGraph;
@@ -27,7 +28,7 @@ public class GameFrame extends JPanel implements Runnable{
 
     public static Long frameStart = 0L;
     public static Long lastFrame = 0L;
-    public static double avgFrameTime = 0;
+    public static double frameTime = 0;
 
     public static int mouseX = 0;
     public static int mouseY = 0;
@@ -43,13 +44,14 @@ public class GameFrame extends JPanel implements Runnable{
     FrameTimeGraph ftGraph;
 
     //Game-wide variables
-    static Level currentScene = new MainMenu();
+
+    //TODO Change to be Scene instead of Level
+    static Level currentScene;
     public static int highScore = 0;
     public static final LoadingScreen loadingScreen = new LoadingScreen();
 
     public static ArrayList<Scene> renderLayers = new ArrayList<>();
 
-    //I think i have to reinvent the button :( because the swing ones are acting weird
     public static ArrayList<JComponent> uiComponents = new ArrayList<>();
 
 
@@ -57,7 +59,7 @@ public class GameFrame extends JPanel implements Runnable{
 
 
 
-    GameFrame(){
+    GameFrame(Level mainScene){
         this.setFocusable(true);
         this.addKeyListener(new KeyListener());
         this.addMouseMotionListener(new MotionDetector());
@@ -85,10 +87,16 @@ public class GameFrame extends JPanel implements Runnable{
         loadingScreen.setPreferredSize(new Dimension(GAME_WIDTH, GAME_HEIGHT));
         gameThread = new Thread(this);
         gameThread.start();
+        DefaultScene defaultScene = new DefaultScene(false);
+        defaultScene.mainScene = mainScene;
+        currentScene = mainScene;
         currentScene.initialize();
 
 
+
     }
+
+
 
     public void run(){
         //Game Loop
@@ -105,7 +113,6 @@ public class GameFrame extends JPanel implements Runnable{
                 long frameStart = System.nanoTime();
                 mouseUpdated = true;
                 if(!LOADING) {
-
                     update();
                 }
                 frames++;
@@ -113,9 +120,10 @@ public class GameFrame extends JPanel implements Runnable{
 
                 lastTime += ns;
                 long frameEnd = System.nanoTime();
-                double frameTime = (frameEnd - frameStart) / 1000000.0;
-                delta = frameTime;
-                avgFrameTime = frameTime;
+                frameTime = (frameEnd - frameStart) / 1000000.0;
+                delta = frameTime / 1000;
+                //System.out.printf("Frametime MS: %.5f Delta: %.10f%n", frameTime, delta);
+
                 frameTimeSum += frameTime;
                 if(ftGraph != null){
                     ftGraph.addFrame(frameTime);
@@ -164,8 +172,11 @@ public class GameFrame extends JPanel implements Runnable{
     }
     public static void setCurrentScene(Level level) {
 
+
         // Set the preferred size of the loading screen
         loadingScreen.setPreferredSize(SCREEN_SIZE);
+
+        GameWindow.clearComponents();
 
         // Add the loading screen to the GameFrame and ensure it's properly displayed
         GameWindow.panel.add(loadingScreen);
@@ -201,6 +212,8 @@ public class GameFrame extends JPanel implements Runnable{
 
         // Start the scene initialization in the background
         sceneInitializer.execute();
+
+
     }
 
     private static void removeLoadingScreen() {

@@ -2,6 +2,7 @@ package Heartbreaker.objects;
 
 
 import Heartbreaker.engine.GameFrame;
+import Heartbreaker.engine.GameObject;
 import Heartbreaker.engine.SoundManager;
 
 import java.awt.*;
@@ -21,14 +22,14 @@ public class Shield extends GameObject {
     private boolean played = false;
 
     public Shield(double x, double y){
-        this.xPosition = x;
-        this.yPosition = y;
-        scale = 1;
+        setXPosition(x);
+        setYPosition(y);
+        setScale(1);
         circles = new ShieldCircle[circleCount];
         for(int i = 0; i < circles.length; i++) {
             circles[i] = new ShieldCircle(0, 0);
             circles[i].setDrawnByScene(false);
-            currentScene.addObject(circles[i]);
+            getScene().addObject(circles[i]);
         }
     }
     public void update(){
@@ -43,7 +44,7 @@ public class Shield extends GameObject {
         //BPM
         //double time = rate;
         //scale = ((Math.abs(Math.sin(time)) * Math.abs((Math.cos(time+.4) - Math.tan(time/2) - .4)))/20) + 1;
-        scale = ((Math.abs(-Math.sin(time)) * (Math.abs((-Math.cos(time - 1.5) +Math.tan(time/2) - 4.5)) - 5.4))/25) + 1;
+        setScale(((Math.abs(-Math.sin(time)) * (Math.abs((-Math.cos(time - 1.5) +Math.tan(time/2) - 4.5)) - 5.4))/25) + 1);
         //scale = 1 * -(Math.abs(Math.sin(frames)) * Math.abs(Math.cos(frames) - 1)) + 5;
         //scale *= -1;
         //scale *= -1;
@@ -51,8 +52,8 @@ public class Shield extends GameObject {
     public void draw(Graphics2D g) {
 
 
-        int midX = currentScene.origin.x;
-        int midY = currentScene.origin.y;
+        int midX = getScene().origin.x;
+        int midY = getScene().origin.y;
 
 
         for (int i = 0; i < circleCount; i++) {
@@ -60,10 +61,10 @@ public class Shield extends GameObject {
                 int distance = 100;
 
                 Point2D.Double point = rotatePoint(Math.toRadians((((360.0 / circleCount) + (Math.sin(Math.toRadians(frames / 1.3))) * 6) * i)
-                        + Math.sin(Math.toRadians(frames)) * (80 + (damage / 4))), new Point2D.Double(scale * distance, scale * distance));
+                        + Math.sin(Math.toRadians(frames)) * (80 + (damage / 4))), new Point2D.Double(getScale() * distance, getScale() * distance));
 
                 Point2D.Double prevPoint = rotatePoint(Math.toRadians((((360.0 / circleCount) + (Math.sin(Math.toRadians((frames - 1) / 1.3))) * 6) * i)
-                        + Math.sin(Math.toRadians(frames - 1 )) * (80 + (damage / 4))), new Point2D.Double(scale * distance, scale * distance));
+                        + Math.sin(Math.toRadians(frames - 1 )) * (80 + (damage / 4))), new Point2D.Double(getScale() * distance, getScale() * distance));
                 double deltaX = point.x - prevPoint.x;
                 double deltaY = point.y - prevPoint.y;
 
@@ -78,12 +79,12 @@ public class Shield extends GameObject {
 
                     if (circles[i].getHP() <= 15) {
                         if (cooldown % 5 == 0) {
-                            currentScene.spawnBullet(((midX + point.x)), ((midY + point.y)), deltaX / 4, deltaY / 4, Math.toDegrees(-Math.atan2(point.x, point.y)), 2, 320, false);
+                            getScene().spawnBullet(((midX + point.x)), ((midY + point.y)), deltaX / 4, deltaY / 4, Math.toDegrees(-Math.atan2(point.x, point.y)), 2, 320, false);
                         }
                     } else {
                         if (cooldown % 10 == 0) {
 
-                            currentScene.spawnBullet(((midX + point.x)), ((midY + point.y)), 0, 0, Math.toDegrees(-Math.atan2(point.x, point.y)), 1, 480, false);
+                            getScene().spawnBullet(((midX + point.x)), ((midY + point.y)), 0, 0, Math.toDegrees(-Math.atan2(point.x, point.y)), 1, 480, false);
                         }
                     }
                 }

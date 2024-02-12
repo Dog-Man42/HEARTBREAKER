@@ -3,7 +3,6 @@ package Heartbreaker.engine.scenes;
 import Heartbreaker.engine.*;
 import Heartbreaker.engine.collision.Collider;
 import Heartbreaker.engine.collision.CollisionManager;
-import Heartbreaker.objects.*;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -16,6 +15,17 @@ public abstract class Scene {
     private ArrayList<GameObject> objects = new ArrayList<>();
     private ArrayList<GameObject> killedObjects = new ArrayList<>();
 
+    private boolean initialized = false;
+
+    public int WIDTH = GameFrame.GAME_WIDTH;
+    public int HEIGHT = GameFrame.GAME_HEIGHT;
+    public int DIAGONAL = (int)Math.round(Math.sqrt(WIDTH * WIDTH + HEIGHT * HEIGHT));
+
+    public double scrollX = 0;
+    public double scrollY = 0;
+
+    public double zoom = 1;
+
 
     public void windowResized(){
         origin = new Point(GameFrame.GAME_WIDTH/2, GameFrame.GAME_HEIGHT/2);
@@ -23,7 +33,7 @@ public abstract class Scene {
     public abstract boolean initialize();
 
 
-    public void updateScene(){}
+    public abstract void updateScene();
 
     public void updateObjects(){
         //System.out.println("Object Count: " + objects.size());

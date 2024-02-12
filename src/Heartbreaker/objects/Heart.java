@@ -27,12 +27,12 @@ public class Heart extends Entity implements Collider {
     public Heart(int x, int y){
         super(200,10);
         Heartbreaker.startTrack();
-        this.xPosition = x;
-        this.yPosition = y;
+        setXPosition(x);
+        setXPosition(y);
 
-        scale = -5;
+        setScale(-5);
 
-        vertices = new Point2D.Double[]{
+        setVertices(new Point2D.Double[]{
                 new Point2D.Double(0,-13),
                 new Point2D.Double(14,0),
                 new Point2D.Double(16,8),
@@ -45,9 +45,7 @@ public class Heart extends Entity implements Collider {
                 new Point2D.Double(-14,13),
                 new Point2D.Double(-16,8),
                 new Point2D.Double(-14,0),
-                new Point2D.Double(0,-13)};
-        transformedVertices = new Point2D.Double[vertices.length];
-        transformedVertices = copyVertices(vertices);
+                new Point2D.Double(0,-13)});
 
 
     }
@@ -62,13 +60,13 @@ public class Heart extends Entity implements Collider {
         double totalTime = frames / 60;
         double rate = totalTime % beat_duration;
         double time = rate / beat_duration * (2 * Math.PI);
-        xPosition = currentScene.origin.x + random.nextInt(-1 - (int)(damage*Math.pow(damage,.2)/20),1 + (int)(damage*Math.pow(damage,.2)/20));
-        yPosition = currentScene.origin.y + random.nextInt(-1 - (int)damage/20,1 + (int)damage/20);
+        setXPosition(getScene().origin.x + random.nextInt(-1 - (int)(damage*Math.pow(damage,.2)/20),1 + (int)(damage*Math.pow(damage,.2)/20)));
+        setYPosition(getScene().origin.y + random.nextInt(-1 - (int)damage/20,1 + (int)damage/20));
         //BPM
         //double time = rate;
         //scale = (Math.abs(Math.sin(time)) * Math.abs((Math.cos(time+.4) - Math.tan(time/2) - .4))) + 3;
-        scale = (Math.abs(-Math.sin(time)) * (Math.abs((-Math.cos(time - 1.5) +Math.tan(time/2) - 4.5)) - 5.4)) + 5;
-        scale *= -1;
+        setScale((Math.abs(-Math.sin(time)) * (Math.abs((-Math.cos(time - 1.5) +Math.tan(time/2) - 4.5)) - 5.4)) + 5);
+        setScale(-getScale());
         //scale = 1 * -(Math.abs(Math.sin(frames)) * Math.abs(Math.cos(frames) - 1)) + 5;
         graph.update();
         if(left != null && right != null){
@@ -83,12 +81,12 @@ public class Heart extends Entity implements Collider {
             if (!flatlined) {
                 GameFrame.soundManager.playClip(SoundManager.heartDamage);
                 maxOutIframes();
-                currentScene.score += 100 * dmg;
+                getScene().score += 100 * dmg;
                 damage += .5 * dmg;
                 bpm += .5 * dmg;
                 graph.setBPM(bpm);
-                if(currentScene.shield != null) {
-                    currentScene.shield.bpm = bpm;
+                if(getScene().shield != null) {
+                    getScene().shield.bpm = bpm;
                 }
                 Heartbreaker.setBpm((float) bpm);
                 if (bpm >= 180) {
@@ -97,19 +95,19 @@ public class Heart extends Entity implements Collider {
                     bpm = 0;
                     graph.setBPM(bpm);
                     graph.setFlatlined(true);
-                    currentScene.shield.setFlatlined(true);
+                    getScene().shield.setFlatlined(true);
                     Heartbreaker.setBpm(10);
                     flatlined = true;
                     GameFrame.soundManager.playClip(SoundManager.flatline);
                 }
         } else {
             if (!dead) {
-                currentScene.score += 1000;
-                currentScene.levelBeaten();
+                getScene().score += 1000;
+                getScene().levelBeaten();
                 GameFrame.soundManager.playClip(SoundManager.heartbreak);
                 dead = true;
-                left = new BrokenHeart(1, xPosition, yPosition, scale);
-                right = new BrokenHeart(-1, xPosition, yPosition, scale);
+                left = new BrokenHeart(1, getXPosition(), getYPosition(), getScale());
+                right = new BrokenHeart(-1, getXPosition(), getYPosition(), getScale());
             }
             }
         }
@@ -121,11 +119,11 @@ public class Heart extends Entity implements Collider {
             g.setColor(Color.getHSBColor(0f, .7f, .7f));
         } else {
             g.setColor(Color.getHSBColor(0f, .2f, .9f));
-            scale *= 1.25;
+            setScale(getScale() * 1.25);
             decrementIFrames();
         }
         if(!dead) {
-            g.drawPolygon(realizePoly(transformedVertices));
+            g.drawPolygon(realizePoly());
         } else {
             left.draw(g);
             right.draw(g);
@@ -140,7 +138,7 @@ public class Heart extends Entity implements Collider {
 
     @Override
     public void collided(CollisionData colData) {
-        if(currentScene instanceof MainMenu){
+        if(getScene() instanceof MainMenu){
             GameFrame.setCurrentScene(new Level1());
         } else {
             damage(colData.getCollider().getDamage());

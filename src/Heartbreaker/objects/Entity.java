@@ -1,5 +1,6 @@
 package Heartbreaker.objects;
 
+import Heartbreaker.engine.GameObject;
 import Heartbreaker.engine.collision.Collider;
 import Heartbreaker.engine.collision.CollisionData;
 

@@ -47,14 +47,13 @@ public class Player extends Entity implements UsesPolar, Collider{
 
     public Player(int x, int y){
         super(20,20);
-        this.xPosition = x;
-        this.yPosition = y;
+        setXPosition(x);
+        setYPosition(y);
+        setScale(5);
         radialPosition = y;
-        scale = 5;
 
-        vertices = new Point2D.Double[]{ new Point2D.Double(-2,-3), new Point2D.Double(-0,3) , new Point2D.Double(2,-3)};
-        transformedVertices = new Point2D.Double[vertices.length];
-        transformedVertices = copyVertices(vertices);
+
+        setVertices(new Point2D.Double[]{ new Point2D.Double(-2,-3), new Point2D.Double(-0,3) , new Point2D.Double(2,-3)});
 
     }
     //input
@@ -107,14 +106,14 @@ public class Player extends Entity implements UsesPolar, Collider{
         //TODO try to fix frame time stutter
 
 
-        double targetRotation = Math.toDegrees(-Math.atan2(GameFrame.mouseX - xPosition, GameFrame.mouseY  - yPosition));
+        double targetRotation = Math.toDegrees(-Math.atan2(GameFrame.mouseX - getXPosition(), GameFrame.mouseY  - getYPosition()));
 
-        rotation = (rotation + targetRotation);
-        rotation  = Math.toDegrees(-Math.atan2(GameFrame.mouseX - getXPosition(),GameFrame.mouseY - getYPosition()));
+        setRotation(getRotation() + targetRotation);
+        setRotation(Math.toDegrees(-Math.atan2(GameFrame.mouseX - getXPosition(),GameFrame.mouseY - getYPosition())));
 
 
-        double prevX = xPosition;
-        double prevY = yPosition;
+        double prevX = getXPosition();
+        double prevY = getYPosition();
 
         theta += angularVelocity / radialPosition;
         radialPosition += radialVelocity;
@@ -133,21 +132,16 @@ public class Player extends Entity implements UsesPolar, Collider{
             radialPosition = 600;
         }
         Point2D.Double position = rotatePoint(Math.toRadians(theta),new Point2D.Double(0,radialPosition));
-        xPosition = position.x + currentScene.origin.x;
-        yPosition = position.y + currentScene.origin.y;
+        setXPosition(position.x + getScene().origin.x);
+        setYPosition(position.y + getScene().origin.y);
 
-        xPosition += xvel;
-        yPosition += yvel;
+        changeXPos(xvel);
+        changeYPos(yvel);
 
         if(spacePressed || Math.abs(xvel) > 0.01 ||Math.abs(xvel) > 0.01) {
-            radialPosition = cartesianToRadius(xPosition - currentScene.origin.x, yPosition - currentScene.origin.y);
-            theta = cartesianToTheta(yPosition - currentScene.origin.y, xPosition - currentScene.origin.x);
+            radialPosition = cartesianToRadius(getXPosition() - getScene().origin.x, getYPosition() - getScene().origin.y);
+            theta = cartesianToTheta(getYPosition() - getScene().origin.y, getXPosition() - getScene().origin.x);
         }
-
-        double deltaX = xPosition - prevX;
-        double deltaY = yPosition - prevY;
-
-
 
 
         radialVelocity = radialVelocity * .95;
@@ -168,12 +162,12 @@ public class Player extends Entity implements UsesPolar, Collider{
             if(spawnBullet) {
                 spawnBullet = false;
                 GameFrame.soundManager.playClip(SoundManager.shootGeneric);
-                currentScene.spawnBullet(temp[1].x, temp[1].y, 0, 0, rotation, 12, 120,true);
+                getScene().spawnBullet(temp[1].x, temp[1].y, 0, 0, getRotation(), 12, 120,true);
                 coolDown = 8;
             } else if(spawnGravBullet){
                 spawnGravBullet = false;
                 GameFrame.soundManager.playClip(SoundManager.shootGrav);
-                currentScene.spawnGravBullet(temp[1].x, temp[1].y, 0,0, rotation, 1, 240,true);
+                getScene().spawnGravBullet(temp[1].x, temp[1].y, 0,0, getRotation(), 1, 240,true);
                 coolDown = 16;
             }
         } else {
@@ -189,16 +183,16 @@ public class Player extends Entity implements UsesPolar, Collider{
     public void draw(Graphics2D g){
 
         if(isHit() || getIFrames() > 0){
-            double temp = scale;
-            scale += getIFrames() % 4;
+            double temp = getScale();
+            changeScale(getIFrames() % 4);
             g.setColor(Color.red);
             decrementIFrames();
             setHit(false);
-            g.drawPolygon(realizePoly(transformedVertices));
-            scale = temp;
+            g.drawPolygon(realizePoly());
+            setScale(temp);
         } else {
             g.setColor(Color.blue);
-            g.drawPolygon(realizePoly(transformedVertices));
+            g.drawPolygon(realizePoly());
         }
         if(getHP() <= 0){
             GameFrame.setCurrentScene(new MainMenu());
@@ -302,12 +296,12 @@ public class Player extends Entity implements UsesPolar, Collider{
             if (!(colData.getCollider() instanceof Bullet)) {
                 xvel = colData.getNormal().x * 2;
                 yvel = colData.getNormal().y * 2;
-                xPosition -= (colData.getNormal().x * (colData.getDepth()));
-                yPosition -= (colData.getNormal().y * (colData.getDepth()));
+                changeXPos(-(colData.getNormal().x * (colData.getDepth())));
+                changeYPos(-(colData.getNormal().y * (colData.getDepth())));
                 //radialVelocity = 0;
                 //angularVelocity = 0;
-                radialPosition = cartesianToRadius((xPosition - currentScene.origin.x) + 2 * (colData.getNormal().x * colData.getDepth()), (yPosition - currentScene.origin.y) + 2 * (colData.getNormal().y * colData.getDepth()));
-                theta = cartesianToTheta((yPosition - currentScene.origin.y) + 2 * (colData.getNormal().x * colData.getDepth()), (xPosition - currentScene.origin.x) + 2 * (colData.getNormal().x * colData.getDepth()));
+                radialPosition = cartesianToRadius((getXPosition() - getScene().origin.x) + 2 * (colData.getNormal().x * colData.getDepth()), (getYPosition() - getScene().origin.y) + 2 * (colData.getNormal().y * colData.getDepth()));
+                theta = cartesianToTheta((getYPosition() - getScene().origin.y) + 2 * (colData.getNormal().x * colData.getDepth()), (getXPosition() - getScene().origin.x) + 2 * (colData.getNormal().x * colData.getDepth()));
             }
         }
         if(!(isHit() || getIFrames() > 0)){

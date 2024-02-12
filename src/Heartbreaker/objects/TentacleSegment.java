@@ -1,5 +1,7 @@
 package Heartbreaker.objects;
 
+import Heartbreaker.engine.GameObject;
+
 import java.awt.*;
 import java.awt.geom.Point2D;
 
@@ -13,17 +15,19 @@ public class TentacleSegment extends GameObject {
 
 
     public TentacleSegment(int radius, double scale, double baseX, double baseY){
-        this.scale = scale;
+
+        setXPosition(baseX);
+        setYPosition(baseY);
+        setScale(scale);
         this.radius = radius;
         this.baseX = baseX;
         this.baseY = baseY;
-        xPosition = baseX;
-        yPosition = baseY;
+
     }
 
     public void setPosition(Point2D.Double p){
-        xPosition = p.x;
-        yPosition = p.y;
+        setXPosition(p.x);
+        setYPosition(p.y);
     }
 
 

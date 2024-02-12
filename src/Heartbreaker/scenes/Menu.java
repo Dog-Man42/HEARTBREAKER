@@ -12,6 +12,11 @@ public class Menu extends Scene {
     }
 
     @Override
+    public void updateScene() {
+
+    }
+
+    @Override
     public void draw(Graphics2D g) {
 
     }

@@ -1,6 +1,8 @@
 package Heartbreaker.main;
 
 import Heartbreaker.engine.*;
+import Heartbreaker.scenes.MainMenu;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 
@@ -19,8 +21,7 @@ public class Heartbreaker {
         track = new MidiPlayer();
         track.init();
         track.setBpmTo(60f);
-        GameWindow window = new GameWindow("HEARTBREAKER");
-        window.start();
+        GameWindow window = new GameWindow("HEARTBREAKER", new MainMenu());
 
         
         

@@ -3,6 +3,7 @@ package Heartbreaker.objects;
 import java.awt.*;
 import java.awt.geom.Point2D;
 
+import Heartbreaker.engine.GameObject;
 import Heartbreaker.engine.collision.Collider;
 import Heartbreaker.engine.collision.CollisionData;
 import Heartbreaker.engine.vectors.*;
@@ -14,7 +15,6 @@ public class Bullet extends GameObject implements Collider{
     private double speed;
     private int age = 0;
     private int ageLimit;
-    private Polygon polygon;
     private boolean playerBullet;
     private boolean dieNextFrame;
     private int dieInFrames= -1;
@@ -31,9 +31,10 @@ public class Bullet extends GameObject implements Collider{
             hits = Collider.HITS_PLAYER;
             hitBy = Collider.HIT_BY_PLAYER;
         }
-        xPosition = xpos;
-        yPosition = ypos;
-        scale = 2;
+        setXPosition(xpos);
+        setYPosition(ypos);
+
+        setScale(2);
 
         ageLimit = limit;
 
@@ -44,19 +45,16 @@ public class Bullet extends GameObject implements Collider{
             xvel += shooterXvel;
             yvel += shooterYvel;
             Vector v = VectorMath.normalize(new Vector(xvel, yvel));
-            rotation = Math.toDegrees(-Math.atan2(v.x, v.y));
+            setRotation(Math.toDegrees(-Math.atan2(v.x, v.y)));
         } else {
-            rotation = angle;
+            setRotation(angle);
         }
-        vertices = new Point2D.Double[]{
+        setVertices(new Point2D.Double[]{
                 new Point2D.Double(-1,-4),
                 new Point2D.Double(-1,4),
                 new Point2D.Double(1,4),
                 new Point2D.Double(1,-4)
-        };
-        transformedVertices = copyVertices(vertices);
-        //transformedVertices = rotatePoints(Math.toRadians(rotation),vertices);
-        polygon = realizePoly(transformedVertices);
+        });
 
     }
 
@@ -64,33 +62,32 @@ public class Bullet extends GameObject implements Collider{
     }
 
     public void update(){
-        xPosition += xvel;
-        yPosition += yvel;
-        int negative = -(currentScene.DIAGONAL - currentScene.WIDTH);
+        changeXPos(xvel);
+        changeYPos(yvel);
+        int negative = -(getScene().DIAGONAL - getScene().WIDTH);
 
-        if(xPosition < negative || currentScene.DIAGONAL < xPosition || yPosition < negative || currentScene.DIAGONAL < yPosition ){
-            currentScene.missedCount++;
-            currentScene.removeObject(this);
+        if(getXPosition() < negative || getScene().DIAGONAL < getXPosition() || getYPosition() < negative || getScene().DIAGONAL < getYPosition() ){
+            getScene().missedCount++;
+            getScene().removeObject(this);
         }
         //collisionDetection();
         if(ageLimit > 0){
             if(age >= ageLimit-20){
-                if(scale <= 0.1) {
+                if(getScale() <= 0.1) {
                     if(playerBullet)
-                        currentScene.missedCount++;
-                    currentScene.removeObject(this);
+                        getScene().missedCount++;
+                    getScene().removeObject(this);
                 } else{
-                    scale -= .1;
+                    changeScale(-.1);
                 }
             }
         }
-        polygon = realizePoly(transformedVertices);
         age++;
         if(dieNextFrame) {
             if (dieInFrames <= 0) {
                 if (playerBullet)
-                    currentScene.missedCount++;
-                currentScene.removeObject(this);
+                    getScene().missedCount++;
+                getScene().removeObject(this);
             } else {
                 dieInFrames--;
             }
@@ -104,7 +101,7 @@ public class Bullet extends GameObject implements Collider{
 
     public void draw(Graphics2D g){
         g.setColor(Color.yellow);
-        g.drawPolygon(polygon);
+        g.drawPolygon(realizePoly());
     }
 
     public void setXvel(double xvel){
@@ -119,7 +116,7 @@ public class Bullet extends GameObject implements Collider{
     @Override
     public void collided(CollisionData colData) {
         if(!(colData.getCollider() instanceof Bullet)){
-            currentScene.removeObject(this);
+            getScene().removeObject(this);
             dieNextFrame = true;
             dieInFrames = 10;
         }

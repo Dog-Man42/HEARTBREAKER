@@ -2,11 +2,10 @@ package Heartbreaker.scenes;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.Random;
 
 import Heartbreaker.engine.*;
 import Heartbreaker.objects.*;
+import Heartbreaker.objects.Box;
 
 public class Level1 extends Level {
 
@@ -44,6 +43,7 @@ public class Level1 extends Level {
         addObject(new MinorEye(rand.nextInt(0,GameFrame.GAME_WIDTH),rand.nextInt(0,GameFrame.GAME_HEIGHT)));
         addObject(new MinorEye(rand.nextInt(0,GameFrame.GAME_WIDTH),rand.nextInt(0,GameFrame.GAME_HEIGHT)));
         */
+
         return true;
 
     }
@@ -79,7 +79,7 @@ public class Level1 extends Level {
         g.setColor(Color.white);
         g.setFont(new Font("Consolas",Font.PLAIN,20));
         g.drawString("Frame Rate: " + GameFrame.FPS,0,20);
-        g.drawString("Frame Time MS: " + String.format("%.2f", GameFrame.avgFrameTime),0,45);
+        g.drawString("Frame Time MS: " + String.format("%.2f", GameFrame.frameTime),0,45);
         g.setFont(new Font("Consolas",Font.PLAIN,30));
         g.drawString("SCORE: " + score,0,80);
         double mod = (heartCount *.6) + (shieldHitCout*.2);

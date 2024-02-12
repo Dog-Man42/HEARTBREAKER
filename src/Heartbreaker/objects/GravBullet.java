@@ -39,37 +39,35 @@ public class GravBullet extends Bullet implements UsesPolar {
             hits = Collider.HITS_PLAYER;
             hitBy = Collider.HIT_BY_PLAYER;
         }
-        scale = 10;
-        rotation = angle;
+        setScale(10);
+        setRotation(angle);
         ageLimit = limit;
 
 
-        xPosition = xpos;
-        yPosition = ypos;
-        double xval = xpos - currentScene.origin.x;
-        double yval = ypos - currentScene.origin.y;
+        setXPosition(xpos);
+        setYPosition(ypos);
+        double xval = xpos - getScene().origin.x;
+        double yval = ypos - getScene().origin.y;
 
         radialPosition = cartesianToRadius(xval,yval);
         theta = cartesianToTheta(yval,xval);
 
-        double tempRot = Math.toRadians(rotation + theta);
+        double tempRot = Math.toRadians(getRotation() + theta);
 
-        xvel = speed * Math.cos(Math.toRadians(rotation));
-        yvel = speed * Math.sin(Math.toRadians(rotation));
+        xvel = speed * Math.cos(Math.toRadians(getRotation()));
+        yvel = speed * Math.sin(Math.toRadians(getRotation()));
 
         radialVelocity = 3 * xvel * Math.cos(Math.toRadians(theta)) + 3 * yvel * Math.sin(Math.toRadians(theta));
         angularVelocity = (-xvel * Math.sin(Math.toRadians(theta)) + yvel * Math.cos(Math.toRadians(theta)));
 
 
-        vertices = new Point2D.Double[]{
+        setVertices(new Point2D.Double[]{
                 new Point2D.Double(-1,-4),
                 new Point2D.Double(-1,4),
                 new Point2D.Double(1,4),
                 new Point2D.Double(1,-4)
-        };
-        transformedVertices = new Point2D.Double[vertices.length];
-        transformedVertices = rotatePoints(Math.toRadians(angle),vertices);
-        polygon = realizePoly(transformedVertices);
+        });
+
     }
 
     public void update(){
@@ -80,13 +78,13 @@ public class GravBullet extends Bullet implements UsesPolar {
         //theta += 1;
         Point2D.Double position = rotatePoint(Math.toRadians(theta),new Point2D.Double(0,radialPosition));
 
-        xPosition = position.x + currentScene.origin.x;
-        yPosition = position.y + currentScene.origin.y;
+        setXPosition(position.x + getScene().origin.x);
+        setYPosition(position.y + getScene().origin.y);
 
 
         if(radialPosition < 20  || radialPosition > 1000 ){
-            currentScene.missedCount++;
-            currentScene.removeObject(this);
+            getScene().missedCount++;
+            getScene().removeObject(this);
         }
 
 
@@ -94,11 +92,11 @@ public class GravBullet extends Bullet implements UsesPolar {
 
         if(ageLimit > 0){
             if(age >= ageLimit-20){
-                if(scale <= 1.25) {
-                    currentScene.missedCount++;
-                    currentScene.removeObject(this);
+                if(getScale() <= 1.25) {
+                    getScene().missedCount++;
+                    getScene().removeObject(this);
                 } else{
-                    scale -= 1.25;
+                    setScale(-1.25);
                 }
             }
         }
@@ -111,7 +109,7 @@ public class GravBullet extends Bullet implements UsesPolar {
 
     public void draw(Graphics2D g){
         g.setColor(Color.cyan);
-        g.drawOval((int) xPosition - (int) (scale /2),(int) yPosition - (int) (scale/2),(int) scale,(int) scale);
+        g.drawOval((int) getXPosition() - (int) (getScale() /2),(int) getYPosition() - (int) (getScale()/2),(int) getScale(),(int) getScale());
 
 
     }
@@ -128,7 +126,7 @@ public class GravBullet extends Bullet implements UsesPolar {
 
         }
         if(!(colData.getCollider() instanceof Bullet)) {
-            currentScene.removeObject(this);
+            getScene().removeObject(this);
             dieNextFrame = true;
             dieInFrames = 10;
         }
@@ -165,7 +163,7 @@ public class GravBullet extends Bullet implements UsesPolar {
 
     @Override
     public double getRadius(){
-        return scale/2.0;
+        return getScale()/2.0;
     }
 
 }

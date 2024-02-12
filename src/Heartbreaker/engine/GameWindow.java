@@ -6,9 +6,9 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.*;
+import Heartbreaker.engine.scenes.Scene;
+import Heartbreaker.scenes.Level;
 
-
-//https://github.com/Vatuu/discord-rpc
 
 public class GameWindow extends JFrame{
     public static GameFrame panel;
@@ -16,8 +16,9 @@ public class GameWindow extends JFrame{
     private static boolean playing = false;
 
 
-    public GameWindow(String title) {
-        panel = new GameFrame();
+    public GameWindow(String title, Level mainScene) {
+        panel = new GameFrame(mainScene);
+
         this.add(panel) ;
         this.setTitle(title);
         this.setResizable(true);
@@ -30,10 +31,16 @@ public class GameWindow extends JFrame{
         this.setLocationRelativeTo(null);
     }
 
-
-    public void start(){
-        while(playing){
-
-        }
+    public static void addComponent(JComponent component){
+        panel.add(component);
+        panel.uiComponents.add(component);
     }
+    public static void clearComponents(){
+        panel.removeAll();
+        panel.revalidate();
+        panel.repaint();
+        panel.uiComponents.clear();
+
+    }
+
 }

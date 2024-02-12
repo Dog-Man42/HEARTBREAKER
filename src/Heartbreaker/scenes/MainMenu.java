@@ -8,8 +8,10 @@ import Heartbreaker.main.Heartbreaker;
 import Heartbreaker.objects.*;
 
 
-
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
@@ -30,10 +32,21 @@ public class MainMenu extends Level {
         heart = new Heart(origin.x,origin.y);
         addObject(heart);
         shield = null;
+/*
+        JButton button = new JButton("TEST");
+        button.setBackground(Color.green);
+        button.setPreferredSize(new Dimension(100, 30));
+        button.addActionListener(e -> System.out.println(System.currentTimeMillis()));
+        button.setFocusable(false);
+        GameWindow.addComponent(button);
 
-        bullets.clear();
-        bulletDeleteQueue.clear();
+        JLabel label = new JLabel("HEARTBREAKER");
+        GameWindow.addComponent(label);
+
+ */
         return true;
+
+
 
     }
 
