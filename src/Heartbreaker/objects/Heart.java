@@ -54,17 +54,16 @@ public class Heart extends Entity implements Collider {
     public void move() {}
     public void update(){
         //frames += .15;
-        frames++;
-
-        double beat_duration = 60 / bpm;
-        double totalTime = frames / 60;
+        double delta = GameFrame.delta;
+        frames+= GameFrame.delta;
+        double frameRate = 60.0;
+        double beat_duration = 60.0 / bpm;
+        double totalTime = frames;
         double rate = totalTime % beat_duration;
         double time = rate / beat_duration * (2 * Math.PI);
         setXPosition(getScene().origin.x + random.nextInt(-1 - (int)(damage*Math.pow(damage,.2)/20),1 + (int)(damage*Math.pow(damage,.2)/20)));
         setYPosition(getScene().origin.y + random.nextInt(-1 - (int)damage/20,1 + (int)damage/20));
-        //BPM
-        //double time = rate;
-        //scale = (Math.abs(Math.sin(time)) * Math.abs((Math.cos(time+.4) - Math.tan(time/2) - .4))) + 3;
+
         setScale((Math.abs(-Math.sin(time)) * (Math.abs((-Math.cos(time - 1.5) +Math.tan(time/2) - 4.5)) - 5.4)) + 5);
         setScale(-getScale());
         //scale = 1 * -(Math.abs(Math.sin(frames)) * Math.abs(Math.cos(frames) - 1)) + 5;

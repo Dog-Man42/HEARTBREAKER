@@ -106,11 +106,11 @@ public class GameFrame extends JPanel implements Runnable{
         long timer = System.currentTimeMillis();
         int frames = 0;
         double frameTimeSum = 0;
-
+        long frameStart = System.nanoTime();
         while(true){
             long now = System.nanoTime();
             if(now - lastTime > ns) {
-                long frameStart = System.nanoTime();
+
                 mouseUpdated = true;
                 if(!LOADING) {
                     update();
@@ -128,6 +128,7 @@ public class GameFrame extends JPanel implements Runnable{
                 if(ftGraph != null){
                     ftGraph.addFrame(frameTime);
                 }
+                frameStart = System.nanoTime();
             }
             if(System.currentTimeMillis() - timer >= 1000) {
                 timer += 1000;

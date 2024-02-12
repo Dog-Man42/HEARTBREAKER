@@ -29,7 +29,7 @@ public class FrameTimeGraph extends GameObject {
         Point2D.Double[] temp = getTransformedVertices();
         for (int i = temp.length - 1; i >= 0; i--) {
             if (i == 0) {
-                histogram[0] = frametime * -25;
+                histogram[0] = frametime * -5;
             } else {
                 histogram[i] = histogram[i - 1];
             }
@@ -51,10 +51,10 @@ public class FrameTimeGraph extends GameObject {
 
             g.drawLine((int) Math.round(line[i].x),(int) Math.round(getYPosition()),(int) Math.round(line[i].x),(int) Math.round(line[i].y));
         }
-        for(int i = 1; i < 11; i++){
-            g.drawLine((int) line[temp.length-1].x - 20, (int) Math.round(getYPosition()) -50 * i,(int) line[temp.length-1].x + 10,(int) Math.round(getYPosition()) - 50 * i);
+        for(int i = 1; i < 31; i++){
+            g.drawLine((int) line[temp.length-1].x - 20, (int) Math.round(getYPosition()) -10 * i,(int) line[temp.length-1].x + 10,(int) Math.round(getYPosition()) - 10 * i);
             g.setFont(new Font(Font.MONOSPACED,Font.ROMAN_BASELINE,15));
-            g.drawString(i + "ms",(int) line[temp.length-1].x + 10,(int) Math.round(getYPosition()) -50 * i);
+            g.drawString(i + "ms",(int) line[temp.length-1].x + 10,(int) Math.round(getYPosition()) -10 * i);
         }
 
 

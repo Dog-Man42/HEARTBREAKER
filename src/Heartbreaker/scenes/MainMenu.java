@@ -1,9 +1,6 @@
 package Heartbreaker.scenes;
 
 import Heartbreaker.engine.*;
-import Heartbreaker.engine.particles.*;
-import Heartbreaker.engine.vectors.Vector3;
-import Heartbreaker.engine.vectors.Vector3Math;
 import Heartbreaker.main.Heartbreaker;
 import Heartbreaker.objects.*;
 
