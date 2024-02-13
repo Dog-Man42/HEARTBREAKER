@@ -1,5 +1,6 @@
 package Heartbreaker.objects;
 
+import Heartbreaker.engine.GameFrame;
 import Heartbreaker.engine.collision.Collider;
 import Heartbreaker.engine.collision.Collision;
 import Heartbreaker.engine.UsesPolar;
@@ -12,7 +13,7 @@ public class GravBullet extends Bullet implements UsesPolar {
 
     private double xvel;
     private double yvel;
-    private int age = 0;
+    private double age = 0;
     private int ageLimit;
     private Polygon polygon;
     private boolean playerBullet;
@@ -71,10 +72,10 @@ public class GravBullet extends Bullet implements UsesPolar {
     }
 
     public void update(){
-        radialVelocity -= 5/radialPosition;
+        radialVelocity -= 200/radialPosition;
 
-        theta += angularVelocity;
-        radialPosition += radialVelocity;
+        theta += angularVelocity * GameFrame.delta;
+        radialPosition += radialVelocity * GameFrame.delta;
         //theta += 1;
         Point2D.Double position = rotatePoint(Math.toRadians(theta),new Point2D.Double(0,radialPosition));
 
@@ -100,7 +101,7 @@ public class GravBullet extends Bullet implements UsesPolar {
                 }
             }
         }
-        age++;
+        age+= GameFrame.delta;
 
 
 

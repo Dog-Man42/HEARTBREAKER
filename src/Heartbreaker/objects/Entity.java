@@ -1,5 +1,6 @@
 package Heartbreaker.objects;
 
+import Heartbreaker.engine.GameFrame;
 import Heartbreaker.engine.GameObject;
 import Heartbreaker.engine.collision.Collider;
 import Heartbreaker.engine.collision.CollisionData;
@@ -100,9 +101,9 @@ public abstract class Entity extends GameObject implements Collider {
         this.iFrames = iframes;
     }
 
-    /** Lowers iFrames by 1 */
+    /** Lowers iFrames by (1 * delta time) */
     public void decrementIFrames(){
-        this.iFrames--;
+        this.iFrames -= 1 *  GameFrame.delta;
     }
 
     /** Sets iFrames to maxIframes */

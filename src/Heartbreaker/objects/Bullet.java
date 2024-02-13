@@ -3,6 +3,7 @@ package Heartbreaker.objects;
 import java.awt.*;
 import java.awt.geom.Point2D;
 
+import Heartbreaker.engine.GameFrame;
 import Heartbreaker.engine.GameObject;
 import Heartbreaker.engine.collision.Collider;
 import Heartbreaker.engine.collision.CollisionData;
@@ -13,7 +14,7 @@ public class Bullet extends GameObject implements Collider{
     private double xvel;
     private double yvel;
     private double speed;
-    private int age = 0;
+    private double age = 0;
     private int ageLimit;
     private boolean playerBullet;
     private boolean dieNextFrame;
@@ -62,8 +63,8 @@ public class Bullet extends GameObject implements Collider{
     }
 
     public void update(){
-        changeXPos(xvel);
-        changeYPos(yvel);
+        changeXPos(xvel * GameFrame.delta);
+        changeYPos(yvel * GameFrame.delta);
         int negative = -(getScene().DIAGONAL - getScene().WIDTH);
 
         if(getXPosition() < negative || getScene().DIAGONAL < getXPosition() || getYPosition() < negative || getScene().DIAGONAL < getYPosition() ){
@@ -82,7 +83,7 @@ public class Bullet extends GameObject implements Collider{
                 }
             }
         }
-        age++;
+        age+= GameFrame.delta;
         if(dieNextFrame) {
             if (dieInFrames <= 0) {
                 if (playerBullet)

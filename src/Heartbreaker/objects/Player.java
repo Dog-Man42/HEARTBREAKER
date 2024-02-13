@@ -14,7 +14,7 @@ public class Player extends Entity implements UsesPolar, Collider{
     private double yvel = 0;
     private boolean spawnBullet;
     private boolean spawnGravBullet;
-    private int coolDown = 0;
+    private double coolDown = 0;
 
     private Point2D prevMouseX;
 
@@ -29,8 +29,8 @@ public class Player extends Entity implements UsesPolar, Collider{
     private double radialVelocity;
     private boolean radialChanged = false;
 
-    private final double maxAngularVel = 400;
-    private final double maxRadial = 6;
+    private final double maxAngularVel = 24000;
+    private final double maxRadial = 360;
     private final double acceleration = .1;
 
     private boolean wPressed = false;
@@ -115,14 +115,12 @@ public class Player extends Entity implements UsesPolar, Collider{
         double prevX = getXPosition();
         double prevY = getYPosition();
 
-        theta += angularVelocity / radialPosition;
-        radialPosition += radialVelocity;
+        theta += (angularVelocity * GameFrame.delta) / radialPosition;
+        radialPosition += radialVelocity * GameFrame.delta;
 
         if(radialPosition < -2){
             theta += 180;
             radialPosition = -radialPosition;
-
-
         }
         if(Math.abs(theta) > 360){
             theta = theta - (360 * Math.signum(theta));
@@ -135,8 +133,8 @@ public class Player extends Entity implements UsesPolar, Collider{
         setXPosition(position.x + getScene().origin.x);
         setYPosition(position.y + getScene().origin.y);
 
-        changeXPos(xvel);
-        changeYPos(yvel);
+        changeXPos(xvel * GameFrame.delta);
+        changeYPos(yvel * GameFrame.delta);
 
         if(spacePressed || Math.abs(xvel) > 0.01 ||Math.abs(xvel) > 0.01) {
             radialPosition = cartesianToRadius(getXPosition() - getScene().origin.x, getYPosition() - getScene().origin.y);
@@ -144,8 +142,8 @@ public class Player extends Entity implements UsesPolar, Collider{
         }
 
 
-        radialVelocity = radialVelocity * .95;
-        angularVelocity  = angularVelocity * .95;
+        radialVelocity = radialVelocity * .96;
+        angularVelocity  = angularVelocity * .96;
         xvel = xvel * .95;
         yvel = yvel * .95;
         if(Math.abs(xvel) <0.01){
@@ -162,16 +160,17 @@ public class Player extends Entity implements UsesPolar, Collider{
             if(spawnBullet) {
                 spawnBullet = false;
                 GameFrame.soundManager.playClip(SoundManager.shootGeneric);
-                getScene().spawnBullet(temp[1].x, temp[1].y, 0, 0, getRotation(), 12, 120,true);
+                getScene().spawnBullet(temp[1].x, temp[1].y, 0, 0, getRotation(), 720, 120,true);
                 coolDown = 8;
             } else if(spawnGravBullet){
                 spawnGravBullet = false;
                 GameFrame.soundManager.playClip(SoundManager.shootGrav);
-                getScene().spawnGravBullet(temp[1].x, temp[1].y, 0,0, getRotation(), 1, 240,true);
+                getScene().spawnGravBullet(temp[1].x, temp[1].y, 0,0, getRotation(), 60, 240,true);
                 coolDown = 16;
             }
         } else {
-            coolDown --;
+            coolDown -= 60 * GameFrame.delta;
+            System.out.println(coolDown);
 
         }
 
@@ -207,9 +206,9 @@ public class Player extends Entity implements UsesPolar, Collider{
 
         if(dPressed) {
             if(spacePressed){
-                xvel += 2.5 * acceleration;
-                if (xvel > 12) {
-                    xvel = 12;
+                xvel += 150 * acceleration;
+                if (xvel > 720) {
+                    xvel = 720;
                 }
 
             } else {
@@ -221,9 +220,9 @@ public class Player extends Entity implements UsesPolar, Collider{
         }
         if(aPressed) {
             if (spacePressed) {
-                xvel -= 2.5 * acceleration;
-                if (xvel < -12) {
-                    xvel = -12;
+                xvel -= 150 * acceleration;
+                if (xvel < -720) {
+                    xvel = -720;
                 }
 
             } else {
@@ -235,9 +234,9 @@ public class Player extends Entity implements UsesPolar, Collider{
         }
         if(wPressed) {
             if(spacePressed){
-                yvel -= 2.5 * acceleration;
-                if (yvel < -12){
-                    yvel = -12;
+                yvel -= 150 * acceleration;
+                if (yvel < -720){
+                    yvel = -720;
                 }
 
             } else {
@@ -249,9 +248,9 @@ public class Player extends Entity implements UsesPolar, Collider{
         }
         if(sPressed) {
             if(spacePressed){
-                yvel += 2.5 * acceleration;
-                if (yvel > 12) {
-                    yvel = 12;
+                yvel += 150 * acceleration;
+                if (yvel > 720) {
+                    yvel = 720;
                 }
 
             } else {
@@ -291,11 +290,11 @@ public class Player extends Entity implements UsesPolar, Collider{
     public void collided(CollisionData colData) {
         if(colData.getCollider().getClass() == Heart.class){
             //currentScene.damageHeart(1);
-            radialVelocity = 10;
+            radialVelocity = 600;
         } else {
             if (!(colData.getCollider() instanceof Bullet)) {
-                xvel = colData.getNormal().x * 2;
-                yvel = colData.getNormal().y * 2;
+                xvel = colData.getNormal().x * 600;
+                yvel = colData.getNormal().y * 600;
                 changeXPos(-(colData.getNormal().x * (colData.getDepth())));
                 changeYPos(-(colData.getNormal().y * (colData.getDepth())));
                 //radialVelocity = 0;

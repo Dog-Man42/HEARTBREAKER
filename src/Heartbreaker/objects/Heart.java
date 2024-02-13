@@ -56,7 +56,6 @@ public class Heart extends Entity implements Collider {
         //frames += .15;
         double delta = GameFrame.delta;
         frames+= GameFrame.delta;
-        double frameRate = 60.0;
         double beat_duration = 60.0 / bpm;
         double totalTime = frames;
         double rate = totalTime % beat_duration;
@@ -64,7 +63,8 @@ public class Heart extends Entity implements Collider {
         setXPosition(getScene().origin.x + random.nextInt(-1 - (int)(damage*Math.pow(damage,.2)/20),1 + (int)(damage*Math.pow(damage,.2)/20)));
         setYPosition(getScene().origin.y + random.nextInt(-1 - (int)damage/20,1 + (int)damage/20));
 
-        setScale((Math.abs(-Math.sin(time)) * (Math.abs((-Math.cos(time - 1.5) +Math.tan(time/2) - 4.5)) - 5.4)) + 5);
+        setScale( .75 * heartFunction(time) + 4);
+        //setScale((Math.abs(-Math.sin(time)) * (Math.abs((-Math.cos(time - 1.5) +Math.tan(time/2) - 4.5)) - 5.4)) + 5);
         setScale(-getScale());
         //scale = 1 * -(Math.abs(Math.sin(frames)) * Math.abs(Math.cos(frames) - 1)) + 5;
         graph.update();
@@ -72,8 +72,18 @@ public class Heart extends Entity implements Collider {
             left.update();
             right.update();
         }
-
     }
+
+    public static double heartFunction(double time){
+        double sft = time + Math.PI - 1;
+        double a = -1 * Math.pow( Math.sin(.5 * sft + 2.9), 10);
+        double b = .5 * Math.pow( Math.sin(.5 * sft + 5), 20);
+        double c = 4 * Math.pow( Math.sin(.5 * sft - 0.01145), 40);
+        double d = .5 * Math.pow( Math.sin(.5 * sft + 0.7), 50);
+
+        return a + b + c + d ;
+    }
+
     public void damage(int dmg) {
 
         if (getIFrames() <= 0) {
@@ -83,6 +93,7 @@ public class Heart extends Entity implements Collider {
                 getScene().score += 100 * dmg;
                 damage += .5 * dmg;
                 bpm += .5 * dmg;
+                getScene().shield.damage += .5 * dmg;
                 graph.setBPM(bpm);
                 if(getScene().shield != null) {
                     getScene().shield.bpm = bpm;

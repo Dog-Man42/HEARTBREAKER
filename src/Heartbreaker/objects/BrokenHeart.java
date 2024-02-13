@@ -1,5 +1,6 @@
 package Heartbreaker.objects;
 
+import Heartbreaker.engine.GameFrame;
 import Heartbreaker.engine.GameObject;
 
 import java.awt.geom.Point2D;
@@ -26,7 +27,7 @@ public class BrokenHeart extends GameObject {
 
     }
     public void update(){
-        changeXPos(-5 * side);
+        changeXPos(-5 * side * GameFrame.delta);
         changeScale(.1);
     }
     public void draw(Graphics2D g){

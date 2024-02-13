@@ -35,7 +35,7 @@ public class HeartGraph extends GameObject {
             double time = rate / beat_duration * (2 * Math.PI);
             //transformedVertices[i].setLocation(i, -10 * (Math.abs(Math.sin(time)) * Math.abs((Math.cos(time+.4) - Math.tan(time/2) - .4))) + 3);
 
-            histogram[i] = -10 * (Math.abs(-Math.sin(time)) * (Math.abs((-Math.cos(time - 1.5) +Math.tan(time/2) - 4.5)) - 5.4)) + 0;
+            histogram[i] = (-10 * Heart.heartFunction(time)) + 12;
             //transformedVertices[i].setLocation(i/2, -10 * (Math.abs(-Math.sin(time)) * (Math.abs((-Math.cos(time - 1.5) +Math.tan(time/2) - 4.5)) - 5.4)) + 0);
             temp[i].setLocation(i,histogram[i]);
         }
@@ -49,8 +49,6 @@ public class HeartGraph extends GameObject {
         for(int i = temp.length-1; i >= 0; i--){
             double fps = 1.0 / GameFrame.delta;
             double beat_duration = 60.0 / bpm;
-            System.out.println("Delta: " + beat_duration);
-            System.out.println("60FPS: " + (60.0 / bpm));
             double totalTime = frames;
             double rate = totalTime % beat_duration;
             double time = rate / beat_duration * (2 * Math.PI);
@@ -58,7 +56,8 @@ public class HeartGraph extends GameObject {
             //transformedVertices[i].setLocation(i, -10 * (Math.abs(Math.sin(time)) * Math.abs((Math.cos(time+.4) - Math.tan(time/2) - .4))) + 3);
             if(i == 0){
                 if(!(bpm < 10)) {
-                    histogram[0] = -10 * (Math.abs(-Math.sin(time)) * (Math.abs((-Math.cos(time - 1.5) + Math.tan(time / 2) - 4.5)) - 5.4)) + 0;
+                    //histogram[0] = -10 * (Math.abs(-Math.sin(time)) * (Math.abs((-Math.cos(time - 1.5) + Math.tan(time / 2) - 4.5)) - 5.4)) + 0;
+                    histogram[0] = (-10 * Heart.heartFunction(time)) + 12;
                 } else {
                     histogram[0] = 5.4;
                 }

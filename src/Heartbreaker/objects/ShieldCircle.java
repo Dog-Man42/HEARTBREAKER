@@ -40,11 +40,12 @@ public class ShieldCircle extends Entity implements Collider {
 
             if (getHP() <= 20 && radius >= 20) {
                 radius = 10;
-                getScene().shield.damage += .5;
+                getScene().shield.damage += .5 * dmg;
                 getScene().score += 100 * dmg;
                 GameFrame.soundManager.playClip(SoundManager.shieldOrbShrink);
+
             } else {
-                getScene().shield.damage += .25;
+                getScene().shield.damage += .25 * dmg;
                 getScene().score += 1 * dmg;
                 GameFrame.soundManager.playClip(SoundManager.shieldOrbDamage);
             }
