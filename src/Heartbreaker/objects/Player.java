@@ -142,10 +142,10 @@ public class Player extends Entity implements UsesPolar, Collider{
         }
 
 
-        radialVelocity = radialVelocity * .96;
-        angularVelocity  = angularVelocity * .96;
-        xvel = xvel * .95;
-        yvel = yvel * .95;
+        radialVelocity *= (60 * .96) * GameFrame.delta;
+        angularVelocity *= (60 * .96) * GameFrame.delta;
+        xvel *= (60 * .96) * GameFrame.delta;
+        yvel *= (60 * .96) * GameFrame.delta;
         if(Math.abs(xvel) <0.01){
             xvel = 0;
         }
@@ -206,13 +206,13 @@ public class Player extends Entity implements UsesPolar, Collider{
 
         if(dPressed) {
             if(spacePressed){
-                xvel += 150 * acceleration;
+                xvel += 150 * 60 * acceleration * GameFrame.delta;
                 if (xvel > 720) {
                     xvel = 720;
                 }
 
             } else {
-                angularVelocity -= maxAngularVel * acceleration;
+                angularVelocity -= maxAngularVel * (60 * acceleration) * GameFrame.delta;
                 if (angularVelocity < -maxAngularVel) {
                     angularVelocity = -maxAngularVel;
                 }
@@ -220,13 +220,14 @@ public class Player extends Entity implements UsesPolar, Collider{
         }
         if(aPressed) {
             if (spacePressed) {
-                xvel -= 150 * acceleration;
+                xvel -= 150 * 60 * acceleration * GameFrame.delta;
                 if (xvel < -720) {
                     xvel = -720;
                 }
 
             } else {
-                angularVelocity += maxAngularVel * acceleration;
+
+                angularVelocity += maxAngularVel * (60 * acceleration) * GameFrame.delta;
                 if (angularVelocity > maxAngularVel) {
                     angularVelocity = maxAngularVel;
                 }
@@ -234,13 +235,15 @@ public class Player extends Entity implements UsesPolar, Collider{
         }
         if(wPressed) {
             if(spacePressed){
-                yvel -= 150 * acceleration;
+                yvel -= 150 * 60 * acceleration * GameFrame.delta;
                 if (yvel < -720){
                     yvel = -720;
                 }
 
             } else {
-                radialVelocity -= maxRadial * acceleration;
+
+                radialVelocity -= 60 * maxRadial * acceleration * GameFrame.delta;
+
                 if (radialVelocity < -maxRadial) {
                     radialVelocity = -maxRadial;
                 }
@@ -248,13 +251,13 @@ public class Player extends Entity implements UsesPolar, Collider{
         }
         if(sPressed) {
             if(spacePressed){
-                yvel += 150 * acceleration;
+                yvel += 150 * 60 * acceleration * GameFrame.delta;
                 if (yvel > 720) {
                     yvel = 720;
                 }
 
             } else {
-                radialVelocity += maxRadial * acceleration;
+                radialVelocity += 60 * maxRadial * acceleration * GameFrame.delta;
                 if (radialVelocity > maxRadial) {
                     radialVelocity = maxRadial;
                 }
