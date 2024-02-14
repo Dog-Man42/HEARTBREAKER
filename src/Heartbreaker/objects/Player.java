@@ -170,7 +170,6 @@ public class Player extends Entity implements UsesPolar, Collider{
             }
         } else {
             coolDown -= 60 * GameFrame.delta;
-            System.out.println(coolDown);
 
         }
 

@@ -95,7 +95,6 @@ public class Shield extends GameObject {
             played = true;
         }
 
-        System.out.println(cooldown);
         if(cooldown <= -20 - (int) Math.round(damage/10)){
             playShoot = false;
             cooldown = 275 - (int) Math.round(damage/1.75);
