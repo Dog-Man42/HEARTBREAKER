@@ -57,7 +57,7 @@ public class MinorEye extends Entity {
         if(frame % 240 == 0){
             firing = true;
             GameFrame.soundManager.playClip(SoundManager.shootLaser);
-            getScene().spawnBullet(getXPosition() + irisXPos,getYPosition() + irisYPos,0,0,Math.toDegrees(theta) + rand.nextFloat(-.5f,.5f),20,60,false);
+            getScene().spawnBullet(getXPosition() + irisXPos,getYPosition() + irisYPos,0,0,Math.toDegrees(theta) + rand.nextFloat(-.5f,.5f),1200,60,false);
             changeScale(-2);
         }
 
