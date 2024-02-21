@@ -13,15 +13,27 @@ public class Camera {
 
     }
 
-    public void keyPressed(KeyEvent e){
-        switch (e.getKeyCode()){
-            case KeyEvent.VK_LEFT -> xPosition -= 250 * GameFrame.delta;
-            case KeyEvent.VK_UP -> yPosition -= 250 * GameFrame.delta;
-            case KeyEvent.VK_RIGHT-> xPosition += 250 * GameFrame.delta;
-            case KeyEvent.VK_DOWN -> yPosition += 250 * GameFrame.delta;
-            case KeyEvent.VK_MINUS -> zoom -= .01;
-            case KeyEvent.VK_EQUALS -> zoom += .01;
+    public void update(){
+        if(Keyboard.isKeyPressed(KeyEvent.VK_LEFT)){
+            xPosition -= 250 * GameFrame.delta;
         }
+        if(Keyboard.isKeyPressed(KeyEvent.VK_UP)){
+            yPosition -= 250 * GameFrame.delta;
+        }
+        if(Keyboard.isKeyPressed(KeyEvent.VK_RIGHT)){
+            xPosition += 250 * GameFrame.delta;
+        }
+        if(Keyboard.isKeyPressed(KeyEvent.VK_DOWN)){
+            yPosition += 250 * GameFrame.delta;
+        }
+        if(Keyboard.isKeyPressed(KeyEvent.VK_MINUS)){
+            zoom -= .01;
+        }
+        if(Keyboard.isKeyPressed(KeyEvent.VK_EQUALS)){
+            zoom += .01;
+        }
+
+
     }
 
     public double getxPosition() {

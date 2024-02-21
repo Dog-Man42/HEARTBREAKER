@@ -43,6 +43,9 @@ public abstract class Scene {
                 }
             }
         }
+        if(camera != null){
+            camera.update();
+        }
         collisionManager.updateColliders();
         clearRemovedObjects();
     }
