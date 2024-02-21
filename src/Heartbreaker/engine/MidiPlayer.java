@@ -23,7 +23,7 @@ public class MidiPlayer {
     }
     public void start(){
         sequencer.stop();
-        sequencer.setTickPosition(-150);
+        sequencer.setTickPosition(0);
         sequencer.start();
     }
     public class listener implements MetaEventListener {

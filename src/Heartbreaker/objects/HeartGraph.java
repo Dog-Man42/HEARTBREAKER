@@ -39,13 +39,13 @@ public class HeartGraph extends GameObject {
             //transformedVertices[i].setLocation(i/2, -10 * (Math.abs(-Math.sin(time)) * (Math.abs((-Math.cos(time - 1.5) +Math.tan(time/2) - 4.5)) - 5.4)) + 0);
             temp[i].setLocation(i,histogram[i]);
         }
-        setTransformedVertices(temp);
+        setVertices(temp);
     }
 
 
     public void update(){
         frames+= GameFrame.delta;
-        Point2D.Double[] temp = getTransformedVertices();
+        Point2D.Double[] temp = getVerticies();
         for(int i = temp.length-1; i >= 0; i--){
             double fps = 1.0 / GameFrame.delta;
             double beat_duration = 60.0 / bpm;
@@ -91,7 +91,7 @@ public class HeartGraph extends GameObject {
         }
 
         Point2D.Double[] line = realizePoints();
-        Point2D.Double[] temp = getTransformedVertices();
+        Point2D.Double[] temp = getVerticies();
         int[] lineX = new int[temp.length];
         int[] lineY = new int[temp.length];
         for(int i = 0; i < temp.length; i++){

@@ -162,6 +162,8 @@ public class GameFrame extends JPanel implements Runnable{
     }
 
     public void draw(Graphics2D g){
+        g.setColor(Color.WHITE);
+        g.setStroke(new BasicStroke(3));
         currentScene.draw(g);
         if(Heartbreaker.DEBUG_MODE){
             ftGraph.draw(g);

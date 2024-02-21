@@ -21,11 +21,7 @@ public abstract class Scene {
     public int HEIGHT = GameFrame.GAME_HEIGHT;
     public int DIAGONAL = (int)Math.round(Math.sqrt(WIDTH * WIDTH + HEIGHT * HEIGHT));
 
-    public double scrollX = 0;
-    public double scrollY = 0;
-
-    public double zoom = 1;
-
+    public Camera camera;
 
     public void windowResized(){
         origin = new Point(GameFrame.GAME_WIDTH/2, GameFrame.GAME_HEIGHT/2);
@@ -59,6 +55,8 @@ public abstract class Scene {
                 if(object.isDrawnByScene()) {
                     object.draw(g);
                 }
+                g.setColor(Color.WHITE);
+                g.setStroke(new BasicStroke(3));
             }
         }
     }
@@ -92,4 +90,9 @@ public abstract class Scene {
     public void clearObjects(){
         objects.clear();
     }
+
+    public Camera getCamera(){
+        return camera;
+    }
+
 }

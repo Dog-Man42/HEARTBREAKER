@@ -51,27 +51,23 @@ public abstract class GameObject {
      */
     private Point2D.Double[] vertices;
 
-    /**
-     * Transformed shape of the object. This is what gets drawn to the screen. Repeated transforms or modifications should not be
-     * done on this array, otherwise inaccuracies could build.
-     */
-    private Point2D.Double[] transformedVertices;
+
 
     /**
      * Returns an array of given points rotated by theta.
      *
-     * @param theta radians to rotate by.
+     * @param theta       radians to rotate by.
      * @param inputPoints points to be rotated.
      * @return Array of rotated points
      */
-    public Point2D.Double[] rotatePoints(double theta, Point2D.Double[] inputPoints){
+    public Point2D.Double[] rotatePoints(double theta, Point2D.Double[] inputPoints) {
         Point2D.Double[] output = new Point2D.Double[inputPoints.length];
-        for(int i = 0; i < inputPoints.length; i++){
+        for (int i = 0; i < inputPoints.length; i++) {
             double sin = Math.sin(theta);
             double cos = Math.cos(theta);
-            double x = inputPoints[i].x * cos- inputPoints[i].y * sin;
+            double x = inputPoints[i].x * cos - inputPoints[i].y * sin;
             double y = inputPoints[i].x * sin + inputPoints[i].y * cos;
-            output[i] = new Point2D.Double(x,y);
+            output[i] = new Point2D.Double(x, y);
         }
         return output;
     }
@@ -79,45 +75,34 @@ public abstract class GameObject {
     /**
      * Returns a given point rotated by theta.
      *
-     * @param theta radians to rotate by.
+     * @param theta      radians to rotate by.
      * @param inputPoint point to be rotated.
      * @return rotated point
      */
-    public Point2D.Double rotatePoint(double theta, Point2D.Double inputPoint){
+    public Point2D.Double rotatePoint(double theta, Point2D.Double inputPoint) {
         double sin = Math.sin(theta);
         double cos = Math.cos(theta);
         double x = inputPoint.x * cos - inputPoint.y * sin;
         double y = inputPoint.x * sin + inputPoint.y * cos;
-        return new Point2D.Double(x,y);
+        return new Point2D.Double(x, y);
     }
 
     /**
      * Rotates a given point around another point by theta.
      *
-     * @param theta radians to rotate by.
+     * @param theta      radians to rotate by.
      * @param inputPoint point to be rotated.
-     * @param parent the point to be rotated around.
+     * @param parent     the point to be rotated around.
      * @return rotated point
      */
-    public Point2D.Double rotatePointAroundPoint(double theta, Point2D.Double inputPoint, Point2D.Double parent){
+    public Point2D.Double rotatePointAroundPoint(double theta, Point2D.Double inputPoint, Point2D.Double parent) {
         double sin = Math.sin(theta);
         double cos = Math.cos(theta);
         double x = (inputPoint.x - parent.x) * cos - (inputPoint.y - parent.y) * sin + parent.x;
         double y = (inputPoint.x - parent.x) * sin + (inputPoint.y - parent.y) * cos + parent.y;
-        return new Point2D.Double(x,y);
+        return new Point2D.Double(x, y);
     }
 
-    /**
-     * Returns a copy of a Point2D.Double array.
-     *
-     * @param baseVerts Point2D.Double array to be copied
-     * @return array of copied vertices
-     */
-    public Point2D.Double[] copyVertices(Point2D.Double[] baseVerts){
-        Point2D.Double[] temp = new Point2D.Double[baseVerts.length];
-        System.arraycopy(baseVerts, 0, temp, 0, baseVerts.length);
-        return temp;
-    }
 
     /**
      * Calculates the distance between x1, y1 and x2, y2.
@@ -128,9 +113,9 @@ public abstract class GameObject {
      * @param y2 y position of point 2
      * @return distance between two points
      */
-    public double calculateDistance(double x1,double y1, double x2, double y2){
-        return Math.sqrt( Math.pow((x2 - x1),2.0) +
-                Math.pow(y2 - y1,2.0) );
+    public double calculateDistance(double x1, double y1, double x2, double y2) {
+        return Math.sqrt(Math.pow((x2 - x1), 2.0) +
+                Math.pow(y2 - y1, 2.0));
     }
 
     /**
@@ -140,87 +125,103 @@ public abstract class GameObject {
      * @param p2 y position of point 1
      * @return distance between two points
      */
-    public double calculateDistance(Point2D.Double p1, Point2D.Double p2){
-        return Math.sqrt( Math.pow((p2.x - p1.x),2.0) +
-                Math.pow(p2.y - p1.y,2.0) );
+    public double calculateDistance(Point2D.Double p1, Point2D.Double p2) {
+        return Math.sqrt(Math.pow((p2.x - p1.x), 2.0) +
+                Math.pow(p2.y - p1.y, 2.0));
     }
 
     /**
-     * Generates a Polygon from a given Point2D.Double array
+     * Generates a Polygon from an a transformed array of provided points
      *
      * @param points Point2D.Double array
      * @return polygon consisting of given points
      */
-    public Polygon realizePoly(Point2D.Double[] points){
+    public Polygon realizePoly(Point2D.Double[] points) {
 
         Polygon temp = new Polygon();
         for (Point2D.Double point : points) {
-            if(parent != null){
+            if (parent != null) {
                 //4.5 hours spent here
-                Point2D.Double tempPoint = new Point2D.Double((point.x * (scale * parent.scale)),(point.y * (scale * parent.scale)));
-                tempPoint = rotatePoint(Math.toRadians(rotation),tempPoint);
-                tempPoint.setLocation(tempPoint.x + xPosition,tempPoint.y + yPosition);
-                tempPoint = rotatePoint(Math.toRadians(parent.rotation),tempPoint);
-                temp.addPoint((int) (tempPoint.x + parent.getXPosition()),(int) (tempPoint.y + parent.getYPosition()));
+                Point2D.Double tempPoint = new Point2D.Double((point.x * (scale * parent.scale)), (point.y * (scale * parent.scale)));
+                tempPoint = rotatePoint(Math.toRadians(rotation), tempPoint);
+                tempPoint.setLocation(tempPoint.x + xPosition, tempPoint.y + yPosition);
+                tempPoint = rotatePoint(Math.toRadians(parent.rotation), tempPoint);
+                temp.addPoint((int) (tempPoint.x + parent.getXPosition()), (int) (tempPoint.y + parent.getYPosition()));
             } else {
-                Point2D.Double tempPoint = new Point2D.Double(point.x * scale,point.y * scale);
-                tempPoint = rotatePoint(Math.toRadians(rotation),tempPoint);
-                temp.addPoint((int) (tempPoint.x + xPosition),(int) (tempPoint.y + yPosition));
+                Point2D.Double tempPoint = new Point2D.Double(point.x * scale, point.y * scale);
+                tempPoint = rotatePoint(Math.toRadians(rotation), tempPoint);
+                temp.addPoint((int) (tempPoint.x + xPosition), (int) (tempPoint.y + yPosition));
             }
         }
         return temp;
     }
 
     /**
-     * Generates a Polygon from the transformedVertices array
+     * Generates a Polygon of transformed vertices
+     *
      * @return
      */
-    public Polygon realizePoly(){
+    public Polygon realizePoly() {
 
         Polygon temp = new Polygon();
-        for (Point2D.Double point : transformedVertices) {
-            if(parent != null){
-                //4.5 hours spent here
-                Point2D.Double tempPoint = new Point2D.Double((point.x * (scale * parent.scale)),(point.y * (scale * parent.scale)));
-                tempPoint = rotatePoint(Math.toRadians(rotation),tempPoint);
-                tempPoint.setLocation(tempPoint.x + xPosition,tempPoint.y + yPosition);
-                tempPoint = rotatePoint(Math.toRadians(parent.rotation),tempPoint);
-                temp.addPoint((int) (tempPoint.x + parent.getXPosition()),(int) (tempPoint.y + parent.getYPosition()));
-            } else {
-                Point2D.Double tempPoint = new Point2D.Double(point.x * scale,point.y * scale);
-                tempPoint = rotatePoint(Math.toRadians(rotation),tempPoint);
-                temp.addPoint((int) (tempPoint.x + xPosition),(int) (tempPoint.y + yPosition));
-            }
+        for(Point2D.Double point : realizePoints()){
+            temp.addPoint( (int) Math.round( point.x ), (int) Math.round( point.y ) );
+        }
+        return temp;
+    }
+
+    public Polygon realizePolyCameraSpace(Camera camera) {
+
+        Polygon temp = new Polygon();
+        for(Point2D.Double point : realizePointsCameraSpace(camera)){
+            temp.addPoint( (int) Math.round( point.x ), (int) Math.round( point.y ) );
         }
         return temp;
     }
 
 
     /**
-     * Generates a Polygon consisting of the points contained in transformedVertices
+     * Generates an array of transformed vertices
      *
      * @return polygon consisting of points within transformedVertices
      */
-    public Point2D.Double[] realizePoints(){
-        if (transformedVertices.length == 0) {
+    public Point2D.Double[] realizePoints() {
+        if (vertices.length == 0) {
             return new Point2D.Double[0];
         }
-        Point2D.Double[] temp = new Point2D.Double[transformedVertices.length];
+        Point2D.Double[] temp = new Point2D.Double[vertices.length];
         for (int i = 0; i < temp.length; i++) {
             temp[i] = new Point2D.Double();
-            if(parent != null){
-                Point2D.Double tempPoint = new Point2D.Double((transformedVertices[i].x * (scale * parent.scale)),(transformedVertices[i].y * (scale * parent.scale)));
-                tempPoint = rotatePoint(Math.toRadians(rotation),tempPoint);
-                tempPoint.setLocation(tempPoint.x + xPosition,tempPoint.y + yPosition);
-                tempPoint = rotatePoint(Math.toRadians(parent.rotation),tempPoint);
-                temp[i].setLocation((int) (tempPoint.x + parent.getXPosition()),(int) (tempPoint.y + parent.getYPosition()));
+            if (parent != null) {
+                //4.5 hours spent here
+                Point2D.Double tempPoint = new Point2D.Double((vertices[i].x * (scale * parent.scale)), (vertices[i].y * (scale * parent.scale)));
+                tempPoint = rotatePoint(Math.toRadians(rotation), tempPoint);
+                tempPoint.setLocation(tempPoint.x + xPosition, tempPoint.y + yPosition);
+                tempPoint = rotatePoint(Math.toRadians(parent.rotation), tempPoint);
+                temp[i].setLocation((int) (tempPoint.x + parent.getXPosition()), (int) (tempPoint.y + parent.getYPosition()));
             } else {
-                Point2D.Double tempPoint = new Point2D.Double(transformedVertices[i].x * scale,transformedVertices[i].y * scale);
-                tempPoint = rotatePoint(Math.toRadians(rotation),tempPoint);
-                temp[i].setLocation((int) (tempPoint.x + xPosition),(int) (tempPoint.y + yPosition));
+                Point2D.Double tempPoint = new Point2D.Double(vertices[i].x * scale, vertices[i].y * scale);
+                tempPoint = rotatePoint(Math.toRadians(rotation), tempPoint);
+                temp[i].setLocation((int) (tempPoint.x + xPosition), (int) (tempPoint.y + yPosition));
             }
         }
         return temp;
+    }
+
+    public Point2D.Double[] realizePointsCameraSpace(Camera camera){
+        Point2D.Double[] points = realizePoints();
+        if(camera == null){
+            return points;
+        }
+        Point origin = getScene().origin;
+
+        for( Point2D.Double point : points){
+            double x = origin.x + (point.getX() - camera.getxPosition()) * camera.zoom;
+            double y = origin.y + (point.getY() - camera.getyPosition()) * camera.zoom;
+            point.setLocation(x,y);
+        }
+
+        return points;
     }
 
     /**
@@ -229,10 +230,19 @@ public abstract class GameObject {
      * @return x-position in world space
      */
     public double getXPosition() {
-        if(parent != null) {
+        if (parent != null) {
             return xPosition + parent.getXPosition();
         }
         return xPosition;
+    }
+
+    /**
+     * Sets the X-position of the object
+     *
+     * @param x new x-position
+     */
+    public void setXPosition(double x) {
+        xPosition = x;
     }
 
     /**
@@ -251,11 +261,20 @@ public abstract class GameObject {
      * @return y-position in world space
      */
     public double getYPosition() {
-        if(parent != null){
+        if (parent != null) {
             return yPosition + parent.getYPosition();
         }
         return yPosition;
 
+    }
+
+    /**
+     * Sets the Y-position of the object
+     *
+     * @param y new y-position
+     */
+    public void setYPosition(double y) {
+        yPosition = y;
     }
 
     /**
@@ -273,8 +292,8 @@ public abstract class GameObject {
      *
      * @return Point2D.Double with position of the object
      */
-    public Point2D.Double getPosition(){
-        if(parent != null) {
+    public Point2D.Double getPosition() {
+        if (parent != null) {
             return new Point2D.Double(xPosition + parent.getXPosition(), yPosition + parent.getYPosition());
         }
         return new Point2D.Double(xPosition, yPosition);
@@ -287,68 +306,56 @@ public abstract class GameObject {
      * @return Point2D.Double with position of the object
      * @throws NullPointerException worldSpace is true and parent null
      */
-    public Point2D.Double getLocalPos( ){
-        return new Point2D.Double(xPosition,yPosition);
+    public Point2D.Double getLocalPos() {
+        return new Point2D.Double(xPosition, yPosition);
     }
-
 
     /**
      * Returns object's rotation in degrees
+     *
      * @return
      */
-    public double getRotation(){
+    public double getRotation() {
         return this.rotation;
     }
 
     /**
+     * Sets Rotation
+     *
+     * @param theta Rotation in degrees
+     */
+    public void setRotation(double theta) {
+        this.rotation = theta;
+    }
+
+    /**
      * Returns the scale of the object
+     *
      * @return
      */
-    public double getScale(){
+    public double getScale() {
         return scale;
     }
 
     /**
-     * Sets the X-position of the object
-     *
-     * @param x new x-position
-     */
-    public void setXPosition(double x){
-        xPosition = x;
-    }
-
-    /**
-     * Sets the Y-position of the object
-     *
-     * @param y new y-position
-     */
-    public void setYPosition(double y){
-        yPosition = y;
-    }
-
-    /**
-     * Sets Rotation
-     * @param theta Rotation in degrees
-     */
-    public void setRotation(double theta){this.rotation = theta;}
-
-    /**
      * Sets Scale. Effects scale and position of children
      */
-    public void setScale(double scale){
+    public void setScale(double scale) {
         this.scale = scale;
     }
 
     /**
      * Changes xposition by n amount
+     *
      * @param change
      */
-    public void changeXPos(double change){
+    public void changeXPos(double change) {
         xPosition += change;
     }
 
     /**
      * Changes yposition by n amount
+     *
      * @param change
      */
     public void changeYPos(double change) {
@@ -357,32 +364,33 @@ public abstract class GameObject {
 
     /**
      * Changes scale by n amount
+     *
      * @param change
      */
-    public void changeScale(double change){
+    public void changeScale(double change) {
         scale += change;
     }
 
     /**
      * Changes rotation by n amount
+     *
      * @param change
      */
-    public void changeRotation(double change){
+    public void changeRotation(double change) {
         rotation += change;
     }
-
 
 
     /**
      * Sets the parent of this GameObject
      *
-     * @param p new parent
+     * @param p              new parent
      * @param keepTransforms adds parent's transforms to this object before changing parent
      * @throws NullPointerException keepTransforms is true and parent null
      */
-    public void setParent(GameObject p, boolean keepTransforms){
-        if(keepTransforms){
-            if(parent == null){
+    public void setParent(GameObject p, boolean keepTransforms) {
+        if (keepTransforms) {
+            if (parent == null) {
                 throw new NullPointerException();
             }
             xPosition += parent.getXPosition();
@@ -399,9 +407,9 @@ public abstract class GameObject {
      * @param keepTransforms if true, all transforms from the parent are kept,
      *                       if false, parent's transforms are ignored.
      */
-    public void removeParent(boolean keepTransforms){
-        if(keepTransforms){
-            if(parent == null){
+    public void removeParent(boolean keepTransforms) {
+        if (keepTransforms) {
+            if (parent == null) {
                 throw new NullPointerException();
             }
             xPosition += parent.getXPosition();
@@ -414,9 +422,10 @@ public abstract class GameObject {
 
     /**
      * Returns the parent Object
+     *
      * @return GameObject
      */
-    public GameObject getParent(){
+    public GameObject getParent() {
         return parent;
     }
 
@@ -430,60 +439,48 @@ public abstract class GameObject {
      *
      * @param g Graphics2D object
      */
-     public abstract void draw(Graphics2D g);
+    public abstract void draw(Graphics2D g);
 
     /**
      * Returns whether the scene draws this GameObject when drawing the objects ArrayList
+     *
      * @return if scene draws object
      */
-    public boolean isDrawnByScene(){
-         return drawnByScene;
-     }
+    public boolean isDrawnByScene() {
+        return drawnByScene;
+    }
 
     /**
      * Sets if the scene can draw the object
+     *
      * @param drawnByScene
      */
-     public void setDrawnByScene(boolean drawnByScene){
-         this.drawnByScene = drawnByScene;
-     }
+    public void setDrawnByScene(boolean drawnByScene) {
+        this.drawnByScene = drawnByScene;
+    }
 
     /**
      * Returns the base vertices array
+     *
      * @return
      */
-    public Point2D.Double[] getVerticies(){
-         return this.vertices;
-     }
+    public Point2D.Double[] getVerticies() {
+        return this.vertices;
+    }
 
     /**
      * Replaces the base vertices and transformed vertices array with a new Point2D.Double array
+     *
      * @param verts new vertices array
      */
-    public void setVertices(Point2D.Double[] verts){
-         this.vertices = verts;
-         transformedVertices = copyVertices(verts);
-     }
+    public void setVertices(Point2D.Double[] verts) {
+        this.vertices = verts;
 
-    /**
-     * Returns the transformed vertices array
-     * @return
-     */
-    public Point2D.Double[] getTransformedVertices(){
-        return this.transformedVertices;
-     }
+    }
 
 
-    /**
-     * Replaces transformed vertices array with a new Point2D.Double array
-     * @param verts new vertices array
-     */
-     public void setTransformedVertices(Point2D.Double[] verts){
-        transformedVertices = verts;
-     }
-
-     public Level getScene(){
-         return currentScene;
-     }
+    public Level getScene() {
+        return currentScene;
+    }
 
 }

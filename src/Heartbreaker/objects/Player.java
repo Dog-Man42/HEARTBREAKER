@@ -7,6 +7,7 @@ import Heartbreaker.scenes.MainMenu;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Point2D;
+import java.util.Arrays;
 
 public class Player extends Entity implements UsesPolar, Collider{
 
@@ -99,6 +100,7 @@ public class Player extends Entity implements UsesPolar, Collider{
     public void update() {
 
         checkKeys();
+        //System.out.println(Arrays.toString(getTransformedVertices()));
 
         //This causes subtle frame time spikes that cause somewhat noticeable jitter.
         //However, it could be due to the way of the GameFrame sending mouseevent to the level and then level to player.
@@ -141,11 +143,11 @@ public class Player extends Entity implements UsesPolar, Collider{
             theta = cartesianToTheta(getYPosition() - getScene().origin.y, getXPosition() - getScene().origin.x);
         }
 
-
-        radialVelocity *= (60 * .96) * GameFrame.delta;
-        angularVelocity *= (60 * .96) * GameFrame.delta;
-        xvel *= (60 * .96) * GameFrame.delta;
-        yvel *= (60 * .96) * GameFrame.delta;
+        double decel = Math.pow(1.0/(60 * .96), GameFrame.delta);
+        radialVelocity *= decel;
+        angularVelocity *= decel;
+        xvel *= decel;
+        yvel *= decel;
         if(Math.abs(xvel) <0.01){
             xvel = 0;
         }
@@ -160,12 +162,12 @@ public class Player extends Entity implements UsesPolar, Collider{
             if(spawnBullet) {
                 spawnBullet = false;
                 GameFrame.soundManager.playClip(SoundManager.shootGeneric);
-                getScene().spawnBullet(temp[1].x, temp[1].y, 0, 0, getRotation(), 720, 120,true);
+                getScene().addObject(new Bullet(temp[1].x, temp[1].y, 0, 0, getRotation(), 720, 120,true));
                 coolDown = 8;
             } else if(spawnGravBullet){
                 spawnGravBullet = false;
                 GameFrame.soundManager.playClip(SoundManager.shootGrav);
-                getScene().spawnGravBullet(temp[1].x, temp[1].y, 0,0, getRotation(), 60, 240,true);
+                getScene().addObject(new GravBullet(temp[1].x, temp[1].y, 0,0, getRotation(), 60, 240,true));
                 coolDown = 16;
             }
         } else {
@@ -190,7 +192,7 @@ public class Player extends Entity implements UsesPolar, Collider{
             setScale(temp);
         } else {
             g.setColor(Color.blue);
-            g.drawPolygon(realizePoly());
+            g.drawPolygon(realizePolyCameraSpace(getScene().getCamera()));
         }
         if(getHP() <= 0){
             GameFrame.setCurrentScene(new MainMenu());

@@ -101,7 +101,7 @@ public class GravBullet extends Bullet implements UsesPolar {
                 }
             }
         }
-        age+= GameFrame.delta;
+        age+= 60 * GameFrame.delta;
 
 
 
@@ -117,8 +117,8 @@ public class GravBullet extends Bullet implements UsesPolar {
     @Override
     public void collided(CollisionData colData) {
         if(colData.getCollider().getClass() == ShieldCircle.class){
-            radialVelocity *= -1;
-            angularVelocity *= -1;
+            radialVelocity *= -.9;
+            angularVelocity *= -.9;
             if(playerBullet){
                 hits = Collider.HITS_PLAYER;
                 hitBy = Collider.HIT_BY_PLAYER;

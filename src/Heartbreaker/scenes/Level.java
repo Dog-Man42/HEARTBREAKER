@@ -47,6 +47,9 @@ public abstract class Level extends Scene{
     public void keyPressed(KeyEvent e){
         if(player != null)
             player.keyPressed(e);
+        if(camera != null){
+            camera.keyPressed(e);
+        }
     }
     public void keyReleased(KeyEvent e){
         if(player != null)

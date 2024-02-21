@@ -26,7 +26,7 @@ public class FrameTimeGraph extends GameObject {
         if (frametime > maxTime){
             maxTime = frametime;
         }
-        Point2D.Double[] temp = getTransformedVertices();
+        Point2D.Double[] temp = getVerticies();
         for (int i = temp.length - 1; i >= 0; i--) {
             if (i == 0) {
                 histogram[0] = frametime * -5;

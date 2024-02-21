@@ -31,12 +31,13 @@ public class Box extends GameObject {
         frames += .15;
 
         setScale(-2*-(Math.abs(Math.sin(frames)) * Math.abs(Math.cos(frames) - 1)) + 8);
+        changeRotation(1);
 
     }
     public void draw(Graphics2D g){
 
         g.setColor(Color.green);
-        g.fillPolygon(realizePoly());
+        g.fillPolygon(realizePolyCameraSpace(getScene().getCamera()));
     }
 
 

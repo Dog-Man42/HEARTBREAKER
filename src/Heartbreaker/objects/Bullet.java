@@ -71,7 +71,7 @@ public class Bullet extends GameObject implements Collider{
             getScene().missedCount++;
             getScene().removeObject(this);
         }
-        //collisionDetection();
+
         if(ageLimit > 0){
             if(age >= ageLimit-20){
                 if(getScale() <= 0.1) {
