@@ -10,9 +10,7 @@ public class DefaultScene extends Level{
 
     public Level mainScene;
 
-    public DefaultScene(boolean scrollable) {
-        super(scrollable);
-    }
+    public DefaultScene() {}
 
 
     @Override

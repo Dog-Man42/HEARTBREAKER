@@ -34,12 +34,6 @@ public class Player extends Entity implements UsesPolar, Collider{
     private final double maxRadial = 360;
     private final double acceleration = .1;
 
-    private boolean wPressed = false;
-    private boolean aPressed = false;
-    private boolean sPressed = false;
-    private boolean dPressed = false;
-    private boolean spacePressed = false;
-    private boolean shiftPressed = false;
     private boolean leftClicked = false;
     private boolean rightClicked = false;
 
@@ -55,27 +49,6 @@ public class Player extends Entity implements UsesPolar, Collider{
 
 
         setVertices(new Point2D.Double[]{ new Point2D.Double(-2,-3), new Point2D.Double(-0,3) , new Point2D.Double(2,-3)});
-
-    }
-    //input
-    public void keyPressed(KeyEvent e){
-        switch(e.getKeyCode()){
-            case KeyEvent.VK_A -> aPressed = true;
-            case KeyEvent.VK_D -> dPressed = true;
-            case KeyEvent.VK_W -> wPressed = true;
-            case KeyEvent.VK_S -> sPressed = true;
-            case KeyEvent.VK_SPACE -> spacePressed = true;
-        }
-
-    }
-    public void keyReleased(KeyEvent e){
-        switch(e.getKeyCode()){
-            case KeyEvent.VK_A -> aPressed = false;
-            case KeyEvent.VK_D -> dPressed = false;
-            case KeyEvent.VK_W -> wPressed = false;
-            case KeyEvent.VK_S -> sPressed = false;
-            case KeyEvent.VK_SPACE -> spacePressed = false;
-        }
 
     }
 
@@ -98,6 +71,7 @@ public class Player extends Entity implements UsesPolar, Collider{
     }
 
     public void update() {
+
 
         checkKeys();
         //System.out.println(Arrays.toString(getTransformedVertices()));
@@ -138,7 +112,7 @@ public class Player extends Entity implements UsesPolar, Collider{
         changeXPos(xvel * GameFrame.delta);
         changeYPos(yvel * GameFrame.delta);
 
-        if(spacePressed || Math.abs(xvel) > 0.01 ||Math.abs(xvel) > 0.01) {
+        if(Keyboard.isKeyPressed(KeyEvent.VK_SPACE) || Math.abs(xvel) > 0.01 ||Math.abs(xvel) > 0.01) {
             radialPosition = cartesianToRadius(getXPosition() - getScene().origin.x, getYPosition() - getScene().origin.y);
             theta = cartesianToTheta(getYPosition() - getScene().origin.y, getXPosition() - getScene().origin.x);
         }
@@ -205,7 +179,9 @@ public class Player extends Entity implements UsesPolar, Collider{
 
     public void checkKeys(){
 
-        if(dPressed) {
+        boolean spacePressed = Keyboard.isKeyPressed(KeyEvent.VK_SPACE);
+
+        if(Keyboard.isKeyPressed(KeyEvent.VK_D)) {
             if(spacePressed){
                 xvel += 150 * 60 * acceleration * GameFrame.delta;
                 if (xvel > 720) {
@@ -219,7 +195,7 @@ public class Player extends Entity implements UsesPolar, Collider{
                 }
             }
         }
-        if(aPressed) {
+        if(Keyboard.isKeyPressed(KeyEvent.VK_A)) {
             if (spacePressed) {
                 xvel -= 150 * 60 * acceleration * GameFrame.delta;
                 if (xvel < -720) {
@@ -234,7 +210,7 @@ public class Player extends Entity implements UsesPolar, Collider{
                 }
             }
         }
-        if(wPressed) {
+        if(Keyboard.isKeyPressed(KeyEvent.VK_W)) {
             if(spacePressed){
                 yvel -= 150 * 60 * acceleration * GameFrame.delta;
                 if (yvel < -720){
@@ -250,7 +226,7 @@ public class Player extends Entity implements UsesPolar, Collider{
                 }
             }
         }
-        if(sPressed) {
+        if(Keyboard.isKeyPressed(KeyEvent.VK_S)) {
             if(spacePressed){
                 yvel += 150 * 60 * acceleration * GameFrame.delta;
                 if (yvel > 720) {

@@ -6,22 +6,34 @@ public class Camera {
     double xPosition = 0;
     double yPosition = 0;
     double zoom = 1;
-    public Camera(double x, double y, double zoom, double rotation){
-        this.xPosition = x;
-        this.yPosition = y;
+    public Camera(double x, double y, double zoom){
+        this.xPosition = x + GameFrame.WIDTH/2;
+        this.yPosition = y + GameFrame.HEIGHT/2;
         this.zoom = zoom;
 
     }
 
-    public void keyPressed(KeyEvent e){
-        switch (e.getKeyCode()){
-            case KeyEvent.VK_LEFT -> xPosition -= 250 * GameFrame.delta;
-            case KeyEvent.VK_UP -> yPosition -= 250 * GameFrame.delta;
-            case KeyEvent.VK_RIGHT-> xPosition += 250 * GameFrame.delta;
-            case KeyEvent.VK_DOWN -> yPosition += 250 * GameFrame.delta;
-            case KeyEvent.VK_MINUS -> zoom -= .01;
-            case KeyEvent.VK_EQUALS -> zoom += .01;
+    public void update(){
+        if(Keyboard.isKeyPressed(KeyEvent.VK_LEFT)){
+            xPosition -= 250 * GameFrame.delta;
         }
+        if(Keyboard.isKeyPressed(KeyEvent.VK_UP)){
+            yPosition -= 250 * GameFrame.delta;
+        }
+        if(Keyboard.isKeyPressed(KeyEvent.VK_RIGHT)){
+            xPosition += 250 * GameFrame.delta;
+        }
+        if(Keyboard.isKeyPressed(KeyEvent.VK_DOWN)){
+            yPosition += 250 * GameFrame.delta;
+        }
+        if(Keyboard.isKeyPressed(KeyEvent.VK_MINUS)){
+            zoom -= .01;
+        }
+        if(Keyboard.isKeyPressed(KeyEvent.VK_EQUALS)){
+            zoom += .01;
+        }
+
+
     }
 
     public double getxPosition() {

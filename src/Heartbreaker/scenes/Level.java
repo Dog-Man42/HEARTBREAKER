@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public abstract class Level extends Scene{
 
-    public final boolean SCROLLABLE;
+
     public int WIDTH = GameFrame.GAME_WIDTH;
     public int HEIGHT = GameFrame.GAME_HEIGHT;
     public int DIAGONAL = (int)Math.round(Math.sqrt(WIDTH * WIDTH + HEIGHT * HEIGHT));
@@ -29,8 +29,8 @@ public abstract class Level extends Scene{
 
 
 
-    public Level(boolean scrollable){
-        SCROLLABLE = scrollable;
+    public Level(){
+
         collisionManager = new CollisionManager();
     }
 
@@ -42,19 +42,6 @@ public abstract class Level extends Scene{
     }
 
     public abstract void draw(Graphics2D g);
-
-    //input Management
-    public void keyPressed(KeyEvent e){
-        if(player != null)
-            player.keyPressed(e);
-        if(camera != null){
-            camera.keyPressed(e);
-        }
-    }
-    public void keyReleased(KeyEvent e){
-        if(player != null)
-            player.keyReleased(e);
-    }
 
     public void mouseMoved(MouseEvent e) {
         if(player != null)

@@ -61,7 +61,6 @@ public class GameFrame extends JPanel implements Runnable{
 
     GameFrame(Level mainScene){
         this.setFocusable(true);
-        this.addKeyListener(new KeyListener());
         this.addMouseMotionListener(new MotionDetector());
         this.addMouseListener(new MotionDetector() {
         });
@@ -87,7 +86,7 @@ public class GameFrame extends JPanel implements Runnable{
         loadingScreen.setPreferredSize(new Dimension(GAME_WIDTH, GAME_HEIGHT));
         gameThread = new Thread(this);
         gameThread.start();
-        DefaultScene defaultScene = new DefaultScene(false);
+        DefaultScene defaultScene = new DefaultScene();
         defaultScene.mainScene = mainScene;
         currentScene = mainScene;
         currentScene.initialize();
@@ -232,18 +231,6 @@ public class GameFrame extends JPanel implements Runnable{
     }
 
 
-    public static class KeyListener extends KeyAdapter{
-
-        public void keyPressed(KeyEvent e){
-            currentScene.keyPressed(e);
-            switch (e.getKeyCode()){
-                case KeyEvent.VK_UP -> targetFPS++;
-            }
-        }
-        public void keyReleased(KeyEvent e){
-            currentScene.keyReleased(e);
-        }
-    }
 
     public static class MotionDetector extends MouseAdapter{
         public void mouseMoved(MouseEvent e) {
