@@ -4,6 +4,7 @@ import Heartbreaker.engine.GameFrame;
 import Heartbreaker.engine.GameObject;
 import Heartbreaker.engine.collision.Collider;
 import Heartbreaker.engine.collision.CollisionData;
+import Heartbreaker.engine.vectors.*;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -30,7 +31,7 @@ public class PhysicsBall extends GameObject implements Collider {
     public void update(double delta) {
         changeXPos(xVel * delta);
         changeYPos(yVel * delta);
-        if(calculateDistance(getPosition(),new Point2D.Double(0,0)) > 500){
+        if(calculateDistance(getPosition(),new Point2D.Double(0,0)) > 5000){
             xVel *= -1;
             yVel *= -1;
         }
@@ -47,21 +48,34 @@ public class PhysicsBall extends GameObject implements Collider {
     }
 
     @Override
-    public void collided(CollisionData colData) {}
+    public void collided(CollisionData colData) {
+        Vector2 correction = Vector2.multiply(colData.getNormal(),colData.getDepth()/2);
+        changeXPos(correction.x);
+        changeYPos(correction.y);
+        Vector2 normal = VectorMath.normalize(colData.getNormal());
+        xVel = xVel * normal.x;
+        yVel = yVel * normal.y;
+        /*
+        if (colData.getCollider() instanceof PhysicsBall){
+
+        }
+
+         */
+    }
 
     @Override
     public int getCanHit() {
-        return 0;
+        return HITS_ALL;
     }
 
     @Override
     public int getHitBy() {
-        return 0;
+        return HIT_BY_ALL;
     }
 
     @Override
     public int getHitBoxType() {
-        return 0;
+        return CIRCLE;
     }
 
     @Override
@@ -76,17 +90,17 @@ public class PhysicsBall extends GameObject implements Collider {
 
     @Override
     public double getXVelocity() {
-        return 0;
+        return xVel;
     }
 
     @Override
     public double getYVelocity() {
-        return 0;
+        return yVel;
     }
 
     @Override
     public double getRadius() {
-        return 0;
+        return radius;
     }
 
     @Override

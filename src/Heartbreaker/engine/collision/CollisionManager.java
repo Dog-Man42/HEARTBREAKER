@@ -51,7 +51,7 @@ public class CollisionManager {
                     colData.setCollider(collider2);
                     collider1.collided(colData);
                     colData.setCollider(collider1);
-                    collider2.collided(colData);
+                    collider2.collided(colData.inverted());
                 }
             }
         }

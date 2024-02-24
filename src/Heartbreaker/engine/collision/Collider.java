@@ -21,7 +21,7 @@ public interface Collider {
     int HIT_BY_ALL = 2;
 
     /** Cannot be hit. Note: This could be replaced by something else eventually. */
-    int HIT_BY_NONE = 2;
+    int HIT_BY_NONE = 3;
 
     /** Can hit enemies */
     int HITS_ENEMY = 0;

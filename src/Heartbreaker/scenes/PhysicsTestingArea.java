@@ -2,8 +2,11 @@ package Heartbreaker.scenes;
 
 import Heartbreaker.engine.Camera;
 import Heartbreaker.engine.GameFrame;
+import Heartbreaker.engine.collision.CollisionManager;
 import Heartbreaker.engine.vectors.Vector2;
 import Heartbreaker.objects.*;
+
+import java.util.Random;
 
 import java.awt.*;
 
@@ -12,15 +15,20 @@ public class PhysicsTestingArea extends Level{
 
     @Override
     public boolean initialize() {
+        collisionManager.clear();
         origin = new Point(GameFrame.GAME_WIDTH/2,GameFrame.GAME_HEIGHT/2);
-        camera = new Camera(0,0,1);
-        addObject(new PhysicsBall(0,0,50,1,500,500));
+        camera = new Camera(0,0,.75);
+        Random random = new Random();
+        for(int i = 0; i < 2000; i++){
+            addObject(new PhysicsBall(random.nextInt(-3000,3001),random.nextInt(-3000,3001),10,1,random.nextInt(-200,201),random.nextInt(-200,201)));
+        }
         return true;
     }
 
     @Override
     public void updateScene(double delta) {
         updateObjects(delta);
+        System.out.println(collisionManager.getColliders().size());
     }
 
     @Override

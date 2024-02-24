@@ -170,6 +170,11 @@ public abstract class GameObject {
         return temp;
     }
 
+    /**
+     * Gets the polygon made from transformed points in camera space
+     * @param camera Scene Camera
+     * @return transformed polygon accounting for camera offset
+     */
     public Polygon realizePolyCameraSpace(Camera camera) {
 
         Polygon temp = new Polygon();
@@ -208,6 +213,11 @@ public abstract class GameObject {
         return temp;
     }
 
+    /**
+     * Gets the transformed points in camera space
+     * @param camera Scene Camera
+     * @return transformed points accounting for camera offset
+     */
     public Point2D.Double[] realizePointsCameraSpace(Camera camera){
         Point2D.Double[] points = realizePoints();
         if(camera == null){
@@ -223,6 +233,8 @@ public abstract class GameObject {
 
         return points;
     }
+
+
 
     /**
      * Returns the x-position of the object. If parent is not null, transforms are added
@@ -316,12 +328,17 @@ public abstract class GameObject {
      */
     public Point2D.Double getPositionCameraSpace(){
         Camera cam = currentScene.camera;
+       /*
         if(parent != null) {
             return new Point2D.Double((xPosition + parent.getXPosition()) - currentScene.getCamera().xPosition, (yPosition + parent.getYPosition()) - currentScene.getCamera().yPosition);
         } else {
             return new Point2D.Double(xPosition - currentScene.getCamera().xPosition, yPosition - currentScene.getCamera().yPosition);
 
         }
+
+        */
+        Point origin = getScene().origin;
+        return new Point2D.Double(origin.x +(getXPosition() - cam.getxPosition()) * cam.getZoom(), origin.y +(getYPosition() - cam.getyPosition()) * cam.getZoom());
     }
 
     /**
