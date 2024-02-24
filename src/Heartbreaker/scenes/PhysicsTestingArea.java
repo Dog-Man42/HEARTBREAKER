@@ -50,15 +50,15 @@ public class PhysicsTestingArea extends Level{
         int xOffset = (int) (camera.getxPosition() * camera.getZoom());
         int yOffset = (int) (camera.getyPosition() * camera.getZoom());
 
-        int xAxis = mScreenX - xOffset;
-        int yAxis = mScreenX - yOffset;
+        int yAxis = mScreenX - xOffset;
+        int xAxis = mScreenY - yOffset;
 
         int xMod = xOffset % cellSize;
         int yMod = yOffset % cellSize;
 
         //To the right
         for(int x = mScreenX - xMod; x < GameFrame.GAME_WIDTH; x += cellSize){
-            if(x == xAxis){
+            if(x == yAxis){
                 g.setColor(Color.GREEN); // Draw the x-axis as green
             } else {
                 g.setColor(Color.GRAY);
@@ -67,7 +67,7 @@ public class PhysicsTestingArea extends Level{
         }
         //to the left
         for(int x = mScreenX - xMod - cellSize; x >= 0; x -= cellSize){
-            if(x == xAxis){
+            if(x == yAxis){
                 g.setColor(Color.GREEN); // Draw the x-axis as green
             } else {
                 g.setColor(Color.GRAY);
@@ -77,7 +77,7 @@ public class PhysicsTestingArea extends Level{
 
 // Draw the horizontal grid lines
         for(int y = mScreenY - yMod; y < GameFrame.GAME_HEIGHT; y += cellSize){
-            if(y == yAxis){
+            if(y == xAxis){
                 g.setColor(Color.RED); // Draw the x-axis as green
             } else {
                 g.setColor(Color.GRAY);
@@ -85,7 +85,7 @@ public class PhysicsTestingArea extends Level{
             g.drawLine(0,y,GameFrame.GAME_WIDTH,y);
         }
         for(int y = mScreenY - yMod - cellSize; y >= 0; y -= cellSize){
-            if(y == yAxis){
+            if(y == xAxis){
                 g.setColor(Color.RED); // Draw the x-axis as green
             } else {
                 g.setColor(Color.GRAY);
