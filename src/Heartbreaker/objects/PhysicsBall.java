@@ -1,6 +1,5 @@
 package Heartbreaker.objects;
 
-import Heartbreaker.engine.GameFrame;
 import Heartbreaker.engine.GameObject;
 import Heartbreaker.engine.collision.Collider;
 import Heartbreaker.engine.collision.CollisionData;
@@ -15,7 +14,10 @@ public class PhysicsBall extends GameObject implements Collider {
     private double xVel;
     private double yVel;
 
-    private double mass;
+    private int mass = 1;
+
+    private boolean vNextFrame = false;
+    private Vector2 tempV = new Vector2(0,0);
 
 
     public PhysicsBall(int x, int y, int radius, int mass, double xvel, double yvel){
@@ -29,12 +31,19 @@ public class PhysicsBall extends GameObject implements Collider {
 
     @Override
     public void update(double delta) {
+        if(vNextFrame){
+            xVel = tempV.x;
+            yVel = tempV.y;
+            vNextFrame = false;
+        }
+
         changeXPos(xVel * delta);
         changeYPos(yVel * delta);
         if(calculateDistance(getPosition(),new Point2D.Double(0,0)) > 5000){
             xVel *= -1;
             yVel *= -1;
         }
+
 
     }
 
@@ -52,15 +61,50 @@ public class PhysicsBall extends GameObject implements Collider {
         Vector2 correction = Vector2.multiply(colData.getNormal(),colData.getDepth()/2);
         changeXPos(correction.x);
         changeYPos(correction.y);
-        Vector2 normal = VectorMath.normalize(colData.getNormal());
-        xVel = xVel * normal.x;
-        yVel = yVel * normal.y;
-        /*
+
+
         if (colData.getCollider() instanceof PhysicsBall){
 
+
+            Collider collider = colData.getCollider();
+
+            Vector2 n = colData.getNormal();
+
+            Vector2 v = new Vector2(xVel,yVel);
+            Vector2 p = new Vector2(getXPositionWorld(),getYPositionWorld());
+
+            int m2 = collider.getMass();
+            Vector2 v2 = new Vector2(collider.getXVelocity(),collider.getYVelocity());
+            Vector2 p2 = new Vector2(collider.getXPosition(),collider.getYPosition());
+
+            double momentumBefore = VectorMath.length(v) * mass + VectorMath.length(v2) * m2;
+
+            double massComp = (double) (1* m2) / (mass + m2) * 2;
+            double velComp = VectorMath.dot(Vector2.difference(v,v2), n);
+            double lengthSquared = VectorMath.lengthSquare(Vector2.difference(p,p2));
+            double factor = massComp * velComp;
+
+            double vFMagnitude = VectorMath.length(v) - factor;
+            Vector2 vFinal = Vector2.multiply(n, vFMagnitude);
+            tempV = vFinal;
+            vNextFrame = true;
+            double momentumAfter = VectorMath.length(v) * mass + VectorMath.length(v2) * m2;
+
+            System.out.println("Before: " + momentumBefore + " After: " + momentumAfter);
+            /*
+            xVel = vFinal.x;
+            yVel = vFinal.y;
+
+
+
+             */
+
+        } else {
+            Vector2 normal = VectorMath.normalize(colData.getNormal());
+            xVel = xVel * normal.x;
+            yVel = yVel * normal.y;
         }
 
-         */
     }
 
     @Override
@@ -101,6 +145,11 @@ public class PhysicsBall extends GameObject implements Collider {
     @Override
     public double getRadius() {
         return radius;
+    }
+
+    @Override
+    public int getMass() {
+        return mass;
     }
 
     @Override

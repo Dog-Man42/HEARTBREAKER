@@ -15,19 +15,21 @@ public class Camera {
 
     public void update(double delta){
         if(Keyboard.isKeyPressed(KeyEvent.VK_LEFT)){
-            xPosition -= 250 * delta;
+            xPosition -= (1/zoom) * 250 * delta;
         }
         if(Keyboard.isKeyPressed(KeyEvent.VK_UP)){
-            yPosition -= 250 * delta;
+            yPosition -= (1/zoom) * 250 * delta;
         }
         if(Keyboard.isKeyPressed(KeyEvent.VK_RIGHT)){
-            xPosition += 250 * delta;
+            xPosition += (1/zoom) * 250 * delta;
         }
         if(Keyboard.isKeyPressed(KeyEvent.VK_DOWN)){
-            yPosition += 250 * delta;
+            yPosition += (1/zoom) * 250 * delta;
         }
         if(Keyboard.isKeyPressed(KeyEvent.VK_MINUS)){
-            zoom -= .01;
+            if(zoom > .02) {
+                zoom -= .01;
+            }
         }
         if(Keyboard.isKeyPressed(KeyEvent.VK_EQUALS)){
             zoom += .01;

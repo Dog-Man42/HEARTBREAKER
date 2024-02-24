@@ -76,8 +76,8 @@ public class Tentacle extends GameObject {
 
 
                 // Normalize the line segment to maintain its length
-                double dx = segments[i].getLocalXPos() -segments[i-1].getLocalXPos();
-                double dy = segments[i].getLocalYPos() -segments[i-1].getLocalYPos();
+                double dx = segments[i].getXPositionWorld() -segments[i-1].getXPositionWorld();
+                double dy = segments[i].getYPositionWorld() -segments[i-1].getYPositionWorld();
                 double length = Math.sqrt(dx * dx + dy * dy);
 
                 if (length > 0) {
@@ -85,8 +85,8 @@ public class Tentacle extends GameObject {
                     dx *= scaleFactor;
                     dy *= scaleFactor;
 
-                    segments[i].setXPosition(segments[i-1].getLocalXPos() + dx);
-                    segments[i].setYPosition(segments[i-1].getLocalYPos() + dy);
+                    segments[i].setXPosition(segments[i-1].getXPositionWorld() + dx);
+                    segments[i].setYPosition(segments[i-1].getYPositionWorld() + dy);
                 }
             } else {
                 angularVels[i] += (random.nextDouble(-1, 1) * angularAccel);
@@ -103,7 +103,7 @@ public class Tentacle extends GameObject {
         for(int i = 0; i < segments.length; i++) {
             if(i > 0){
                 g.setColor(Color.GREEN);
-                g.drawLine((int) segments[i-1].getLocalXPos(), (int) segments[i-1].getLocalYPos(), (int) segments[i].getLocalXPos(),(int) segments[i].getLocalYPos());
+                g.drawLine((int) segments[i-1].getXPositionWorld(), (int) segments[i-1].getYPositionWorld(), (int) segments[i].getXPositionWorld(),(int) segments[i].getYPositionWorld());
             }
             segments[i].draw(g, delta );
         }

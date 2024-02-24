@@ -11,6 +11,7 @@ import java.util.Random;
 import java.awt.*;
 
 public class PhysicsTestingArea extends Level{
+
     public PhysicsTestingArea() {}
 
     @Override
@@ -27,8 +28,8 @@ public class PhysicsTestingArea extends Level{
 
     @Override
     public void updateScene(double delta) {
+        System.out.println("FRAME\n\n\n");
         updateObjects(delta);
-        System.out.println(collisionManager.getColliders().size());
     }
 
     @Override

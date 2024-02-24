@@ -95,6 +95,14 @@ public interface Collider {
     /** The radius of the hitbox if the collider has a circle hitbox. */
     double getRadius();
 
+    /**
+     * Returns the mass of the collider
+     * @return By default 0;
+     */
+    default int getMass(){
+        return 0;
+    }
+
     /** The verticies of the hitbox if the collider has a polygon hitbox. */
     Point2D.Double[] getPoints();
 

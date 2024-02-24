@@ -258,12 +258,11 @@ public abstract class GameObject {
     }
 
     /**
-     * Returns the x-position
+     * Returns the x-position without considering a parent's transforms
      *
      * @return x-position of object
-     * @throws NullPointerException worldSpace is true and parent null
      */
-    public double getLocalXPos() {
+    public double getXPositionWorld() {
         return xPosition;
     }
 
@@ -290,12 +289,11 @@ public abstract class GameObject {
     }
 
     /**
-     * Returns the y-position
+     * Returns the y-position without considering a parent's transforms
      *
      * @return y-position of object
-     * @throws NullPointerException worldSpace is true and parent null
      */
-    public double getLocalYPos() {
+    public double getYPositionWorld() {
         return yPosition;
     }
 

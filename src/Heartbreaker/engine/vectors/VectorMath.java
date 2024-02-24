@@ -12,7 +12,16 @@ public class VectorMath {
      * @return The length of Vector2 A
      */
     public static double length(Vector2 a){
-        return Math.sqrt(a.x * a.x + a.y * a.y);
+        return Math.sqrt(lengthSquare(a));
+    }
+
+    /**
+     * Calculates the sum of the squares of each component of the vector
+     * @param a Vector2 a
+     * @return (a.x * a.x) + (a.y * a.y)
+     */
+    public static double lengthSquare(Vector2 a ){
+        return (a.x * a.x + a.y * a.y);
     }
 
     /**
