@@ -34,7 +34,7 @@ public class MinorEye extends Entity {
         frame = rand.nextInt(0,120);
     }
     @Override
-    public void update() {
+    public void update(double delta) {
         frame++;
         //setXPosition(getXPosition() + 4*Math.sin(frame/10));
         //setYPosition(getYPosition() + 1.5 * (Math.sin((frame/10)*2) + Math.cos((frame/10)/2.0)));
@@ -69,7 +69,7 @@ public class MinorEye extends Entity {
     }
 
     @Override
-    public void draw(Graphics2D g) {
+    public void draw(Graphics2D g, double delta) {
 
         if(isHit() || getIFrames() > 0){
             double temp = getScale();

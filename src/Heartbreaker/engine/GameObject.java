@@ -311,6 +311,20 @@ public abstract class GameObject {
     }
 
     /**
+     * Gets the object position in camera space.
+     * @return position - camera offset
+     */
+    public Point2D.Double getPositionCameraSpace(){
+        Camera cam = currentScene.camera;
+        if(parent != null) {
+            return new Point2D.Double((xPosition + parent.getXPosition()) - currentScene.getCamera().xPosition, (yPosition + parent.getYPosition()) - currentScene.getCamera().yPosition);
+        } else {
+            return new Point2D.Double(xPosition - currentScene.getCamera().xPosition, yPosition - currentScene.getCamera().yPosition);
+
+        }
+    }
+
+    /**
      * Returns object's rotation in degrees
      *
      * @return
@@ -432,14 +446,15 @@ public abstract class GameObject {
     /**
      * Called every frame. Used to update Game Objects.
      */
-    public abstract void update();
+    public abstract void update(double delta);
 
     /**
      * Called every frame. Draws to the screen.
      *
-     * @param g Graphics2D object
+     * @param g     Graphics2D object
+     * @param delta
      */
-    public abstract void draw(Graphics2D g);
+    public abstract void draw(Graphics2D g, double delta);
 
     /**
      * Returns whether the scene draws this GameObject when drawing the objects ArrayList

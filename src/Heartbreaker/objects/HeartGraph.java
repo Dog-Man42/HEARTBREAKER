@@ -43,16 +43,16 @@ public class HeartGraph extends GameObject {
     }
 
 
-    public void update(){
-        frames+= GameFrame.delta;
+    public void update(double delta){
+        frames+= delta;
         Point2D.Double[] temp = getVerticies();
         for(int i = temp.length-1; i >= 0; i--){
-            double fps = 1.0 / GameFrame.delta;
+            double fps = 1.0 / delta;
             double beat_duration = 60.0 / bpm;
             double totalTime = frames;
             double rate = totalTime % beat_duration;
             double time = rate / beat_duration * (2 * Math.PI);
-            //time = frames + GameFrame.delta;
+            //time = frames + delta;
             //transformedVertices[i].setLocation(i, -10 * (Math.abs(Math.sin(time)) * Math.abs((Math.cos(time+.4) - Math.tan(time/2) - .4))) + 3);
             if(i == 0){
                 if(!(bpm < 10)) {
@@ -75,7 +75,7 @@ public class HeartGraph extends GameObject {
             damage++;
         }
     }
-    public void draw(Graphics2D g){
+    public void draw(Graphics2D g, double delta){
         if(flatlined){
             g.setColor(Color.getHSBColor((0f)/255,1,.1f));
         } else {

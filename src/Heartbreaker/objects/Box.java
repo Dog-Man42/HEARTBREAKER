@@ -27,14 +27,14 @@ public class Box extends GameObject {
 
 
     }
-    public void update(){
+    public void update(double delta){
         frames += .15;
 
         setScale(-2*-(Math.abs(Math.sin(frames)) * Math.abs(Math.cos(frames) - 1)) + 8);
         changeRotation(1);
 
     }
-    public void draw(Graphics2D g){
+    public void draw(Graphics2D g, double delta){
 
         g.setColor(Color.green);
         g.fillPolygon(realizePolyCameraSpace(getScene().getCamera()));

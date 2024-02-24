@@ -7,7 +7,6 @@ import Heartbreaker.scenes.MainMenu;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Point2D;
-import java.util.Arrays;
 
 public class Player extends Entity implements UsesPolar, Collider{
 
@@ -70,10 +69,10 @@ public class Player extends Entity implements UsesPolar, Collider{
         }
     }
 
-    public void update() {
+    public void update(double delta) {
 
 
-        checkKeys();
+        checkKeys(delta);
         //System.out.println(Arrays.toString(getTransformedVertices()));
 
         //This causes subtle frame time spikes that cause somewhat noticeable jitter.
@@ -91,8 +90,8 @@ public class Player extends Entity implements UsesPolar, Collider{
         double prevX = getXPosition();
         double prevY = getYPosition();
 
-        theta += (angularVelocity * GameFrame.delta) / radialPosition;
-        radialPosition += radialVelocity * GameFrame.delta;
+        theta += (angularVelocity * delta) / radialPosition;
+        radialPosition += radialVelocity * delta;
 
         if(radialPosition < -2){
             theta += 180;
@@ -109,15 +108,15 @@ public class Player extends Entity implements UsesPolar, Collider{
         setXPosition(position.x + getScene().origin.x);
         setYPosition(position.y + getScene().origin.y);
 
-        changeXPos(xvel * GameFrame.delta);
-        changeYPos(yvel * GameFrame.delta);
+        changeXPos(xvel * delta);
+        changeYPos(yvel * delta);
 
         if(Keyboard.isKeyPressed(KeyEvent.VK_SPACE) || Math.abs(xvel) > 0.01 ||Math.abs(xvel) > 0.01) {
             radialPosition = cartesianToRadius(getXPosition() - getScene().origin.x, getYPosition() - getScene().origin.y);
             theta = cartesianToTheta(getYPosition() - getScene().origin.y, getXPosition() - getScene().origin.x);
         }
 
-        double decel = Math.pow(1.0/(60 * .96), GameFrame.delta);
+        double decel = Math.pow(1.0/(60 * .96), delta);
         radialVelocity *= decel;
         angularVelocity *= decel;
         xvel *= decel;
@@ -145,7 +144,7 @@ public class Player extends Entity implements UsesPolar, Collider{
                 coolDown = 16;
             }
         } else {
-            coolDown -= 60 * GameFrame.delta;
+            coolDown -= 60 * delta;
 
         }
 
@@ -154,7 +153,7 @@ public class Player extends Entity implements UsesPolar, Collider{
 
     }
 
-    public void draw(Graphics2D g){
+    public void draw(Graphics2D g, double delta){
 
         if(isHit() || getIFrames() > 0){
             double temp = getScale();
@@ -177,19 +176,19 @@ public class Player extends Entity implements UsesPolar, Collider{
         g.drawString("HP: " + getHP(), 0,GameFrame.GAME_HEIGHT - 40);
     }
 
-    public void checkKeys(){
+    public void checkKeys(double delta){
 
         boolean spacePressed = Keyboard.isKeyPressed(KeyEvent.VK_SPACE);
 
         if(Keyboard.isKeyPressed(KeyEvent.VK_D)) {
             if(spacePressed){
-                xvel += 150 * 60 * acceleration * GameFrame.delta;
+                xvel += 150 * 60 * acceleration * delta;
                 if (xvel > 720) {
                     xvel = 720;
                 }
 
             } else {
-                angularVelocity -= maxAngularVel * (60 * acceleration) * GameFrame.delta;
+                angularVelocity -= maxAngularVel * (60 * acceleration) * delta;
                 if (angularVelocity < -maxAngularVel) {
                     angularVelocity = -maxAngularVel;
                 }
@@ -197,14 +196,14 @@ public class Player extends Entity implements UsesPolar, Collider{
         }
         if(Keyboard.isKeyPressed(KeyEvent.VK_A)) {
             if (spacePressed) {
-                xvel -= 150 * 60 * acceleration * GameFrame.delta;
+                xvel -= 150 * 60 * acceleration * delta;
                 if (xvel < -720) {
                     xvel = -720;
                 }
 
             } else {
 
-                angularVelocity += maxAngularVel * (60 * acceleration) * GameFrame.delta;
+                angularVelocity += maxAngularVel * (60 * acceleration) * delta;
                 if (angularVelocity > maxAngularVel) {
                     angularVelocity = maxAngularVel;
                 }
@@ -212,14 +211,14 @@ public class Player extends Entity implements UsesPolar, Collider{
         }
         if(Keyboard.isKeyPressed(KeyEvent.VK_W)) {
             if(spacePressed){
-                yvel -= 150 * 60 * acceleration * GameFrame.delta;
+                yvel -= 150 * 60 * acceleration * delta;
                 if (yvel < -720){
                     yvel = -720;
                 }
 
             } else {
 
-                radialVelocity -= 60 * maxRadial * acceleration * GameFrame.delta;
+                radialVelocity -= 60 * maxRadial * acceleration * delta;
 
                 if (radialVelocity < -maxRadial) {
                     radialVelocity = -maxRadial;
@@ -228,13 +227,13 @@ public class Player extends Entity implements UsesPolar, Collider{
         }
         if(Keyboard.isKeyPressed(KeyEvent.VK_S)) {
             if(spacePressed){
-                yvel += 150 * 60 * acceleration * GameFrame.delta;
+                yvel += 150 * 60 * acceleration * delta;
                 if (yvel > 720) {
                     yvel = 720;
                 }
 
             } else {
-                radialVelocity += 60 * maxRadial * acceleration * GameFrame.delta;
+                radialVelocity += 60 * maxRadial * acceleration * delta;
                 if (radialVelocity > maxRadial) {
                     radialVelocity = maxRadial;
                 }

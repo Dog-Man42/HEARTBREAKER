@@ -43,8 +43,8 @@ public class MainMenu extends Level {
 
     }
 
-    public void updateScene(){
-        updateObjects();
+    public void updateScene(double delta){
+        updateObjects(delta);
         if(Keyboard.isKeyPressed(KeyEvent.VK_SLASH)){
             GameFrame.setCurrentScene(new PhysicsTestingArea());
         }
@@ -59,7 +59,7 @@ public class MainMenu extends Level {
     }
 
     @Override
-    public void draw(Graphics2D g) {
+    public void draw(Graphics2D g, double delta) {
 
         g.setRenderingHint(
                 RenderingHints.KEY_TEXT_ANTIALIASING,
@@ -95,7 +95,7 @@ public class MainMenu extends Level {
         g.setStroke(new BasicStroke(3));
         //heart.draw(g);
         //player.draw(g);
-        drawObjects(g);
+        drawObjects(g, delta);
         g.drawOval((int) camera.getxPosition() - 5, (int) camera.getyPosition() - 5, 10,10);
 
     }

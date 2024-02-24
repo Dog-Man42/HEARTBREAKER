@@ -19,13 +19,13 @@ public class DefaultScene extends Level{
     }
 
     @Override
-    public void updateScene() {
+    public void updateScene(double delta) {
         GameFrame.setCurrentScene(mainScene);
     }
 
 
     @Override
-    public void draw(Graphics2D g) {
+    public void draw(Graphics2D g, double delta) {
 
     }
 

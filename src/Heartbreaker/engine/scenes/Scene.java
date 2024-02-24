@@ -29,9 +29,9 @@ public abstract class Scene {
     public abstract boolean initialize();
 
 
-    public abstract void updateScene();
+    public abstract void updateScene(double delta);
 
-    public void updateObjects(){
+    public void updateObjects(double delta){
         //System.out.println("Object Count: " + objects.size());
         //System.out.println("Collider Count: " + collisionManager.size());
         if(objects.size() > 0){
@@ -39,24 +39,24 @@ public abstract class Scene {
             for(int i = 0; i < length; i++){
                 GameObject object = objects.get(i);
                 if(!killedObjects.contains(object)){
-                    object.update();
+                    object.update(delta);
                 }
             }
         }
         if(camera != null){
-            camera.update();
+            camera.update(delta);
         }
         collisionManager.updateColliders();
         clearRemovedObjects();
     }
-    public abstract void draw(Graphics2D g);
+    public abstract void draw(Graphics2D g, double delta);
 
-    public void drawObjects(Graphics2D g){
+    public void drawObjects(Graphics2D g, double delta){
         if(objects.size() > 0){
             for(int i = objects.size() - 1; i >= 0; i--){
                 GameObject object = objects.get(i);
                 if(object.isDrawnByScene()) {
-                    object.draw(g);
+                    object.draw(g, delta);
                 }
                 g.setColor(Color.WHITE);
                 g.setStroke(new BasicStroke(3));

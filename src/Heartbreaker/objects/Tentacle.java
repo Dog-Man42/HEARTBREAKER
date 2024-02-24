@@ -40,7 +40,7 @@ public class Tentacle extends GameObject {
 
     }
 
-    public void update() {
+    public void update(double delta) {
         setRotation(getRotation()+10);
         boolean slow;
 
@@ -98,14 +98,14 @@ public class Tentacle extends GameObject {
     }
 
 
-    public void draw(Graphics2D g) {
+    public void draw(Graphics2D g, double delta) {
 
         for(int i = 0; i < segments.length; i++) {
             if(i > 0){
                 g.setColor(Color.GREEN);
                 g.drawLine((int) segments[i-1].getLocalXPos(), (int) segments[i-1].getLocalYPos(), (int) segments[i].getLocalXPos(),(int) segments[i].getLocalYPos());
             }
-            segments[i].draw(g);
+            segments[i].draw(g, delta );
         }
     }
 

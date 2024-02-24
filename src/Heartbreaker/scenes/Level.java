@@ -41,7 +41,7 @@ public abstract class Level extends Scene{
         addObject(new GravBullet(x,y,xVel,yVel,angle,speed,age,player));
     }
 
-    public abstract void draw(Graphics2D g);
+    public abstract void draw(Graphics2D g, double delta);
 
     public void mouseMoved(MouseEvent e) {
         if(player != null)

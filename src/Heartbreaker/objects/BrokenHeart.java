@@ -26,11 +26,11 @@ public class BrokenHeart extends GameObject {
                 new Point2D.Double(0 * hs,8)});
 
     }
-    public void update(){
-        changeXPos(-5 * side * GameFrame.delta);
+    public void update(double delta){
+        changeXPos(-5 * side * delta);
         changeScale(.1);
     }
-    public void draw(Graphics2D g){
+    public void draw(Graphics2D g, double delta){
         g.draw(realizePoly());
         System.out.println("Parent = " + getParent());
 

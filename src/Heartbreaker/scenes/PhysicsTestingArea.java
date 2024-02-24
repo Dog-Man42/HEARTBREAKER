@@ -2,10 +2,8 @@ package Heartbreaker.scenes;
 
 import Heartbreaker.engine.Camera;
 import Heartbreaker.engine.GameFrame;
-import Heartbreaker.objects.Box;
-import Heartbreaker.objects.Heart;
-import Heartbreaker.objects.MinorEye;
-import Heartbreaker.objects.Player;
+import Heartbreaker.engine.vectors.Vector2;
+import Heartbreaker.objects.*;
 
 import java.awt.*;
 
@@ -16,49 +14,48 @@ public class PhysicsTestingArea extends Level{
     public boolean initialize() {
         origin = new Point(GameFrame.GAME_WIDTH/2,GameFrame.GAME_HEIGHT/2);
         camera = new Camera(0,0,1);
-        addObject(new Player(0,0));
-        addObject(new Heart(0,0));
-        addObject(new Box(0,0,5));
-        addObject(new MinorEye(0,0));
+        addObject(new PhysicsBall(0,0,50,1,500,500));
         return true;
     }
 
     @Override
-    public void updateScene() {
-        updateObjects();
+    public void updateScene(double delta) {
+        updateObjects(delta);
     }
 
     @Override
-    public void draw(Graphics2D g) {
+    public void draw(Graphics2D g, double delta) {
         drawGrid(g);
-        drawObjects(g);
+        drawObjects(g, delta);
+        g.drawOval(-10,-10,20,20);
     }
     public void drawGrid(Graphics2D g){
-        int cellSize = (int) Math.round(50 * camera.getZoom());
+        double zoom = (camera.getZoom());
+        int cellSize = (int) Math.round(50 * zoom);
         BasicStroke temp = (BasicStroke) g.getStroke();
         Color col = g.getColor();
         g.setStroke(new BasicStroke(2));
 
-        int mScreenX = WIDTH/2;
-        int mScreenY = HEIGHT/2;
+        int mScreenX = GameFrame.GAME_WIDTH/2;
+        int mScreenY = GameFrame.GAME_HEIGHT/2;
 
         int xOffset = (int) (camera.getxPosition() * camera.getZoom());
         int yOffset = (int) (camera.getyPosition() * camera.getZoom());
 
-        int xAxis = WIDTH/2 - xOffset;
-        int yAxis = HEIGHT/2 - yOffset;
+        int xAxis = mScreenX - xOffset;
+        int yAxis = mScreenX - yOffset;
 
         int xMod = xOffset % cellSize;
         int yMod = yOffset % cellSize;
 
         //To the right
-        for(int x = mScreenX - xMod; x < WIDTH; x += cellSize){
+        for(int x = mScreenX - xMod; x < GameFrame.GAME_WIDTH; x += cellSize){
             if(x == xAxis){
                 g.setColor(Color.GREEN); // Draw the x-axis as green
             } else {
                 g.setColor(Color.GRAY);
             }
-            g.drawLine(x,0,x,HEIGHT);
+            g.drawLine(x,0,x,GameFrame.GAME_HEIGHT);
         }
         //to the left
         for(int x = mScreenX - xMod - cellSize; x >= 0; x -= cellSize){
@@ -67,17 +64,17 @@ public class PhysicsTestingArea extends Level{
             } else {
                 g.setColor(Color.GRAY);
             }
-            g.drawLine(x,0,x,HEIGHT);
+            g.drawLine(x,0,x,GameFrame.GAME_HEIGHT);
         }
 
 // Draw the horizontal grid lines
-        for(int y = mScreenY - yMod; y < HEIGHT; y += cellSize){
+        for(int y = mScreenY - yMod; y < GameFrame.GAME_HEIGHT; y += cellSize){
             if(y == yAxis){
                 g.setColor(Color.RED); // Draw the x-axis as green
             } else {
                 g.setColor(Color.GRAY);
             }
-            g.drawLine(0,y,WIDTH,y);
+            g.drawLine(0,y,GameFrame.GAME_WIDTH,y);
         }
         for(int y = mScreenY - yMod - cellSize; y >= 0; y -= cellSize){
             if(y == yAxis){
@@ -85,7 +82,7 @@ public class PhysicsTestingArea extends Level{
             } else {
                 g.setColor(Color.GRAY);
             }
-            g.drawLine(0,y,WIDTH,y);
+            g.drawLine(0,y,GameFrame.GAME_WIDTH,y);
         }
 
         g.setStroke(temp);

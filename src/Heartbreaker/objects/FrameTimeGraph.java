@@ -22,14 +22,14 @@ public class FrameTimeGraph extends GameObject {
         setYPosition(GameFrame.GAME_HEIGHT - 22);
     }
 
-    public void addFrame(double frametime){
-        if (frametime > maxTime){
-            maxTime = frametime;
+    public void addFrame(double delta){
+        if (delta > maxTime){
+            maxTime = delta;
         }
         Point2D.Double[] temp = getVerticies();
         for (int i = temp.length - 1; i >= 0; i--) {
             if (i == 0) {
-                histogram[0] = frametime * -5;
+                histogram[0] = delta * -5;
             } else {
                 histogram[i] = histogram[i - 1];
             }
@@ -38,16 +38,16 @@ public class FrameTimeGraph extends GameObject {
     }
 
     @Override
-    public void update() {}
+    public void update(double delta) {}
 
-    public void draw(Graphics2D g ){
+    public void draw(Graphics2D g, double delta){
         Point2D.Double[] line = realizePoints();
         Point2D.Double[] temp = getVerticies();
 
         for(int i = 0; i < temp.length; i++){
             g.setStroke(new BasicStroke(1));
             g.setFont(new Font(Font.MONOSPACED,Font.ROMAN_BASELINE,20));
-            g.drawString("Max Frametime Milliseconds " + maxTime,0,Math.round(getYPosition() - 10));
+            g.drawString("Max delta Milliseconds " + maxTime,0,Math.round(getYPosition() - 10));
 
             g.drawLine((int) Math.round(line[i].x),(int) Math.round(getYPosition()),(int) Math.round(line[i].x),(int) Math.round(line[i].y));
         }

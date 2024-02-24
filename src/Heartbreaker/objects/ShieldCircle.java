@@ -53,7 +53,7 @@ public class ShieldCircle extends Entity implements Collider {
     }
 
     @Override
-    public void draw(Graphics2D g){
+    public void draw(Graphics2D g, double delta){
 
         int midX = getScene().origin.x;
         int midY = getScene().origin.y;
@@ -81,7 +81,7 @@ public class ShieldCircle extends Entity implements Collider {
     }
 
     @Override
-    public void update() {
+    public void update(double delta) {
     }
 
     @Override

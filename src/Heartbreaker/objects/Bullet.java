@@ -45,7 +45,7 @@ public class Bullet extends GameObject implements Collider{
         if(shooterXvel != 0 && shooterYvel != 0) {
             xvel += shooterXvel;
             yvel += shooterYvel;
-            Vector v = VectorMath.normalize(new Vector(xvel, yvel));
+            Vector2 v = VectorMath.normalize(new Vector2(xvel, yvel));
             setRotation(Math.toDegrees(-Math.atan2(v.x, v.y)));
         } else {
             setRotation(angle);
@@ -62,9 +62,9 @@ public class Bullet extends GameObject implements Collider{
     public Bullet() {
     }
 
-    public void update(){
-        changeXPos(xvel * GameFrame.delta);
-        changeYPos(yvel * GameFrame.delta);
+    public void update(double delta){
+        changeXPos(xvel * delta);
+        changeYPos(yvel * delta);
         int negative = -(getScene().DIAGONAL - getScene().WIDTH);
 
         if(getXPosition() < negative || getScene().DIAGONAL < getXPosition() || getYPosition() < negative || getScene().DIAGONAL < getYPosition() ){
@@ -83,7 +83,7 @@ public class Bullet extends GameObject implements Collider{
                 }
             }
         }
-        age+= GameFrame.delta;
+        age+= delta;
         if(dieNextFrame) {
             if (dieInFrames <= 0) {
                 if (playerBullet)
@@ -100,7 +100,7 @@ public class Bullet extends GameObject implements Collider{
         return playerBullet;
     }
 
-    public void draw(Graphics2D g){
+    public void draw(Graphics2D g, double delta){
         g.setColor(Color.yellow);
         g.drawPolygon(realizePoly());
     }

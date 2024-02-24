@@ -12,12 +12,12 @@ public class Menu extends Scene {
     }
 
     @Override
-    public void updateScene() {
+    public void updateScene(double delta) {
 
     }
 
     @Override
-    public void draw(Graphics2D g) {
+    public void draw(Graphics2D g, double delta) {
 
     }
 }

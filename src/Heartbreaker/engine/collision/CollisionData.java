@@ -1,6 +1,6 @@
 package Heartbreaker.engine.collision;
 
-import Heartbreaker.engine.vectors.Vector;
+import Heartbreaker.engine.vectors.Vector2;
 
 /**
  * Contains useful data from collision events
@@ -13,7 +13,7 @@ public class CollisionData {
     private double depth;
 
     /** Normal of the collision, can be used for collision resolution */
-    private Vector normal;
+    private Vector2 normal;
 
     /** Type of the collision. Can be {@link Collision#CIRCLE_CIRCLE}, {@link Collision#CIRCLE_POLY}, or {@link Collision#POLY_POLY}*/
     private int collisionType;
@@ -22,7 +22,7 @@ public class CollisionData {
     private Collider collider;
 
     /** Default Constructor without a provided collider */
-    public CollisionData(double depth, Vector normal, int collisionType){
+    public CollisionData(double depth, Vector2 normal, int collisionType){
         this.depth = depth;
         this.normal = normal;
         this.collisionType = collisionType;
@@ -30,7 +30,7 @@ public class CollisionData {
     }
 
     /** Constructor with a provided collider */
-    public CollisionData(double depth, Vector normal, int collisionType, Collider collider){
+    public CollisionData(double depth, Vector2 normal, int collisionType, Collider collider){
         this.depth = depth;
         this.normal = normal;
         this.collisionType = collisionType;
@@ -43,7 +43,7 @@ public class CollisionData {
     }
 
     /** @return The normal of the other collider */
-    public Vector getNormal(){
+    public Vector2 getNormal(){
         return normal;
     }
 
@@ -62,7 +62,7 @@ public class CollisionData {
 
     /** @return A copy of this CollisionData with its normal inverted */
     public CollisionData inverted(){
-        return new CollisionData(depth, Vector.multiply(normal,-1),collisionType,collider);
+        return new CollisionData(depth, Vector2.multiply(normal,-1),collisionType,collider);
     }
 
     @Override

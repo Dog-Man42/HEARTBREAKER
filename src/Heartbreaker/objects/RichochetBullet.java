@@ -1,7 +1,7 @@
 package Heartbreaker.objects;
 
 import Heartbreaker.engine.collision.CollisionData;
-import Heartbreaker.engine.vectors.Vector;
+import Heartbreaker.engine.vectors.Vector2;
 import Heartbreaker.engine.vectors.VectorMath;
 
 import java.awt.*;
@@ -22,10 +22,10 @@ public class RichochetBullet extends Bullet{
         } else {
             changeXPos(-(-colData.getNormal().x * colData.getDepth()));
             changeYPos(-(-colData.getNormal().y * colData.getDepth()));
-            double speed = VectorMath.length(new Vector(getXVelocity(),getYVelocity()));
+            double speed = VectorMath.length(new Vector2(getXVelocity(),getYVelocity()));
             setXvel(speed * colData.getNormal().x);
             setYvel(speed * colData.getNormal().y);
-            Vector v = VectorMath.normalize(new Vector(getXVelocity(), getYVelocity()));
+            Vector2 v = VectorMath.normalize(new Vector2(getXVelocity(), getYVelocity()));
             setRotation(Math.toDegrees(-Math.atan2(v.x, v.y)));
             hp--;
         }
@@ -41,7 +41,7 @@ public class RichochetBullet extends Bullet{
     }
 
     @Override
-    public void draw(Graphics2D g){
+    public void draw(Graphics2D g, double delta){
         g.setColor(Color.ORANGE);
         g.drawPolygon(realizePoly());
     }

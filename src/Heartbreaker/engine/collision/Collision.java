@@ -43,7 +43,7 @@ public class Collision {
      */
     public static CollisionData circleCircle(Point2D centerA, double radiusA, Point2D centerB, double radiusB){
 
-        Vector normal = Vector.ZERO;
+        Vector2 normal = Vector2.ZERO;
         double depth = 0;
 
         double x = centerB.getX() - centerA.getX();
@@ -54,7 +54,7 @@ public class Collision {
         if(!(distance < radii)){
             return null;
         }
-        normal = VectorMath.normalize(Vector.difference(new Vector(centerB),new Vector(centerA)));
+        normal = VectorMath.normalize(Vector2.difference(new Vector2(centerB),new Vector2(centerA)));
         depth = radii + distance;
         return new CollisionData(depth,normal,CIRCLE_CIRCLE);
     }
@@ -69,18 +69,18 @@ public class Collision {
      */
     public static CollisionData circlePolygon(Point2D circleCenter, double radius, Point2D[] verts){
 
-        Vector normal = Vector.ZERO;
+        Vector2 normal = Vector2.ZERO;
         double depth = Float.MAX_VALUE;
 
         //Polygon
         for(int i = 0; i < verts.length; i++){
             //Get projection lines
-            Vector vA = new Vector(verts[i]);
-            Vector vB = new Vector(verts[(i+1) % verts.length]);
+            Vector2 vA = new Vector2(verts[i]);
+            Vector2 vB = new Vector2(verts[(i+1) % verts.length]);
 
             //Gets the edge of the two points and gets its axis
-            Vector edge = Vector.difference(vB,vA);
-            Vector axis = new Vector(-edge.y, edge.x);
+            Vector2 edge = Vector2.difference(vB,vA);
+            Vector2 axis = new Vector2(-edge.y, edge.x);
 
             //Get the mins and maxes
             double[] minMaxA = projectVerts(verts, axis);
@@ -104,9 +104,9 @@ public class Collision {
         }
 
         int cpi = findClosetVert(circleCenter,verts);
-        Vector closetsPoint = new Vector(verts[cpi]);
+        Vector2 closetsPoint = new Vector2(verts[cpi]);
 
-        Vector axis = Vector.difference(closetsPoint,new Vector(circleCenter));
+        Vector2 axis = Vector2.difference(closetsPoint,new Vector2(circleCenter));
 
         //Get the mins and maxes
         double[] minMaxA = projectVerts(verts, axis);
@@ -129,11 +129,11 @@ public class Collision {
         }
         depth /= VectorMath.length(normal);
         normal = VectorMath.normalize(normal);
-        Vector polyCenter = findArithmeticMean(verts);
-        Vector direction = Vector.difference(polyCenter,new Vector(circleCenter));
+        Vector2 polyCenter = findArithmeticMean(verts);
+        Vector2 direction = Vector2.difference(polyCenter,new Vector2(circleCenter));
 
         if(VectorMath.dot(direction,normal) < 0.0){
-            normal = Vector.multiply(normal,-1);
+            normal = Vector2.multiply(normal,-1);
         }
         return new CollisionData(depth,normal,CIRCLE_POLY);
     }
@@ -149,8 +149,8 @@ public class Collision {
         double minDistance = Double.MAX_VALUE;
 
         for(int i = 0; i < verts.length; i++){
-            Vector v = new Vector(verts[i].getX(),verts[i].getY());
-            double distance = VectorMath.distance(v,new Vector(center));
+            Vector2 v = new Vector2(verts[i].getX(),verts[i].getY());
+            double distance = VectorMath.distance(v,new Vector2(center));
 
             if(distance < minDistance){
                 minDistance = distance;
@@ -168,12 +168,12 @@ public class Collision {
      * @param axis axis to project too
      * @return The minimum point of the cirlce and the maximum point of the circle on the projection
      */
-    private static double[] projectCircle(Point2D center, double radius, Vector axis){
-        Vector direction = VectorMath.normalize(axis);
-        Vector directionAndRadius = Vector.multiply(direction,radius);
+    private static double[] projectCircle(Point2D center, double radius, Vector2 axis){
+        Vector2 direction = VectorMath.normalize(axis);
+        Vector2 directionAndRadius = Vector2.multiply(direction,radius);
 
-        Vector p1 = Vector.sum(new Vector(center), directionAndRadius);
-        Vector p2 = Vector.difference(new Vector(center), directionAndRadius);
+        Vector2 p1 = Vector2.sum(new Vector2(center), directionAndRadius);
+        Vector2 p2 = Vector2.difference(new Vector2(center), directionAndRadius);
 
         //projection
         double min = VectorMath.dot(p1,axis);
@@ -196,18 +196,18 @@ public class Collision {
      */
     public static CollisionData polygonPolygon(Point2D[] vertsA, Point2D[] vertsB){
 
-        Vector normal = Vector.ZERO;
+        Vector2 normal = Vector2.ZERO;
         double depth = Float.MAX_VALUE;
 
         //Polygon A
         for(int i = 0; i < vertsA.length; i++){
             //Get projection lines
-            Vector vA = new Vector(vertsA[i]);
-            Vector vB = new Vector(vertsA[(i+1) % vertsA.length]);
+            Vector2 vA = new Vector2(vertsA[i]);
+            Vector2 vB = new Vector2(vertsA[(i+1) % vertsA.length]);
 
             //Gets the edge of the two points and gets its axis
-            Vector edge = Vector.difference(vB,vA);
-            Vector axis = new Vector(-edge.y, edge.x);
+            Vector2 edge = Vector2.difference(vB,vA);
+            Vector2 axis = new Vector2(-edge.y, edge.x);
 
             //Get the mins and maxes
             double[] minMaxA = projectVerts(vertsA, axis);
@@ -232,12 +232,12 @@ public class Collision {
         //Polygon B
         for(int i = 0; i < vertsB.length; i++){
             //Get projection lines
-            Vector vA = new Vector(vertsB[i]);
-            Vector vB = new Vector(vertsB[(i+1) % vertsB.length]);
+            Vector2 vA = new Vector2(vertsB[i]);
+            Vector2 vB = new Vector2(vertsB[(i+1) % vertsB.length]);
 
             //Gets the edge of the two points and gets its axis
-            Vector edge = Vector.difference(vB,vA);
-            Vector axis = new Vector(-edge.y, edge.x);
+            Vector2 edge = Vector2.difference(vB,vA);
+            Vector2 axis = new Vector2(-edge.y, edge.x);
 
             //Get the mins and maxes
             double[] minMaxA = projectVerts(vertsA, axis);
@@ -261,12 +261,12 @@ public class Collision {
 
         depth /= VectorMath.length(normal);
         normal = VectorMath.normalize(normal);
-        Vector centerA = findArithmeticMean(vertsA);
-        Vector centerB = findArithmeticMean(vertsB);
-        Vector direction = Vector.difference(centerB,centerA);
+        Vector2 centerA = findArithmeticMean(vertsA);
+        Vector2 centerB = findArithmeticMean(vertsB);
+        Vector2 direction = Vector2.difference(centerB,centerA);
 
         if(VectorMath.dot(direction,normal) < 0.0){
-            normal = Vector.multiply(normal,-1);
+            normal = Vector2.multiply(normal,-1);
         }
 
 
@@ -278,17 +278,17 @@ public class Collision {
      * @param verts The Vertices of a polygon
      * @return A vector representing the center of a polygon
      */
-    private static Vector findArithmeticMean(Point2D[] verts){
+    private static Vector2 findArithmeticMean(Point2D[] verts){
         double sumX = 0;
         double sumY = 0;
 
         for(int i = 0; i < verts.length; i++){
-            Vector v = new Vector(verts[i]);
+            Vector2 v = new Vector2(verts[i]);
             sumX += v.x;
             sumY += v.y;
         }
 
-        return new Vector(sumX / (double)verts.length, sumY / (double)verts.length);
+        return new Vector2(sumX / (double)verts.length, sumY / (double)verts.length);
     }
 
     /**
@@ -297,14 +297,14 @@ public class Collision {
      * @param axis Axis to project onto.
      * @return minimum value at index 0 and maximum value at index 1.
      */
-    private static double[] projectVerts(Point2D[] verts, Vector axis){
+    private static double[] projectVerts(Point2D[] verts, Vector2 axis){
         double max = Double.MIN_VALUE;
         double min = Double.MAX_VALUE;
 
 
         for (Point2D vert : verts) {
             //Projects the verts to the axis
-            Vector v = new Vector(vert);
+            Vector2 v = new Vector2(vert);
             double projection = VectorMath.dot(v, axis);
 
             //Sets the min and max based on the projected verts

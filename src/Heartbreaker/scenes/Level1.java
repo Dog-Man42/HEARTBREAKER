@@ -49,17 +49,17 @@ public class Level1 extends Level {
 
 
 
-    public void updateScene(){
+    public void updateScene(double delta){
         if(beaten){
             if(System.currentTimeMillis() - beatTime >= 10000){
                 GameFrame.setCurrentScene(new MainMenu());
             }
         }
-        updateObjects();
+        updateObjects(delta);
     }
 
     @Override
-    public void draw(Graphics2D g){
+    public void draw(Graphics2D g, double delta){
         long drawNano = System.currentTimeMillis();
         g.setStroke(new BasicStroke(1));
         radialGrid(g);
@@ -67,11 +67,11 @@ public class Level1 extends Level {
         g.setStroke(new BasicStroke(3));
         if(boxes.size() > 0){
             for(Box box : boxes){
-                box.draw(g);
+                box.draw(g, delta);
             }
         }
 
-        drawObjects(g);
+        drawObjects(g, delta);
         g.setColor(Color.RED);
 
 

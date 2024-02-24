@@ -32,9 +32,9 @@ public class Shield extends GameObject {
             getScene().addObject(circles[i]);
         }
     }
-    public void update(){
+    public void update(double delta){
         if(!flatlined) {
-            timer += GameFrame.delta;
+            timer += delta;
 
         }
 
@@ -50,7 +50,7 @@ public class Shield extends GameObject {
         //scale *= -1;
         //scale *= -1;
     }
-    public void draw(Graphics2D g) {
+    public void draw(Graphics2D g, double delta) {
 
 
         int midX = getScene().origin.x;
@@ -72,7 +72,7 @@ public class Shield extends GameObject {
                 //g.drawOval((int) ((midX + point.x) - 13),(int) ((midY + point.y) - 13),26,26);
                 circles[i].setXposition(point.x);
                 circles[i].setYposition(point.y);
-                circles[i].draw(g);
+                circles[i].draw(g, delta);
 
                 if (cooldown <= 0 && !flatlined) {
                     playShoot = true;
@@ -100,7 +100,7 @@ public class Shield extends GameObject {
             cooldown = 275 - (int) Math.round(damage/1.75);
             played = false;
         } else {
-            cooldown -= 60 * GameFrame.delta;
+            cooldown -= 60 * delta;
         }
         //g.drawOval(midX + 20,midY + 20,25,25);
 

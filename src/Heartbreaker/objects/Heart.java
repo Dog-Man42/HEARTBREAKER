@@ -12,8 +12,6 @@ import Heartbreaker.main.Heartbreaker;
 import Heartbreaker.scenes.Level1;
 import Heartbreaker.scenes.MainMenu;
 
-import javax.swing.*;
-
 public class Heart extends Entity implements Collider {
 
     private double frames = 0;
@@ -55,10 +53,9 @@ public class Heart extends Entity implements Collider {
 
 
     public void move() {}
-    public void update(){
+    public void update(double delta){
         //frames += .15;
-        double delta = GameFrame.delta;
-        frames+= GameFrame.delta;
+        frames+= delta;
         double beat_duration = 60.0 / bpm;
         double totalTime = frames;
         double rate = totalTime % beat_duration;
@@ -70,10 +67,10 @@ public class Heart extends Entity implements Collider {
         //setScale((Math.abs(-Math.sin(time)) * (Math.abs((-Math.cos(time - 1.5) +Math.tan(time/2) - 4.5)) - 5.4)) + 5);
         setScale(-getScale());
         //scale = 1 * -(Math.abs(Math.sin(frames)) * Math.abs(Math.cos(frames) - 1)) + 5;
-        graph.update();
+        graph.update(delta);
         if(left != null && right != null){
-            left.update();
-            right.update();
+            left.update(delta);
+            right.update(delta);
         }
     }
 
@@ -127,7 +124,7 @@ public class Heart extends Entity implements Collider {
     }
     
 
-    public void draw(Graphics2D g){
+    public void draw(Graphics2D g, double delta){
         if(getIFrames() <= 0) {
             g.setColor(Color.getHSBColor(0f, .7f, .7f));
         } else {
@@ -138,10 +135,10 @@ public class Heart extends Entity implements Collider {
         if(!dead) {
             g.drawPolygon(realizePolyCameraSpace(getScene().getCamera()));
         } else {
-            left.draw(g);
-            right.draw(g);
+            left.draw(g,delta);
+            right.draw(g,delta);
         }
-        graph.draw(g);
+        graph.draw(g,delta);
     }
 
     public double getBpm(){

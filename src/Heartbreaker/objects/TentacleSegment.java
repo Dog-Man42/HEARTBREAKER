@@ -34,9 +34,9 @@ public class TentacleSegment extends GameObject {
 
 
     @Override
-    public void update() {}
+    public void update(double delta) {}
 
-    public void draw(Graphics2D g){
+    public void draw(Graphics2D g, double delta){
         g.setColor(Color.ORANGE);
         g.fillOval((int) (getXPosition() - radius), (int) (getYPosition() - radius), radius*2,radius*2);
 

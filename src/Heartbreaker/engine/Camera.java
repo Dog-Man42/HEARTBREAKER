@@ -13,18 +13,18 @@ public class Camera {
 
     }
 
-    public void update(){
+    public void update(double delta){
         if(Keyboard.isKeyPressed(KeyEvent.VK_LEFT)){
-            xPosition -= 250 * GameFrame.delta;
+            xPosition -= 250 * delta;
         }
         if(Keyboard.isKeyPressed(KeyEvent.VK_UP)){
-            yPosition -= 250 * GameFrame.delta;
+            yPosition -= 250 * delta;
         }
         if(Keyboard.isKeyPressed(KeyEvent.VK_RIGHT)){
-            xPosition += 250 * GameFrame.delta;
+            xPosition += 250 * delta;
         }
         if(Keyboard.isKeyPressed(KeyEvent.VK_DOWN)){
-            yPosition += 250 * GameFrame.delta;
+            yPosition += 250 * delta;
         }
         if(Keyboard.isKeyPressed(KeyEvent.VK_MINUS)){
             zoom -= .01;

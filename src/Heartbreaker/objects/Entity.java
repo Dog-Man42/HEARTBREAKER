@@ -125,7 +125,7 @@ public abstract class Entity extends GameObject implements Collider {
      * By default, decrements iFrames if greater than 0 and sets hit to false if it is true each frame.
      */
     @Override
-    public void update() {
+    public void update(double delta) {
         if(iFrames > 0){
             iFrames--;
         }
@@ -135,7 +135,7 @@ public abstract class Entity extends GameObject implements Collider {
     }
 
     @Override
-    public void draw(Graphics2D g) {}
+    public void draw(Graphics2D g, double delta) {}
     @Override
     public void collided(CollisionData colData) {}
 
