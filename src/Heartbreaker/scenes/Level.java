@@ -43,18 +43,6 @@ public abstract class Level extends Scene{
 
     public abstract void draw(Graphics2D g, double delta);
 
-    public void mouseMoved(MouseEvent e) {
-        if(player != null)
-            player.mouseMoved(e);
-    }
-    public void mousePressed(MouseEvent e) {
-        if(player != null)
-            player.mousePressed(e);
-    }
-    public void mouseReleased(MouseEvent e) {
-        if(player != null)
-            player.mouseReleased(e);
-    }
 
     public abstract void levelBeaten();
 

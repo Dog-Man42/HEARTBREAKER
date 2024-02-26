@@ -61,9 +61,8 @@ public class GameFrame extends JPanel implements Runnable{
 
     GameFrame(Level mainScene){
         this.setFocusable(true);
-        this.addMouseMotionListener(new MotionDetector());
-        this.addMouseListener(new MotionDetector() {
-        });
+        this.addMouseListener(new MouseInput());
+        this.addMouseMotionListener(new MouseInput());
         this.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
                 GAME_WIDTH = e.getComponent().getWidth();
@@ -128,6 +127,7 @@ public class GameFrame extends JPanel implements Runnable{
                     ftGraph.addFrame(frameTime);
                 }
                 frameStart = System.nanoTime();
+                System.out.println(MouseInput.getPressedButtons());
             }
             if(System.currentTimeMillis() - timer >= 1000) {
                 timer += 1000;
@@ -232,32 +232,6 @@ public class GameFrame extends JPanel implements Runnable{
 
 
 
-    public static class MotionDetector extends MouseAdapter{
-        public void mouseMoved(MouseEvent e) {
-            mouseX = e.getX();
-            mouseY = e.getY();
-            if(!mouseUpdated) {
-                //currentScene.mouseMoved(e);
-                //mouseUpdated = true;
-            }
-
-        }
-
-        public void mouseDragged(MouseEvent e) {
-            mouseX = e.getX();
-            mouseY = e.getY();
-            //currentScene.mouseMoved(e);
-        }
-
-        public void mousePressed(MouseEvent e) {
-            currentScene.mousePressed(e);
-        }
-        public void mouseReleased(MouseEvent e) {
-            currentScene.mouseReleased(e);
-        }
-
-
-    }
 
 
 }

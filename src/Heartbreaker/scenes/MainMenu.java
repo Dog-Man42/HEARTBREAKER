@@ -53,10 +53,6 @@ public class MainMenu extends Level {
     @Override
     public void levelBeaten() {}
 
-    public void mouseMoved(MouseEvent e) {
-        if(player != null)
-            player.mouseMoved(e);
-    }
 
     @Override
     public void draw(Graphics2D g, double delta) {

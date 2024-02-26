@@ -16,10 +16,6 @@ public class Player extends Entity implements UsesPolar, Collider{
     private boolean spawnGravBullet;
     private double coolDown = 0;
 
-    private Point2D prevMouseX;
-
-    private int MouseX;
-    private int MouseY;
 
     private double theta;
     private double angularVelocity;
@@ -33,8 +29,6 @@ public class Player extends Entity implements UsesPolar, Collider{
     private final double maxRadial = 360;
     private final double acceleration = .1;
 
-    private boolean leftClicked = false;
-    private boolean rightClicked = false;
 
 
     private Point2D mousePosition = new Point2D.Double(0,0);
@@ -51,24 +45,6 @@ public class Player extends Entity implements UsesPolar, Collider{
 
     }
 
-    public void mouseMoved(MouseEvent e){
-        Point2D prevMousePosition = mousePosition;
-        mousePosition = e.getPoint();
-    }
-    public void mousePressed(MouseEvent e){
-
-        switch(e.getButton()) {
-            case MouseEvent.BUTTON1 -> leftClicked = true;
-            case MouseEvent.BUTTON3 -> rightClicked = true;
-        }
-    }
-    public void mouseReleased(MouseEvent e){
-        switch(e.getButton()) {
-            case MouseEvent.BUTTON1 -> leftClicked = false;
-            case MouseEvent.BUTTON3 -> rightClicked = false;
-        }
-    }
-
     public void update(double delta) {
 
 
@@ -81,10 +57,10 @@ public class Player extends Entity implements UsesPolar, Collider{
         //TODO try to fix frame time stutter
 
 
-        double targetRotation = Math.toDegrees(-Math.atan2(GameFrame.mouseX - getXPosition(), GameFrame.mouseY  - getYPosition()));
+        double targetRotation = Math.toDegrees(-Math.atan2(MouseInput.getPosition().x - getXPosition(), MouseInput.getPosition().y  - getYPosition()));
 
         setRotation(getRotation() + targetRotation);
-        setRotation(Math.toDegrees(-Math.atan2(GameFrame.mouseX - getXPosition(),GameFrame.mouseY - getYPosition())));
+        setRotation(Math.toDegrees(-Math.atan2(MouseInput.getPosition().x - getXPosition(),MouseInput.getPosition().y - getYPosition())));
 
 
         double prevX = getXPosition();
@@ -239,11 +215,11 @@ public class Player extends Entity implements UsesPolar, Collider{
                 }
             }
         }
-        if(leftClicked) {
+        if(MouseInput.isButtonPressed(MouseEvent.BUTTON1)) {
             if(coolDown <= 0)
                 spawnBullet = true;
         }
-        if(rightClicked) {
+        if(MouseInput.isButtonPressed(MouseEvent.BUTTON3)) {
             if(coolDown <= 0)
                 spawnGravBullet = true;
         }
