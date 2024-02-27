@@ -60,6 +60,7 @@ public class PhysicsTestingArea extends Level{
     public void drawGrid(Graphics2D g){
         double zoom = (camera.getZoom());
         double s = (zoom * 200) % 50 + 50;
+
         int cellSize = (int) Math.round(s);
         BasicStroke temp = (BasicStroke) g.getStroke();
         Color col = g.getColor();
