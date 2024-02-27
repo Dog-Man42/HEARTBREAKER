@@ -18,20 +18,16 @@ public class GameFrame extends JPanel implements Runnable{
     public static int GAME_WIDTH = 1000;
     public static int GAME_HEIGHT = 800;
     static Dimension SCREEN_SIZE = new Dimension(GAME_WIDTH,GAME_HEIGHT);
+
+
     public static double delta = 0;
-
+    public static double frameTime = 0;
     public static int FPS = 0;
-
     public static int targetFPS = 60;
 
     public static boolean LOADING = false;
 
-    public static Long frameStart = 0L;
-    public static Long lastFrame = 0L;
-    public static double frameTime = 0;
 
-    public static int mouseX = 0;
-    public static int mouseY = 0;
 
     Thread gameThread;
     public static BufferedImage bufferedImage;
@@ -61,8 +57,10 @@ public class GameFrame extends JPanel implements Runnable{
 
     GameFrame(Level mainScene){
         this.setFocusable(true);
-        this.addMouseListener(new MouseInput());
-        this.addMouseMotionListener(new MouseInput());
+        MouseInput mouseInput = new MouseInput();
+        this.addMouseListener(mouseInput);
+        this.addMouseMotionListener(mouseInput);
+        this.addMouseWheelListener(mouseInput);
         this.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
                 GAME_WIDTH = e.getComponent().getWidth();
@@ -127,7 +125,6 @@ public class GameFrame extends JPanel implements Runnable{
                     ftGraph.addFrame(frameTime);
                 }
                 frameStart = System.nanoTime();
-                System.out.println(MouseInput.getPressedButtons());
             }
             if(System.currentTimeMillis() - timer >= 1000) {
                 timer += 1000;
