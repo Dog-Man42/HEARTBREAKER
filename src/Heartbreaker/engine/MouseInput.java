@@ -14,6 +14,7 @@ public class MouseInput extends MouseAdapter {
     private static Point mousePosition = new Point(0,0);
     private static double scrollAmount = 0;
     private static long movedTime = 0;
+    private static long scrolledTime = 0;
 
 
     public void mouseMoved(MouseEvent e){
@@ -36,7 +37,9 @@ public class MouseInput extends MouseAdapter {
     }
 
     public void mouseWheelMoved(MouseWheelEvent e){
-        scrollAmount += e.getPreciseWheelRotation();
+        scrollAmount = e.getPreciseWheelRotation();
+        scrolledTime = System.currentTimeMillis();
+
     }
 
     public static Point getPosition(){
@@ -52,11 +55,16 @@ public class MouseInput extends MouseAdapter {
     }
 
     public static boolean isMouseMoved(){
-        return movedTime == System.currentTimeMillis();
+        return System.currentTimeMillis() - movedTime <= 10;
     }
 
     public static double getScrollAmount(){
-        return scrollAmount;
+        if(System.currentTimeMillis() - scrolledTime <= 20) {
+            return scrollAmount;
+        } else {
+            scrollAmount = 0;
+            return 0.0;
+        }
     }
     public static List<Map.Entry<Integer, Boolean>> getPressedButtons(){
         return pressedButtons.entrySet().stream().toList();
