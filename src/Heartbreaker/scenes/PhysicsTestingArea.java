@@ -26,7 +26,7 @@ public class PhysicsTestingArea extends Level{
         origin = new Point(GameFrame.GAME_WIDTH/2,GameFrame.GAME_HEIGHT/2);
         camera = new Camera(0,0,.75);
         Random random = new Random();
-        for(int i = 0; i < 3000; i++){
+        for(int i = 0; i < 1000; i++){
             int mass = random.nextInt(1,11);
             addObject(new PhysicsBall(random.nextInt(-3000,3001),random.nextInt(-3000,3001),10,1,random.nextInt(-200,201),random.nextInt(-200,201)));
         }
@@ -59,7 +59,9 @@ public class PhysicsTestingArea extends Level{
     }
     public void drawGrid(Graphics2D g){
         double zoom = (camera.getZoom());
-        int cellSize = (int) Math.round(50 * zoom);
+        double s = zoom * 100 % 50 + 50;
+        System.out.println(s);
+        int cellSize = (int) Math.round(s);
         BasicStroke temp = (BasicStroke) g.getStroke();
         Color col = g.getColor();
         g.setStroke(new BasicStroke(1));
