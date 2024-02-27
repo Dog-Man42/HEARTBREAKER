@@ -16,13 +16,14 @@ public class Heartbreaker {
         for(int i = 0; i < args.length; i++){
             if(args[i].equals("-debug")){
                 DEBUG_MODE = true;
+
             }
         }
         track = new MidiPlayer();
         track.init();
         track.setBpmTo(60f);
         GameWindow window = new GameWindow("HEARTBREAKER", new MainMenu());
-
+        window.DEBUG = DEBUG_MODE;
         
         
 

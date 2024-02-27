@@ -15,6 +15,9 @@ public class GameWindow extends JFrame{
 
     private static boolean playing = false;
 
+    public static boolean DEBUG = false;
+
+
 
     public GameWindow(String title, Level mainScene) {
         panel = new GameFrame(mainScene);
