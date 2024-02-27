@@ -120,6 +120,14 @@ public class Vector2 {
     }
 
     /**
+     * Creates a Point2D.Double using the x and y components of the Vector2
+     * @return Point2D from x and y
+     */
+    public Point2D.Double toPoint(){
+        return new Point2D.Double(x,y);
+    }
+
+    /**
      * Returns whether the components of this vector is equal to Vector2 b.
      * @param b Vector2 b
      * @return true if Vector2.x == VectorB.x and Vector2.y == VectorB.y.
