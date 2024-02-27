@@ -98,7 +98,7 @@ public class MainMenu extends Level {
 
     public void radialGrid(Graphics2D g){
         g.setColor(new Color(50,50,50));
-        g.setStroke(new BasicStroke(2));
+        g.setStroke(new BasicStroke(1));
         double resolution = 24;
         double diagonal = Math.sqrt(Math.pow(WIDTH,2) + Math.pow(HEIGHT,2));
         double centerx = origin.x + (origin.x - camera.getxPosition()) * camera.getZoom();

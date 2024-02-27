@@ -76,50 +76,30 @@ public class PhysicsTestingArea extends Level{
         int xMod = xOffset % cellSize;
         int yMod = yOffset % cellSize;
 
+        g.setStroke(new BasicStroke(2));
+        g.setColor(Color.DARK_GRAY);
         //To the right
         for(int x = mScreenX - xMod; x < GameFrame.GAME_WIDTH; x += cellSize){
-            if(x == yAxis){
-                g.setStroke(new BasicStroke(2));
-                g.setColor(Color.GREEN); // Draw the x-axis as green
-            } else {
-                g.setStroke(new BasicStroke(1));
-                g.setColor(Color.DARK_GRAY);
-            }
             g.drawLine(x,0,x,GameFrame.GAME_HEIGHT);
         }
         //to the left
         for(int x = mScreenX - xMod - cellSize; x >= 0; x -= cellSize){
-            if(x == yAxis){
-                g.setStroke(new BasicStroke(2));
-                g.setColor(Color.GREEN); // Draw the x-axis as green
-            } else {
-                g.setStroke(new BasicStroke(1));
-                g.setColor(Color.DARK_GRAY);
-            }
             g.drawLine(x,0,x,GameFrame.GAME_HEIGHT);
         }
 
 // Draw the horizontal grid lines
         for(int y = mScreenY - yMod; y < GameFrame.GAME_HEIGHT; y += cellSize){
-            if(y == xAxis){
-                g.setStroke(new BasicStroke(2));
-                g.setColor(Color.RED); // Draw the x-axis as green
-            } else {
-                g.setStroke(new BasicStroke(1));
-                g.setColor(Color.DARK_GRAY);
-            }
             g.drawLine(0,y,GameFrame.GAME_WIDTH,y);
         }
         for(int y = mScreenY - yMod - cellSize; y >= 0; y -= cellSize){
-            if(y == xAxis){
-                g.setStroke(new BasicStroke(2));
-                g.setColor(Color.RED); // Draw the x-axis as green
-            } else {
-                g.setStroke(new BasicStroke(1));
-                g.setColor(Color.DARK_GRAY);
-            }
             g.drawLine(0,y,GameFrame.GAME_WIDTH,y);
         }
+
+        g.setStroke(new BasicStroke(4));
+        g.setColor(Color.GREEN);
+        g.drawLine(yAxis,GameFrame.GAME_HEIGHT,yAxis,0);
+        g.setColor(Color.RED);
+        g.drawLine(GameFrame.GAME_WIDTH,xAxis,0,xAxis);
 
         g.setStroke(temp);
         g.setColor(col);
