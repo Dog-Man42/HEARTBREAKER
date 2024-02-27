@@ -38,9 +38,12 @@ public class FrameTimeGraph extends GameObject {
     }
 
     @Override
-    public void update(double delta) {}
+    public void update(double delta) {
+
+    }
 
     public void draw(Graphics2D g, double delta){
+        setYPosition(GameFrame.GAME_HEIGHT - 22);
         Point2D.Double[] line = realizePoints();
         Point2D.Double[] temp = getVerticies();
 

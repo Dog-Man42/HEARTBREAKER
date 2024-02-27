@@ -27,7 +27,7 @@ public class Camera {
             yPosition += (1/zoom) * 250 * delta;
         }
         if(Keyboard.isKeyPressed(KeyEvent.VK_MINUS)){
-            if(zoom > .02) {
+            if(zoom > .04) {
                 zoom -= .01;
             }
         }
