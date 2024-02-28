@@ -110,7 +110,7 @@ public class ShieldCircle extends Entity implements Collider {
 
     @Override
     public boolean getStatic() {
-        return false;
+        return true;
     }
 
     @Override

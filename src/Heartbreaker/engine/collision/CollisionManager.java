@@ -1,6 +1,8 @@
 package Heartbreaker.engine.collision;
 
 
+import Heartbreaker.engine.vectors.VectorMath;
+
 import java.util.ArrayList;
 
 public class CollisionManager {
@@ -47,11 +49,14 @@ public class CollisionManager {
                     }
 
                 }
+
                 if(colData != null){
-                    colData.setCollider(collider2);
-                    collider1.collided(colData);
-                    colData.setCollider(collider1);
-                    collider2.collided(colData.inverted());
+                    if( !collider1.getStatic() && !collider2.getStatic()) {
+                        colData.setCollider(collider2);
+                        collider1.collided(colData);
+                        colData.setCollider(collider1);
+                        collider2.collided(colData.inverted());
+                    }
                 }
             }
         }

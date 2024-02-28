@@ -55,7 +55,7 @@ public class Collision {
             return null;
         }
         normal = VectorMath.normalize(Vector2.difference(new Vector2(centerB),new Vector2(centerA)));
-        depth = radii + distance;
+        depth = radii - distance;
         return new CollisionData(depth,normal,CIRCLE_CIRCLE);
     }
 

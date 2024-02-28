@@ -17,6 +17,7 @@ public class PhysicsTestingArea extends Level{
     private boolean dragging = false;
     private Point dragStartMouse = new Point(0,0);
     private Point2D.Double dragStartCam = new Point2D.Double(0,0);
+    private int frame = 0;
 
     public PhysicsTestingArea() {}
 
@@ -26,9 +27,9 @@ public class PhysicsTestingArea extends Level{
         origin = new Point(GameFrame.GAME_WIDTH/2,GameFrame.GAME_HEIGHT/2);
         camera = new Camera(0,0,.75);
         Random random = new Random();
-        for(int i = 0; i < 1000; i++){
+        for(int i = 0; i < 3000; i++){
             int mass = random.nextInt(1,11);
-            addObject(new PhysicsBall(random.nextInt(-3000,3001),random.nextInt(-3000,3001),10,1,random.nextInt(-200,201),random.nextInt(-200,201)));
+            addObject(new PhysicsBall(random.nextInt(-5000,5001),random.nextInt(-5000,5001),10,5,random.nextInt(-200,201),random.nextInt(-200,201)));
         }
         return true;
     }
@@ -48,14 +49,15 @@ public class PhysicsTestingArea extends Level{
             dragStartCam = camera.getPosition();
             dragStartMouse = MouseInput.getPosition();
         }
+
         updateObjects(delta);
+
     }
 
     @Override
     public void draw(Graphics2D g, double delta) {
         drawGrid(g);
         drawObjects(g, delta);
-        g.drawOval(-10,-10,20,20);
     }
     public void drawGrid(Graphics2D g){
         double zoom = (camera.getZoom());

@@ -20,8 +20,10 @@ public class PhysicsBall extends GameObject implements Collider {
     private int mass = 1;
 
     private Vector2 accel = new Vector2(0,0);
+    private Vector2 tempV = null;
 
     private ArrayList<Link> links = new ArrayList<>();
+    private Vector2 normal = null;
 
     private class Link{
         
@@ -45,11 +47,21 @@ public class PhysicsBall extends GameObject implements Collider {
                 double x = VectorMath.length(force) - restLength;
                 force = Vector2.multiply(VectorMath.normalize(force), k * x);
 
-                Vector2 velocity = Vector2.difference(new Vector2(b.getXVelocity(),b.getYVelocity()), new Vector2(a.getXVelocity(),a.getYVelocity()));
-                double v = VectorMath.dot(force, velocity);
-                force = Vector2.difference(force, Vector2.multiply(velocity, -.99 ));
-                a.applyForce(force);
-                b.applyForce(Vector2.negate(force));
+                // Calculate relative velocity
+                Vector2 vA = new Vector2(a.getXVelocity(),a.getYVelocity());
+                Vector2 vB = new Vector2(b.getXVelocity(), b.getYVelocity());
+
+                Vector2 relativeVelocity = Vector2.difference(vA, vB);
+
+                // Apply damping force (opposes relative velocity)
+                double dampingFactor = 0.05; // Adjust this value as needed
+                Vector2 dampingForce = Vector2.multiply(relativeVelocity, -dampingFactor);
+
+                // Combine spring force and damping force
+                Vector2 totalForce = Vector2.sum(force, dampingForce);
+
+                a.applyForce(totalForce);
+                b.applyForce(Vector2.negate(totalForce));
             }
         }
 
@@ -106,8 +118,13 @@ public class PhysicsBall extends GameObject implements Collider {
 
     @Override
     public void update(double delta) {
-        xVel += accel.x * delta;
-        yVel += accel.y * delta;
+        if(tempV != null){
+            xVel = tempV.x;
+            yVel = tempV.y;
+            tempV = null;
+        }
+        xVel += accel.x;
+        yVel += accel.y;
         accel = new Vector2(0,0);
 
         changeXPos(xVel * delta);
@@ -132,20 +149,24 @@ public class PhysicsBall extends GameObject implements Collider {
         Vector2 originV = Vector2.difference(new Vector2(0,0), new Vector2(getPosition()));
         originV = VectorMath.normalize(originV);
 
+
         double distance = VectorMath.lengthSquare(new Vector2(getPosition()));
-        if(distance > 500) {
-            double gForce = 100000 / (10000 + distance);
+        if(Math.sqrt(distance) > 1000) {
+            double gForce = 10000 / (1000 + distance);
             applyForce(Vector2.multiply(originV, 20 * gForce));
 
         }
+        /*
         if(calculateDistance(getPosition(),new Point2D.Double(0,0)) > 5000){
             double angle = Math.atan2(getYPosition(), getXPosition());
             // Set the new position of the circle to be on the boundary of the circle with radius 5000
             setXPosition(5000 * Math.cos(angle));
             setYPosition(5000 * Math.sin(angle));
 
-            applyForce(new Vector2(-1.2 * xVel / delta,-1.2 * yVel / delta));
+            applyForce(new Vector2(-1.2 * xVel,-1.2 * yVel));
         }
+
+         */
 
 
     }
@@ -158,6 +179,11 @@ public class PhysicsBall extends GameObject implements Collider {
         g.setColor(Color.ORANGE);
         g.drawOval((int) (p.x - drawRadius/2), (int) (p.y - drawRadius/2), drawRadius*2,drawRadius*2);
         if(GameWindow.DEBUG) {
+            if(normal != null){
+                int xM = (int) (p.x + drawRadius/2);
+                int yM = (int) (p.y + drawRadius/2);
+                //g.drawLine(xM, yM, (int) (xM + normal.x), (int) (yM + normal.y));
+            }
             for (Iterator<Link> it = links.iterator(); it.hasNext(); ) {
                 Link link = it.next();
                 PhysicsBall other = link.getOther(this);
@@ -171,66 +197,54 @@ public class PhysicsBall extends GameObject implements Collider {
 
     @Override
     public void collided(CollisionData colData) {
-        Vector2 correction = Vector2.multiply(colData.getNormal(),colData.getDepth()/2);
+
+        Vector2 correction = Vector2.multiply(colData.getNormal(),-colData.getDepth());
+        normal = correction;
         changeXPos(correction.x);
         changeYPos(correction.y);
 
 
         if (colData.getCollider() instanceof PhysicsBall collider){
 
-
-            Vector2 n = VectorMath.normalize(Vector2.difference(new Vector2(collider.getPosition()), new Vector2(getPosition())));
-            Vector2 tan = new Vector2(-n.y,n.x);
+            Vector2 p = new Vector2(getPosition());
+            Vector2 p2 = new Vector2(collider.getPosition());
+            Vector2 n = Vector2.difference(p,p2);
 
             Vector2 v = new Vector2(xVel,yVel);
             Vector2 v2 = new Vector2(collider.getXVelocity(),collider.getYVelocity());
 
-            double vN = VectorMath.dot(n,v);
-            double vT = VectorMath.dot(tan,v);
-
-            double vN2 = VectorMath.dot(n,v2);
-            double vT2 = VectorMath.dot(tan,v2);
+            int m = mass;
             int m2 = collider.getMass();
 
-
-            double vNFinal = (vN * (mass - m2) + 2 * m2 * vN2) / (mass + m2);
-            double vTFinal = vT;
-
-            Vector2 vFinal = Vector2.sum(Vector2.multiply(n, vNFinal), Vector2.multiply(tan, vTFinal));
-
-            /*
-
-            Vector2 p = new Vector2(getPosition());
-
-
-
-            Vector2 p2 = new Vector2(collider.getPosition());
 
             double momentumBefore = VectorMath.length(v) * mass + VectorMath.length(v2) * m2;
 
             //restitution
-            double e = 0.5;
+            double e = .5;
+
+            double massComp = ((1 + e) * m2) / (double) (m + m2);
+            double numerator = VectorMath.dot(Vector2.difference(v,v2), n);
+            double lengthSquared = VectorMath.lengthSquare(n);
+            double factor =  massComp * (numerator / lengthSquared);
+            System.out.println(factor);
+
+            Vector2 vFinal = Vector2.multiply(n,factor);
+            vFinal = Vector2.difference(v,vFinal);
+            tempV = vFinal;
 
 
-
-            double massComp = (double) (2* m2) / (mass + m2);
-            double velComp = VectorMath.dot(Vector2.difference(v,v2), n);
-            double lengthSquared = VectorMath.lengthSquare(Vector2.difference(p,p2));
-            double factor = massComp * velComp * -.5;
-
-            double vFMagnitude = VectorMath.length(v) - factor;
-            //Vector2 vFinal = Vector2.multiply(n, vFMagnitude);
-            */
-
-            accel = Vector2.sum(accel,vFinal);
+            //accel = Vector2.sum(accel,vFinal);
 
 
-            double momentumAfter = VectorMath.length(v) * mass + VectorMath.length(v2) * m2;
-            if(momentumAfter <200) {
-                addLink(new Link(this, collider, radius * 2, 8));
+            double momentumAfter = VectorMath.length(Vector2.sum(v,vFinal)) * mass + VectorMath.length(v2) * m2;
+            //System.out.println("Momentum Difference: " + Math.abs(momentumAfter - momentumBefore));
+
+            if(momentumAfter < 9000) {
+                addLink(new Link(this, collider, radius * 2.5, 1.5));
             }
 
         } else {
+
             Vector2 normal = VectorMath.normalize(colData.getNormal());
             xVel = xVel * normal.x;
             yVel = yVel * normal.y;
