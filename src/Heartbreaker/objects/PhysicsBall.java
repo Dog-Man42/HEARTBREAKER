@@ -2,11 +2,15 @@ package Heartbreaker.objects;
 
 import Heartbreaker.engine.GameObject;
 import Heartbreaker.engine.GameWindow;
+import Heartbreaker.engine.Keyboard;
+import Heartbreaker.engine.MouseInput;
 import Heartbreaker.engine.collision.Collider;
 import Heartbreaker.engine.collision.CollisionData;
 import Heartbreaker.engine.vectors.*;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -27,12 +31,14 @@ public class PhysicsBall extends GameObject implements Collider {
 
     private int linkLimit = 6;
 
+    private boolean followed = false;
     private class Link{
         
         public PhysicsBall a;
         public PhysicsBall b;
         public double restLength;
         public double k;
+
         
         public Link(PhysicsBall a, PhysicsBall b, double restLength, double force){//
             this.a = a;
@@ -56,7 +62,7 @@ public class PhysicsBall extends GameObject implements Collider {
                 Vector2 relativeVelocity = Vector2.difference(vA, vB);
 
                 // Apply damping force (opposes relative velocity)
-                double dampingFactor = 0.015; // Adjust this value as needed
+                double dampingFactor = 0.05; // Adjust this value as needed
                 Vector2 dampingForce = Vector2.multiply(relativeVelocity, -dampingFactor);
 
                 // Combine spring force and damping force
@@ -144,6 +150,21 @@ public class PhysicsBall extends GameObject implements Collider {
             links.clear();
         }
 
+        if(followed){
+            getScene().camera.setPosition(getPosition());
+            if(Keyboard.isKeyPressed(KeyEvent.VK_E) || MouseInput.isButtonPressed(MouseEvent.BUTTON1)){
+                followed = false;
+                getScene().getCamera().setPosition(new Point2D.Double(0,0));
+            }
+        } else {
+            if(Math.abs(VectorMath.length(Vector2.difference( new Vector2(getPositionCameraSpace()), new Vector2(MouseInput.getPosition())))) <= radius ){
+                if(MouseInput.isButtonPressed(MouseEvent.BUTTON1)){
+                    followed = true;
+                }
+
+            }
+        }
+
         for(Iterator<Link> it = links.iterator(); it.hasNext();){
             Link link = it.next();
             PhysicsBall other = link.getOther(this);
@@ -165,7 +186,7 @@ public class PhysicsBall extends GameObject implements Collider {
 
 
         double distance = VectorMath.lengthSquare(new Vector2(getPosition()));
-        if(Math.sqrt(distance) > 20) {
+        if(Math.sqrt(distance) > 50) {
             applyForce(Vector2.multiply(originV, 1 + (10000/distance)));
 
         }
@@ -189,7 +210,11 @@ public class PhysicsBall extends GameObject implements Collider {
         Point2D.Double p = getPositionCameraSpace();
         double zoom = getScene().getCamera().getZoom();
         int drawRadius = (int) (getScene().getCamera().getZoom() * radius);
-        g.setColor(Color.ORANGE);
+        if(followed){
+            g.setColor(Color.BLUE);
+        } else {
+            g.setColor(Color.ORANGE);
+        }
         g.fillOval((int) (p.x - drawRadius/2), (int) (p.y - drawRadius/2), drawRadius*2,drawRadius*2);
         if(GameWindow.DEBUG) {
             if(normal != null){
@@ -241,7 +266,7 @@ public class PhysicsBall extends GameObject implements Collider {
             double momentumBefore = VectorMath.length(v) * mass + VectorMath.length(v2) * m2;
 
             //restitution
-            double e = .99;
+            double e = 1;
 
             double massComp = ((1 + e) * m2) / (double) (m + m2);
             double numerator = VectorMath.dot(Vector2.difference(v,v2), n);
@@ -258,8 +283,8 @@ public class PhysicsBall extends GameObject implements Collider {
 
             double dMomentum = (VectorMath.length(v) * mass) - (VectorMath.length(v2) * m2);
 
-            if(Math.abs(dMomentum) < 100) {
-                Link link = new Link(this, collider, radius * 2.25, .1);
+            if(Math.abs(dMomentum) < 300) {
+                Link link = new Link(this, collider, radius + collider.getRadius(), 1);
                 if(!hasLink(link) && !collider.hasLink(link)) {
                     addLink(link);
                     collider.addLink(link);

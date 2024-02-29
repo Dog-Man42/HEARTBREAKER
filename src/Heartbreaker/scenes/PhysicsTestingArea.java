@@ -27,9 +27,9 @@ public class PhysicsTestingArea extends Level{
         origin = new Point(GameFrame.GAME_WIDTH/2,GameFrame.GAME_HEIGHT/2);
         camera = new Camera(0,0,.75);
         Random random = new Random();
-        for(int i = 0; i < 3000; i++){
-            int mass = random.nextInt(1,11);
-            addObject(new PhysicsBall(random.nextInt(-5000,5001),random.nextInt(-5000,5001),10,5,random.nextInt(-100,101),random.nextInt(-100,101)));
+        for(int i = 0; i < 3500; i++){
+            int mass = random.nextInt(4,6);
+            addObject(new PhysicsBall(random.nextInt(-5000,5001),random.nextInt(-5000,5001),2 * mass,mass,random.nextInt(-100,101),random.nextInt(-100,101)));
         }
         return true;
     }
