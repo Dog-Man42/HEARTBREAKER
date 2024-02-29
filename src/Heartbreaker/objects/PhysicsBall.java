@@ -25,6 +25,8 @@ public class PhysicsBall extends GameObject implements Collider {
     private ArrayList<Link> links = new ArrayList<>();
     private Vector2 normal = null;
 
+    private int linkLimit = 6;
+
     private class Link{
         
         public PhysicsBall a;
@@ -54,7 +56,7 @@ public class PhysicsBall extends GameObject implements Collider {
                 Vector2 relativeVelocity = Vector2.difference(vA, vB);
 
                 // Apply damping force (opposes relative velocity)
-                double dampingFactor = 0.05; // Adjust this value as needed
+                double dampingFactor = 0.015; // Adjust this value as needed
                 Vector2 dampingForce = Vector2.multiply(relativeVelocity, -dampingFactor);
 
                 // Combine spring force and damping force
@@ -71,6 +73,10 @@ public class PhysicsBall extends GameObject implements Collider {
             } else {
                 return a;
             }
+        }
+
+        public double getLength(){
+            return VectorMath.length(Vector2.difference(new Vector2(b.getPosition()), new Vector2(a.getPosition())));
         }
 
         @Override
@@ -106,9 +112,13 @@ public class PhysicsBall extends GameObject implements Collider {
     }
     
     public void addLink(Link link){
-        if(!links.contains(link) && links.size() < 6) {
+        if(!links.contains(link) && links.size() < linkLimit) {
             links.add(link);
         }
+    }
+
+    public boolean hasLink(Link link){
+        return links.contains(link) || links.size() >= linkLimit;
     }
 
     public void applyForce(Vector2 force){
@@ -130,6 +140,10 @@ public class PhysicsBall extends GameObject implements Collider {
         changeXPos(xVel * delta);
         changeYPos(yVel * delta);
 
+        if(links.size() > linkLimit){
+            links.clear();
+        }
+
         for(Iterator<Link> it = links.iterator(); it.hasNext();){
             Link link = it.next();
             PhysicsBall other = link.getOther(this);
@@ -137,7 +151,7 @@ public class PhysicsBall extends GameObject implements Collider {
             double length = VectorMath.length(displacement);
 
 
-            if(length > link.restLength * 4){
+            if(length > link.restLength * 2){
                 it.remove();
             } else {
                 link.updateForce(this);
@@ -151,9 +165,8 @@ public class PhysicsBall extends GameObject implements Collider {
 
 
         double distance = VectorMath.lengthSquare(new Vector2(getPosition()));
-        if(Math.sqrt(distance) > 1000) {
-            double gForce = 10000 / (1000 + distance);
-            applyForce(Vector2.multiply(originV, 20 * gForce));
+        if(Math.sqrt(distance) > 20) {
+            applyForce(Vector2.multiply(originV, 1 + (10000/distance)));
 
         }
         /*
@@ -177,7 +190,7 @@ public class PhysicsBall extends GameObject implements Collider {
         double zoom = getScene().getCamera().getZoom();
         int drawRadius = (int) (getScene().getCamera().getZoom() * radius);
         g.setColor(Color.ORANGE);
-        g.drawOval((int) (p.x - drawRadius/2), (int) (p.y - drawRadius/2), drawRadius*2,drawRadius*2);
+        g.fillOval((int) (p.x - drawRadius/2), (int) (p.y - drawRadius/2), drawRadius*2,drawRadius*2);
         if(GameWindow.DEBUG) {
             if(normal != null){
                 int xM = (int) (p.x + drawRadius/2);
@@ -186,13 +199,21 @@ public class PhysicsBall extends GameObject implements Collider {
             }
             for (Iterator<Link> it = links.iterator(); it.hasNext(); ) {
                 Link link = it.next();
+                double hue = mapToRange(link.getLength(), 0,2 * link.restLength,300,0  );
+
+                g.setColor(Color.getHSBColor(((float) hue)/255,1,1));
                 PhysicsBall other = link.getOther(this);
                 Point2D.Double p2 = other.getPositionCameraSpace();
-                g.setStroke(new BasicStroke(1));
+                g.setStroke(new BasicStroke(3));
                 g.drawLine((int) (p.x + drawRadius / 2), (int) (p.y + drawRadius / 2), (int) (p2.x + drawRadius / 2), (int) (p2.y + drawRadius / 2));
             }
         }
 
+    }
+
+    private double mapToRange(double input, double minOriginal, double maxOriginal, double min, double max) {
+        double ratio = (input - minOriginal) / (maxOriginal - minOriginal);
+        return ratio * (max - min) + min;
     }
 
     @Override
@@ -220,13 +241,12 @@ public class PhysicsBall extends GameObject implements Collider {
             double momentumBefore = VectorMath.length(v) * mass + VectorMath.length(v2) * m2;
 
             //restitution
-            double e = .5;
+            double e = .99;
 
             double massComp = ((1 + e) * m2) / (double) (m + m2);
             double numerator = VectorMath.dot(Vector2.difference(v,v2), n);
             double lengthSquared = VectorMath.lengthSquare(n);
             double factor =  massComp * (numerator / lengthSquared);
-            System.out.println(factor);
 
             Vector2 vFinal = Vector2.multiply(n,factor);
             vFinal = Vector2.difference(v,vFinal);
@@ -236,11 +256,14 @@ public class PhysicsBall extends GameObject implements Collider {
             //accel = Vector2.sum(accel,vFinal);
 
 
-            double momentumAfter = VectorMath.length(Vector2.sum(v,vFinal)) * mass + VectorMath.length(v2) * m2;
-            //System.out.println("Momentum Difference: " + Math.abs(momentumAfter - momentumBefore));
+            double dMomentum = (VectorMath.length(v) * mass) - (VectorMath.length(v2) * m2);
 
-            if(momentumAfter < 9000) {
-                addLink(new Link(this, collider, radius * 2.5, 1.5));
+            if(Math.abs(dMomentum) < 100) {
+                Link link = new Link(this, collider, radius * 2.25, .1);
+                if(!hasLink(link) && !collider.hasLink(link)) {
+                    addLink(link);
+                    collider.addLink(link);
+                }
             }
 
         } else {

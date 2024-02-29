@@ -98,7 +98,7 @@ public class GameFrame extends JPanel implements Runnable{
         //Game Loop
         long lastTime = System.nanoTime();
         double amountOfTicks = targetFPS;
-        double ns = 1000000000 / 60.0;
+        double ns = 1000000000 / 120.0;
         long timer = System.currentTimeMillis();
         int frames = 0;
         double frameTimeSum = 0;

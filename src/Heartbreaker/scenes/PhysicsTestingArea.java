@@ -29,7 +29,7 @@ public class PhysicsTestingArea extends Level{
         Random random = new Random();
         for(int i = 0; i < 3000; i++){
             int mass = random.nextInt(1,11);
-            addObject(new PhysicsBall(random.nextInt(-5000,5001),random.nextInt(-5000,5001),10,5,random.nextInt(-200,201),random.nextInt(-200,201)));
+            addObject(new PhysicsBall(random.nextInt(-5000,5001),random.nextInt(-5000,5001),10,5,random.nextInt(-100,101),random.nextInt(-100,101)));
         }
         return true;
     }
@@ -49,8 +49,10 @@ public class PhysicsTestingArea extends Level{
             dragStartCam = camera.getPosition();
             dragStartMouse = MouseInput.getPosition();
         }
-
-        updateObjects(delta);
+        int substeps = 4;
+        for(int i = 0; i < substeps; i++){
+            updateObjects(delta/substeps);
+        }
 
     }
 
