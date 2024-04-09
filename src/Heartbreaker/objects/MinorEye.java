@@ -124,13 +124,13 @@ public class MinorEye extends Entity {
     }
 
     @Override
-    public int getCanHit() {
-        return Collider.HITS_PLAYER;
+    public int getCollisionLayer() {
+        return Collider.LAYER_2;
     }
 
     @Override
-    public int getHitBy() {
-        return Collider.HIT_BY_PLAYER;
+    public int getCollisionMask() {
+        return Collider.MASK_1;
     }
 
     @Override

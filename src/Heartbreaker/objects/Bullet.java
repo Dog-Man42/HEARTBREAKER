@@ -3,7 +3,6 @@ package Heartbreaker.objects;
 import java.awt.*;
 import java.awt.geom.Point2D;
 
-import Heartbreaker.engine.GameFrame;
 import Heartbreaker.engine.GameObject;
 import Heartbreaker.engine.collision.Collider;
 import Heartbreaker.engine.collision.CollisionData;
@@ -20,17 +19,17 @@ public class Bullet extends GameObject implements Collider{
     private boolean dieNextFrame;
     private int dieInFrames= -1;
     protected int damage = 1;
-    protected int hits;
-    protected int hitBy;
+    protected int colLayer;
+    protected int colMask;
 
     public Bullet(double xpos,double ypos, double shooterXvel, double shooterYvel, double angle,double speed, int limit,boolean player){
         playerBullet = player;
         if(player){
-            hits = Collider.HITS_ENEMY;
-            hitBy = Collider.HIT_BY_ENEMY;
+            colLayer = Collider.LAYER_1;
+            colMask = Collider.MASK_2;
         } else {
-            hits = Collider.HITS_PLAYER;
-            hitBy = Collider.HIT_BY_PLAYER;
+            colLayer = Collider.LAYER_2;
+            colMask = Collider.MASK_1;
         }
         setXPosition(xpos);
         setYPosition(ypos);
@@ -124,13 +123,13 @@ public class Bullet extends GameObject implements Collider{
     }
 
     @Override
-    public int getCanHit() {
-        return hits;
+    public int getCollisionLayer() {
+        return colLayer;
     }
 
     @Override
-    public int getHitBy() {
-        return hitBy;
+    public int getCollisionMask() {
+        return colMask;
     }
 
     @Override

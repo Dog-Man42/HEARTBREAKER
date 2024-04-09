@@ -11,29 +11,32 @@ import java.awt.geom.Point2D;
 
 public interface Collider {
 
-    /** Can be hit by the player */
-    int HIT_BY_PLAYER = 0;
+    //Temporary, inelegant solution. Will be replaced with a system where a collider can exist on multiple layers and have multiple masks.
+    //This is sufficient for now.
 
-    /** Can be hit by an enemy */
-    int HIT_BY_ENEMY = 1;
+    /** Exists on all Layers */
+    int LAYER_ALL = 0;
 
-    /** Can be hit by everything */
-    int HIT_BY_ALL = 2;
+    /** Exists on Layer 1 */
+    int LAYER_1 = 1;
 
-    /** Cannot be hit. Note: This could be replaced by something else eventually. */
-    int HIT_BY_NONE = 3;
+    /** Exists on Layer 2 */
+    int LAYER_2 = 2;
 
-    /** Can hit enemies */
-    int HITS_ENEMY = 0;
+    /** Exists on Layer 3 */
+    int LAYER_3 = 3;
 
-    /** Can hit the player */
-    int HITS_PLAYER = 1;
+    /** Can collide with all Layers */
+    int MASK_All = 0;
 
-    /** Can hit everything */
-    int HITS_ALL = 2;
+    /** Can collide with Layer 1 */
+    int MASK_1 = 1;
 
-    /** Cannot hit anything. Note: This could be replaced by something else eventually. */
-    int HITS_NONE = 3;
+    /** Can collide with Layer 2 */
+    int MASK_2 = 2;
+
+    /** Can collide with Layer 3 */
+    int MASK_3 = 3;
 
     /** No hitbox */
     int NO_HITBOX = 0;
@@ -52,15 +55,15 @@ public interface Collider {
 
     /**
      * Returns what the collider can hit.
-     * @return Either {@link #HITS_PLAYER}, {@link #HITS_ENEMY}, {@link #HITS_ALL}, or {@link #HITS_NONE}.
+     * @return Either {@link #LAYER_ALL}, {@link #LAYER_1}, {@link #LAYER_2}, or {@link #LAYER_3}.
      */
-    int getCanHit();
+    int getCollisionLayer();
 
     /**
      * Returns what the collider can be hit by.
-     * @return Either {@link #HIT_BY_PLAYER}, {@link #HIT_BY_ENEMY}, {@link #HIT_BY_ALL}, or {@link #HIT_BY_NONE}.
+     * @return Either {@link #MASK_All}, {@link #MASK_1}, {@link #MASK_2}, or {@link #MASK_3}.
      */
-    int getHitBy();
+    int getCollisionMask();
 
     /**
      * Returns what kind of hitbox the collider has.

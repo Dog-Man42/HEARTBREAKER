@@ -264,24 +264,24 @@ public class Player extends Entity implements UsesPolar, Collider{
     }
 
     @Override
-    public int getCanHit() {
+    public int getCollisionLayer() {
         /*
         if(isHit()){
             return Collider.HITS_NONE;
         }
 
          */
-        return Collider.HITS_ENEMY;
+        return Collider.LAYER_1;
     }
 
     @Override
-    public int getHitBy() {
+    public int getCollisionMask() {
         /*
         if (isHit()){
             return Collider.HIT_BY_NONE;
         }
          */
-        return Collider.HIT_BY_ENEMY;
+        return Collider.MASK_2;
     }
 
     @Override

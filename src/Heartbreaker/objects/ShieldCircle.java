@@ -94,13 +94,13 @@ public class ShieldCircle extends Entity implements Collider {
         return new Point2D.Double(getScene().origin.x + getXPosition(), getScene().origin.y + getYPosition());
     }
     @Override
-    public int getCanHit() {
-        return Collider.HITS_PLAYER;
+    public int getCollisionLayer() {
+        return Collider.LAYER_2;
     }
 
     @Override
-    public int getHitBy() {
-        return Collider.HIT_BY_PLAYER;
+    public int getCollisionMask() {
+        return Collider.MASK_1;
     }
 
     @Override
@@ -110,7 +110,7 @@ public class ShieldCircle extends Entity implements Collider {
 
     @Override
     public boolean getStatic() {
-        return true;
+        return false;
     }
 
     @Override

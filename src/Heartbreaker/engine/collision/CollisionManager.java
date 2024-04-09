@@ -1,8 +1,6 @@
 package Heartbreaker.engine.collision;
 
 
-import Heartbreaker.engine.vectors.VectorMath;
-
 import java.util.ArrayList;
 
 public class CollisionManager {
@@ -70,21 +68,25 @@ public class CollisionManager {
      * @return True if colliders are allowed to collide with each other
      */
     public static boolean canCollide(Collider collider1, Collider collider2){
-        boolean hNone1 = collider1.getCanHit() == Collider.HIT_BY_NONE;
-        boolean hNone2 = collider2.getCanHit() == Collider.HIT_BY_NONE;
-        if(hNone1 && hNone2){
-            return false;
+
+        //No matter what the collision masks are, they will collide
+        if(collider1.getCollisionLayer() == Collider.LAYER_ALL || collider2.getCollisionLayer() == Collider.LAYER_ALL){
+            return true;
         }
 
-        if(collider1.getCanHit() == Collider.HITS_ALL || collider2.getCanHit() == Collider.HITS_ALL){
+        //No matter the collision layers, they will collide
+        if(collider1.getCollisionMask() == Collider.MASK_All || collider2.getCollisionLayer() == Collider.MASK_All){
             return true;
         }
-        if(collider1.getCanHit() == collider2.getHitBy() || hNone2){
+
+        if(collider1.getCollisionLayer() == collider2.getCollisionMask()){
             return true;
         }
-        if(collider2.getCanHit() == collider1.getHitBy() || hNone1){
+
+        if(collider2.getCollisionLayer() == collider1.getCollisionMask()){
             return true;
         }
+
         return false;
     }
 

@@ -1,12 +1,12 @@
 package Heartbreaker.objects;
 
-import Heartbreaker.engine.GameFrame;
 import Heartbreaker.engine.collision.Collider;
 import Heartbreaker.engine.UsesPolar;
 import Heartbreaker.engine.collision.CollisionData;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+
 
 public class GravBullet extends Bullet implements UsesPolar {
 
@@ -24,20 +24,19 @@ public class GravBullet extends Bullet implements UsesPolar {
 
     private double radialPosition;
     private double radialVelocity;
-    private int hits;
-    private int hitBy;
-
+    private int colLayer;
+    private int colMask;
 
 
     public GravBullet(double xpos,double ypos, double shooterXvel, double shooterYvel, double angle,double speed, int limit,boolean player){
         damage = 2;
         playerBullet = player;
         if(player){
-            hits = Collider.HITS_ENEMY;
-            hitBy = Collider.HIT_BY_ENEMY;
+            colLayer = Collider.LAYER_1;
+            colMask = Collider.MASK_2;
         } else {
-            hits = Collider.HITS_PLAYER;
-            hitBy = Collider.HIT_BY_PLAYER;
+            colLayer = Collider.LAYER_2;
+            colMask = Collider.MASK_1;
         }
         setScale(10);
         setRotation(angle);
@@ -119,8 +118,8 @@ public class GravBullet extends Bullet implements UsesPolar {
             radialVelocity *= -.9;
             angularVelocity *= -.9;
             if(playerBullet){
-                hits = Collider.HITS_PLAYER;
-                hitBy = Collider.HIT_BY_PLAYER;
+                colLayer = Collider.LAYER_2;
+                colMask = Collider.MASK_1;
             }
             return;
 
@@ -132,13 +131,13 @@ public class GravBullet extends Bullet implements UsesPolar {
         }
     }
     @Override
-    public int getCanHit() {
-        return hits;
+    public int getCollisionLayer() {
+        return colLayer;
     }
 
     @Override
-    public int getHitBy() {
-        return hitBy;
+    public int getCollisionMask() {
+        return colMask;
     }
     @Override
 

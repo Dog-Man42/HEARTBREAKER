@@ -266,7 +266,7 @@ public class PhysicsBall extends GameObject implements Collider {
             double momentumBefore = VectorMath.length(v) * mass + VectorMath.length(v2) * m2;
 
             //restitution
-            double e = 1;
+            double e = .98;
 
             double massComp = ((1 + e) * m2) / (double) (m + m2);
             double numerator = VectorMath.dot(Vector2.difference(v,v2), n);
@@ -301,13 +301,13 @@ public class PhysicsBall extends GameObject implements Collider {
     }
 
     @Override
-    public int getCanHit() {
-        return HITS_ALL;
+    public int getCollisionLayer() {
+        return LAYER_ALL;
     }
 
     @Override
-    public int getHitBy() {
-        return HIT_BY_ALL;
+    public int getCollisionMask() {
+        return MASK_All;
     }
 
     @Override

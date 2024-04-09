@@ -140,12 +140,12 @@ public abstract class Entity extends GameObject implements Collider {
     public void collided(CollisionData colData) {}
 
     @Override
-    public int getCanHit() {
+    public int getCollisionLayer() {
         return 0;
     }
 
     @Override
-    public int getHitBy() {
+    public int getCollisionMask() {
         return 0;
     }
 

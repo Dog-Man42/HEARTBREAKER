@@ -31,13 +31,13 @@ public class RichochetBullet extends Bullet{
         }
     }
     @Override
-    public int getCanHit() {
-        return hits;
+    public int getCollisionLayer() {
+        return colLayer;
     }
 
     @Override
-    public int getHitBy() {
-        return hitBy;
+    public int getCollisionMask() {
+        return colMask;
     }
 
     @Override
