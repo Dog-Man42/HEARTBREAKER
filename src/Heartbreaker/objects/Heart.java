@@ -9,6 +9,7 @@ import Heartbreaker.engine.SoundManager;
 import Heartbreaker.engine.collision.Collider;
 import Heartbreaker.engine.collision.CollisionData;
 import Heartbreaker.main.Heartbreaker;
+import Heartbreaker.scenes.Level;
 import Heartbreaker.scenes.Level1;
 import Heartbreaker.scenes.MainMenu;
 
@@ -24,7 +25,10 @@ public class Heart extends Entity implements Collider {
     private BrokenHeart right;
     private boolean dead = false;
 
+    private Level currentLevel = null;
+
     public Heart(int x, int y){
+
         super(200,10);
 
         Heartbreaker.startTrack();
@@ -32,6 +36,10 @@ public class Heart extends Entity implements Collider {
         setXPosition(y);
 
         setScale(-5);
+
+        if(getScene() instanceof Level){
+            currentLevel = (Level) getScene();
+        }
 
         setVertices(new Point2D.Double[]{
                 new Point2D.Double(0,-13),
@@ -52,7 +60,7 @@ public class Heart extends Entity implements Collider {
     }
 
 
-    public void move() {}
+
     public void update(double delta){
         //frames += .15;
         frames+= delta;
@@ -84,19 +92,25 @@ public class Heart extends Entity implements Collider {
         return a + b + c + d ;
     }
 
+
+
+    //Rewrite WILL be needed.
     public void damage(int dmg) {
 
         if (getIFrames() <= 0) {
             if (!flatlined) {
                 GameFrame.soundManager.playClip(SoundManager.heartDamage);
                 maxOutIframes();
-                getScene().score += 100 * dmg;
                 damage += .5 * dmg;
                 bpm += .5 * dmg;
-                getScene().shield.damage += .5 * dmg;
                 graph.setBPM(bpm);
-                if(getScene().shield != null) {
-                    getScene().shield.bpm = bpm;
+
+                if(currentLevel != null) {
+                    currentLevel.shield.damage += .5 * dmg;
+                    currentLevel.score += 100 * dmg;
+                    if (currentLevel.shield != null) {
+                        currentLevel.shield.bpm = bpm;
+                    }
                 }
                 Heartbreaker.setBpm((float) bpm);
                 if (bpm >= 180) {
@@ -105,15 +119,19 @@ public class Heart extends Entity implements Collider {
                     bpm = 0;
                     graph.setBPM(bpm);
                     graph.setFlatlined(true);
-                    getScene().shield.setFlatlined(true);
+                    if(currentLevel != null) {
+                        currentLevel.shield.setFlatlined(true);
+                    }
                     Heartbreaker.setBpm(10);
                     flatlined = true;
                     GameFrame.soundManager.playClip(SoundManager.flatline);
                 }
         } else {
             if (!dead) {
-                getScene().score += 1000;
-                getScene().levelBeaten();
+                if(currentLevel != null) {
+                    currentLevel.score += 1000;
+                    currentLevel.levelBeaten();
+                }
                 GameFrame.soundManager.playClip(SoundManager.heartbreak);
                 dead = true;
                 left = new BrokenHeart(1, getXPosition(), getYPosition(), getScale());

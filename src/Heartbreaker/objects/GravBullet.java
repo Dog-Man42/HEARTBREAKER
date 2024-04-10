@@ -3,6 +3,7 @@ package Heartbreaker.objects;
 import Heartbreaker.engine.collision.Collider;
 import Heartbreaker.engine.UsesPolar;
 import Heartbreaker.engine.collision.CollisionData;
+import Heartbreaker.scenes.Level;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -70,6 +71,12 @@ public class GravBullet extends Bullet implements UsesPolar {
     }
 
     public void update(double delta){
+        
+        Level currentLevel = null;
+        if(getScene() instanceof Level){
+            currentLevel = (Level) getScene();
+        }
+        
         radialVelocity -= 200/radialPosition;
 
         theta += angularVelocity * delta;
@@ -82,7 +89,7 @@ public class GravBullet extends Bullet implements UsesPolar {
 
 
         if(radialPosition < 20  || radialPosition > 1000 ){
-            getScene().missedCount++;
+            currentLevel.missedCount++;
             getScene().removeObject(this);
         }
 
@@ -92,7 +99,7 @@ public class GravBullet extends Bullet implements UsesPolar {
         if(ageLimit > 0){
             if(age >= ageLimit-20){
                 if(getScale() <= 1.25) {
-                    getScene().missedCount++;
+                    currentLevel.missedCount++;
                     getScene().removeObject(this);
                 } else{
                     setScale(-1.25);

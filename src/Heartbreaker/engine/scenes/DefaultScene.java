@@ -1,14 +1,12 @@
 package Heartbreaker.engine.scenes;
 
 import Heartbreaker.engine.GameFrame;
-import Heartbreaker.scenes.Level;
-import Heartbreaker.scenes.MainMenu;
 
 import java.awt.*;
 
-public class DefaultScene extends Level{
+public class DefaultScene extends Scene{
 
-    public Level mainScene;
+    public Scene mainScene;
 
     public DefaultScene() {}
 
@@ -29,8 +27,5 @@ public class DefaultScene extends Level{
 
     }
 
-    @Override
-    public void levelBeaten() {
 
-    }
 }

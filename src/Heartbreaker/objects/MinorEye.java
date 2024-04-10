@@ -4,6 +4,7 @@ import Heartbreaker.engine.GameFrame;
 import Heartbreaker.engine.SoundManager;
 import Heartbreaker.engine.collision.Collider;
 import Heartbreaker.engine.collision.CollisionData;
+import Heartbreaker.scenes.Level;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -11,14 +12,16 @@ import java.util.Random;
 
 public class MinorEye extends Entity {
 
-    double frame = 0;
-    double radius;
-    double irisXPos = 0;
-    double irisYPos = 0;
-    double irisRadius;
-    double pupilXRadius;
-    double pupilYRadius;
-    boolean firing = false;
+    private double frame = 0;
+    private double radius;
+    private double irisXPos = 0;
+    private double irisYPos = 0;
+    private double irisRadius;
+    private double pupilXRadius;
+    private double pupilYRadius;
+    private boolean firing = false;
+
+    private Level currentLevel;
 
     Random rand;
     public MinorEye(double x, double y){
@@ -32,14 +35,24 @@ public class MinorEye extends Entity {
         pupilYRadius = 1;
         rand = new Random(System.nanoTime());
         frame = rand.nextInt(0,120);
+
+        if(getScene() instanceof Level){
+            currentLevel = (Level) getScene();
+        }
     }
+
     @Override
     public void update(double delta) {
         frame++;
         //setXPosition(getXPosition() + 4*Math.sin(frame/10));
         //setYPosition(getYPosition() + 1.5 * (Math.sin((frame/10)*2) + Math.cos((frame/10)/2.0)));
         setScale(6 + (1.5*Math.sin(frame/15.0)+1.5));
-        double theta = -Math.atan2(getScene().player.getXPosition() - getXPosition(), getScene().player.getYPosition() - getYPosition());
+        double theta = 0;
+        if(currentLevel == null) {
+            theta = -Math.atan2(currentLevel.player.getXPosition() - getXPosition(), currentLevel.player.getYPosition() - getYPosition());
+        } else {
+            theta += .1;
+        }
         Point2D.Double temp = rotatePoint(theta,new Point2D.Double(0,1));
 
         irisXPos = temp.x * (1.5 * getScale());
@@ -57,7 +70,7 @@ public class MinorEye extends Entity {
         if(frame % 240 == 0){
             firing = true;
             GameFrame.soundManager.playClip(SoundManager.shootLaser);
-            getScene().spawnBullet(getXPosition() + irisXPos,getYPosition() + irisYPos,0,0,Math.toDegrees(theta) + rand.nextFloat(-.5f,.5f),1200,60,false);
+            getScene().addObject(new Bullet(getXPosition() + irisXPos,getYPosition() + irisYPos,0,0,Math.toDegrees(theta) + rand.nextFloat(-.5f,.5f),1200,60,false));
             changeScale(-2);
         }
 
@@ -113,12 +126,12 @@ public class MinorEye extends Entity {
             //setXPosition(getXPosition() - colData.getNormal().x * colData.getDepth());
             //setYPosition(getYPosition() - colData.getNormal().x * colData.getDepth());
             if(getHP() <= 0){
-                getScene().score += 10 * dmg;
+                currentLevel.score += 10 * dmg;
                 getScene().removeObject(this);
                 GameFrame.soundManager.playClip(SoundManager.deathMinorEye);
             }
 
-            getScene().score += 2 * dmg;
+            currentLevel.score += 2 * dmg;
             GameFrame.soundManager.playClip(SoundManager.hurtMinorEye);
         }
     }

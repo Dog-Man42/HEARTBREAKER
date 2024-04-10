@@ -1,6 +1,6 @@
 package Heartbreaker.engine;
 
-import Heartbreaker.scenes.*;
+import Heartbreaker.engine.scenes.Scene;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -44,7 +44,7 @@ public abstract class GameObject {
     /**
      * Scene the object belongs to
      */
-    private Level currentScene = GameFrame.getCurrentScene();
+    private Scene currentScene = GameFrame.getCurrentScene();
 
     /**
      * Represents the shape of the object as a polygon. Should not be changed otherwise inaccuracies could build.
@@ -509,7 +509,7 @@ public abstract class GameObject {
     }
 
 
-    public Level getScene() {
+    public Scene getScene() {
         return currentScene;
     }
 

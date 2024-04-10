@@ -79,12 +79,12 @@ public class Shield extends GameObject {
                     //Some weirdness with the rounding that I don't feel like fixing
                     if (circles[i].getHP() <= 15) {
                         if (Math.round(cooldown) % 5 == 0) {
-                            getScene().spawnBullet(((midX + point.x)), ((midY + point.y)), deltaX / 4, deltaY / 4, Math.toDegrees(-Math.atan2(point.x, point.y)), 120, 320, false);
+                            getScene().addObject(new Bullet(((midX + point.x)), ((midY + point.y)), deltaX / 4, deltaY / 4, Math.toDegrees(-Math.atan2(point.x, point.y)), 120, 320, false));
                         }
                     } else {
                         if (Math.round(cooldown) % 10 == 0) {
 
-                            getScene().spawnBullet(((midX + point.x)), ((midY + point.y)), 0, 0, Math.toDegrees(-Math.atan2(point.x, point.y)), 60, 480, false);
+                            getScene().addObject(new Bullet(((midX + point.x)), ((midY + point.y)), 0, 0, Math.toDegrees(-Math.atan2(point.x, point.y)), 60, 480, false));
                         }
                     }
                 }

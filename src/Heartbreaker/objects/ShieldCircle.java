@@ -4,6 +4,7 @@ import Heartbreaker.engine.GameFrame;
 import Heartbreaker.engine.SoundManager;
 import Heartbreaker.engine.collision.Collider;
 import Heartbreaker.engine.collision.CollisionData;
+import Heartbreaker.scenes.Level;
 
 import java.awt.geom.*;
 import java.awt.*;
@@ -15,12 +16,18 @@ public class ShieldCircle extends Entity implements Collider {
     private double xVel = 0;
     private double yVel = 0;
 
+    private Level currentLevel = null;
+
 
     public ShieldCircle(double xpos, double ypos){
         super(40,20);
         setXposition(xpos);
         setYposition(ypos);
         this.radius = 20;
+
+        if(getScene() instanceof Level){
+            currentLevel = (Level) getScene();
+        }
     }
 
     public void setXposition(double xpos){
@@ -40,13 +47,13 @@ public class ShieldCircle extends Entity implements Collider {
 
             if (getHP() <= 20 && radius >= 20) {
                 radius = 10;
-                getScene().shield.damage += .5 * dmg;
-                getScene().score += 100 * dmg;
+                currentLevel.shield.damage += .5 * dmg;
+                currentLevel.score += 100 * dmg;
                 GameFrame.soundManager.playClip(SoundManager.shieldOrbShrink);
 
             } else {
-                getScene().shield.damage += .25 * dmg;
-                getScene().score += 1 * dmg;
+                currentLevel.shield.damage += .25 * dmg;
+                currentLevel.score += 1 * dmg;
                 GameFrame.soundManager.playClip(SoundManager.shieldOrbDamage);
             }
         }
@@ -66,9 +73,9 @@ public class ShieldCircle extends Entity implements Collider {
             setHit(false);
             if(getHP() <= 0){
                 alive = false;
-                getScene().score += 10000;
+                currentLevel.score += 10000;
                 GameFrame.soundManager.playClip(SoundManager.shieldOrbDestroy);
-                getScene().shield.damage += 5;
+                currentLevel.shield.damage += 5;
             }
         } else {
             if(getHP() > 20) {

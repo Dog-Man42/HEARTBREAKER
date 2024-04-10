@@ -3,17 +3,11 @@ package Heartbreaker.scenes;
 import Heartbreaker.engine.*;
 import Heartbreaker.main.Heartbreaker;
 import Heartbreaker.objects.*;
-import Heartbreaker.objects.Box;
 
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
+
 
 public class MainMenu extends Level {
 
@@ -30,9 +24,9 @@ public class MainMenu extends Level {
         heart = new Heart(origin.x,origin.y);
         addObject(heart);
         shield = null;
-        camera = new Camera(origin.x,origin.y,1);
-        Box box1 = new Box(0,0,10);
-        addObject(box1);
+        //camera = new Camera(origin.x,origin.y,1);
+
+
 
 
 
@@ -62,7 +56,7 @@ public class MainMenu extends Level {
                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         //g.drawImage(drawCircle(g),0,0,null);
         //drawCircle(g);
-        radialGrid(g);
+        //waradialGrid(g);
         g.setColor(Color.RED);
         //g.drawString("Frame Rate: " + GameFrame.FPS,0,20);
         //g.drawString("Frame Time MS: " + String.format("%.2f", GameFrame.avgFrameTime),0,45);
@@ -92,10 +86,14 @@ public class MainMenu extends Level {
         //heart.draw(g);
         //player.draw(g);
         drawObjects(g, delta);
-        g.drawOval((int) camera.getxPosition() - 5, (int) camera.getyPosition() - 5, 10,10);
+        if(camera != null) {
+            g.drawOval((int) camera.getxPosition() - 5, (int) camera.getyPosition() - 5, 10, 10);
+        }
 
     }
 
+    /*
+    Used to test Levels involving a moveable camera
     public void radialGrid(Graphics2D g){
         g.setColor(new Color(50,50,50));
         g.setStroke(new BasicStroke(1));
@@ -117,4 +115,6 @@ public class MainMenu extends Level {
         }
 
     }
+
+     */
 }

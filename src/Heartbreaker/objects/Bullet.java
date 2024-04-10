@@ -7,6 +7,7 @@ import Heartbreaker.engine.GameObject;
 import Heartbreaker.engine.collision.Collider;
 import Heartbreaker.engine.collision.CollisionData;
 import Heartbreaker.engine.vectors.*;
+import Heartbreaker.scenes.Level;
 
 public class Bullet extends GameObject implements Collider{
 
@@ -62,12 +63,20 @@ public class Bullet extends GameObject implements Collider{
     }
 
     public void update(double delta){
+
+        Level currentLevel = null;
+        if(getScene() instanceof Level){
+            currentLevel = (Level) getScene();
+        }
+
         changeXPos(xvel * delta);
         changeYPos(yvel * delta);
         int negative = -(getScene().DIAGONAL - getScene().WIDTH);
 
         if(getXPosition() < negative || getScene().DIAGONAL < getXPosition() || getYPosition() < negative || getScene().DIAGONAL < getYPosition() ){
-            getScene().missedCount++;
+            if(currentLevel != null) {
+                currentLevel.missedCount++;
+            }
             getScene().removeObject(this);
         }
 
@@ -75,7 +84,9 @@ public class Bullet extends GameObject implements Collider{
             if(age >= ageLimit-20){
                 if(getScale() <= 0.1) {
                     if(playerBullet)
-                        getScene().missedCount++;
+                        if(currentLevel != null) {
+                            currentLevel.missedCount++;
+                        }
                     getScene().removeObject(this);
                 } else{
                     changeScale(-.1);
@@ -86,7 +97,9 @@ public class Bullet extends GameObject implements Collider{
         if(dieNextFrame) {
             if (dieInFrames <= 0) {
                 if (playerBullet)
-                    getScene().missedCount++;
+                    if(currentLevel != null) {
+                        currentLevel.missedCount++;
+                    }
                 getScene().removeObject(this);
             } else {
                 dieInFrames--;

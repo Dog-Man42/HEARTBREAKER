@@ -35,14 +35,12 @@ public class GameFrame extends JPanel implements Runnable{
     Graphics2D graphics2D;
 
 
-    //Attempt to fix frame time that may or may not work
-    public static boolean mouseUpdated = false;
+
     FrameTimeGraph ftGraph;
 
-    //Game-wide variables
 
-    //TODO Change to be Scene instead of Level
-    static Level currentScene;
+
+    static Scene currentScene;
     public static int highScore = 0;
     public static final LoadingScreen loadingScreen = new LoadingScreen();
 
@@ -55,7 +53,7 @@ public class GameFrame extends JPanel implements Runnable{
 
 
 
-    GameFrame(Level mainScene){
+    GameFrame(Scene mainScene){
         this.setFocusable(true);
         MouseInput mouseInput = new MouseInput();
         this.addMouseListener(mouseInput);
@@ -107,7 +105,6 @@ public class GameFrame extends JPanel implements Runnable{
             long now = System.nanoTime();
             if(now - lastTime > ns) {
 
-                mouseUpdated = true;
                 if(!LOADING) {
                     update();
                 }
@@ -166,10 +163,10 @@ public class GameFrame extends JPanel implements Runnable{
         }
     }
 
-    public static Level getCurrentScene(){
+    public static Scene getCurrentScene(){
         return currentScene;
     }
-    public static void setCurrentScene(Level level) {
+    public static void setCurrentScene(Scene scene) {
 
 
         // Set the preferred size of the loading screen
@@ -192,7 +189,7 @@ public class GameFrame extends JPanel implements Runnable{
                 loadingScreen.setVisible(true);
 
                 // Initialize the current scene
-                currentScene = level;
+                currentScene = scene;
                 currentScene.initialize();
                 LOADING = false;
 

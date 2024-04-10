@@ -3,11 +3,9 @@ package Heartbreaker.engine;
 
 
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import javax.swing.*;
 import Heartbreaker.engine.scenes.Scene;
-import Heartbreaker.scenes.Level;
+
 
 
 public class GameWindow extends JFrame{
@@ -19,7 +17,7 @@ public class GameWindow extends JFrame{
 
 
 
-    public GameWindow(String title, Level mainScene) {
+    public GameWindow(String title, Scene mainScene) {
         panel = new GameFrame(mainScene);
 
         this.add(panel) ;

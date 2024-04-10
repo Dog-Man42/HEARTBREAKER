@@ -3,6 +3,7 @@ package Heartbreaker.scenes;
 import Heartbreaker.engine.Camera;
 import Heartbreaker.engine.GameFrame;
 import Heartbreaker.engine.MouseInput;
+import Heartbreaker.engine.scenes.Scene;
 import Heartbreaker.engine.vectors.Vector2;
 import Heartbreaker.objects.*;
 
@@ -12,7 +13,7 @@ import java.util.Random;
 
 import java.awt.*;
 
-public class PhysicsTestingArea extends Level{
+public class PhysicsTestingArea extends Scene {
 
     private boolean dragging = false;
     private Point dragStartMouse = new Point(0,0);
@@ -27,7 +28,7 @@ public class PhysicsTestingArea extends Level{
         origin = new Point(GameFrame.GAME_WIDTH/2,GameFrame.GAME_HEIGHT/2);
         camera = new Camera(0,0,.75);
         Random random = new Random();
-        for(int i = 0; i < 3500; i++){
+        for(int i = 0; i < 2500; i++){
             int mass = random.nextInt(4,6);
             addObject(new PhysicsBall(random.nextInt(-5000,5001),random.nextInt(-5000,5001),2 * mass,mass,random.nextInt(-100,101),random.nextInt(-100,101)));
         }
@@ -111,8 +112,4 @@ public class PhysicsTestingArea extends Level{
         g.setColor(col);
     }
 
-    @Override
-    public void levelBeaten() {
-
-    }
 }
