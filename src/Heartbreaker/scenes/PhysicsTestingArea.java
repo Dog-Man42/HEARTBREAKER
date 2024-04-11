@@ -3,6 +3,7 @@ package Heartbreaker.scenes;
 import Heartbreaker.engine.Camera;
 import Heartbreaker.engine.GameFrame;
 import Heartbreaker.engine.MouseInput;
+import Heartbreaker.engine.collision.CollisionManager;
 import Heartbreaker.engine.scenes.Scene;
 import Heartbreaker.engine.vectors.Vector2;
 import Heartbreaker.objects.*;
@@ -24,7 +25,7 @@ public class PhysicsTestingArea extends Scene {
 
     @Override
     public boolean initialize() {
-        collisionManager.clear();
+        collisionManager = new CollisionManager();
         origin = new Point(GameFrame.GAME_WIDTH/2,GameFrame.GAME_HEIGHT/2);
         camera = new Camera(0,0,.75);
         Random random = new Random();
@@ -62,6 +63,9 @@ public class PhysicsTestingArea extends Scene {
         drawGrid(g);
         drawObjects(g, delta);
     }
+
+
+
     public void drawGrid(Graphics2D g){
         double zoom = (camera.getZoom());
         double s = (zoom * 200) % 50 + 50;
