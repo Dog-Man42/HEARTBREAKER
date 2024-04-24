@@ -51,9 +51,9 @@ public class CollisionManager {
                 if(colData != null){
                     if( !collider1.getStatic() && !collider2.getStatic()) {
                         colData.setCollider(collider2);
-                        collider1.collided(colData);
+                        collider1.collided(colData.inverted());
                         colData.setCollider(collider1);
-                        collider2.collided(colData.inverted());
+                        collider2.collided(colData);
                     }
                 }
             }
