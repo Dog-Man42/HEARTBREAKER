@@ -1,9 +1,10 @@
 package Heartbreaker.objects;
 
+import Heartbreaker.engine.GameFrame;
 import Heartbreaker.engine.GameObject;
 import Heartbreaker.engine.GameWindow;
-import Heartbreaker.engine.Keyboard;
-import Heartbreaker.engine.MouseInput;
+import Heartbreaker.engine.input.KeyInput;
+import Heartbreaker.engine.input.MouseInput;
 import Heartbreaker.engine.collision.Collider;
 import Heartbreaker.engine.collision.CollisionData;
 import Heartbreaker.engine.vectors.*;
@@ -14,6 +15,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Vector;
 
 public class PhysicsBall extends GameObject implements Collider {
 
@@ -26,13 +28,13 @@ public class PhysicsBall extends GameObject implements Collider {
     private Vector2 accel = new Vector2(0,0);
     private Vector2 tempV = null;
 
-    private ArrayList<Link> links = new ArrayList<>();
+    public ArrayList<Link> links = new ArrayList<>();
     private Vector2 normal = null;
 
-    private int linkLimit = 6;
+    public int linkLimit = 8;
 
     private boolean followed = false;
-    private class Link{
+    public static class Link{
         
         public PhysicsBall a;
         public PhysicsBall b;
@@ -120,6 +122,7 @@ public class PhysicsBall extends GameObject implements Collider {
     public void addLink(Link link){
         if(!links.contains(link) && links.size() < linkLimit) {
             links.add(link);
+
         }
     }
 
@@ -128,8 +131,8 @@ public class PhysicsBall extends GameObject implements Collider {
     }
 
     public void applyForce(Vector2 force){
-
-        accel = Vector2.sum(accel, Vector2.divide(force,mass));
+        Vector2 temp = Vector2.multiply(force,mass);
+        accel = Vector2.sum(accel, Vector2.multiply(temp, GameFrame.delta));
     }
 
     @Override
@@ -139,6 +142,7 @@ public class PhysicsBall extends GameObject implements Collider {
             yVel = tempV.y;
             tempV = null;
         }
+
         xVel += accel.x;
         yVel += accel.y;
         accel = new Vector2(0,0);
@@ -152,7 +156,7 @@ public class PhysicsBall extends GameObject implements Collider {
 
         if(followed){
             getScene().camera.setPosition(getPosition());
-            if(Keyboard.isKeyPressed(KeyEvent.VK_E) || MouseInput.isButtonPressed(MouseEvent.BUTTON1)){
+            if(KeyInput.isKeyPressed(KeyEvent.VK_E) || MouseInput.isButtonPressed(MouseEvent.BUTTON1)){
                 followed = false;
                 getScene().getCamera().setPosition(new Point2D.Double(0,0));
             }
@@ -185,22 +189,12 @@ public class PhysicsBall extends GameObject implements Collider {
         originV = VectorMath.normalize(originV);
 
 
-        double distance = VectorMath.lengthSquare(new Vector2(getPosition()));
-        if(Math.sqrt(distance) > 50) {
-            applyForce(Vector2.multiply(originV, 1 + (10000/distance)));
+        double distance = VectorMath.length(new Vector2(getPosition()));
+        if(Math.sqrt(distance) > 0) {
+            applyForce(Vector2.multiply(originV,  1/(.001 * distance + .005)));
 
         }
-        /*
-        if(calculateDistance(getPosition(),new Point2D.Double(0,0)) > 5000){
-            double angle = Math.atan2(getYPosition(), getXPosition());
-            // Set the new position of the circle to be on the boundary of the circle with radius 5000
-            setXPosition(5000 * Math.cos(angle));
-            setYPosition(5000 * Math.sin(angle));
 
-            applyForce(new Vector2(-1.2 * xVel,-1.2 * yVel));
-        }
-
-         */
 
 
     }
@@ -244,7 +238,7 @@ public class PhysicsBall extends GameObject implements Collider {
     @Override
     public void collided(CollisionData colData) {
 
-        Vector2 correction = Vector2.multiply(colData.getNormal(),-colData.getDepth());
+        Vector2 correction = Vector2.multiply(colData.getNormal(),colData.getDepth());
         normal = correction;
         changeXPos(correction.x);
         changeYPos(correction.y);
@@ -266,7 +260,7 @@ public class PhysicsBall extends GameObject implements Collider {
             double momentumBefore = VectorMath.length(v) * mass + VectorMath.length(v2) * m2;
 
             //restitution
-            double e = .98;
+            double e = .95;
 
             double massComp = ((1 + e) * m2) / (double) (m + m2);
             double numerator = VectorMath.dot(Vector2.difference(v,v2), n);
@@ -280,14 +274,30 @@ public class PhysicsBall extends GameObject implements Collider {
 
             //accel = Vector2.sum(accel,vFinal);
 
+            Vector2 normalForce = Vector2.multiply(colData.getNormal(),colData.getDepth());
+            Vector2 friction = Vector2.multiply(normalForce,.1);
+
+
+
 
             double dMomentum = (VectorMath.length(v) * mass) - (VectorMath.length(v2) * m2);
 
-            if(Math.abs(dMomentum) < 300) {
-                Link link = new Link(this, collider, radius + collider.getRadius(), 1);
+            if(Math.abs(dMomentum) < 900) {
+                Link link = new Link(this, collider, radius + collider.getRadius(), .9);
                 if(!hasLink(link) && !collider.hasLink(link)) {
-                    addLink(link);
-                    collider.addLink(link);
+                    if(collider.links.size() < collider.linkLimit && links.size() < linkLimit) {
+                        addLink(link);
+                        collider.addLink(link);
+                        //experimental averaging of spring links
+                        double sum = 0;
+                        for (Link l : links) {
+                            sum += l.restLength;
+                        }
+                        sum = sum / links.size();
+                        for (Link l : links) {
+                            l.restLength = sum;
+                        }
+                    }
                 }
             }
 

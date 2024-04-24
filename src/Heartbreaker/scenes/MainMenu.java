@@ -1,6 +1,7 @@
 package Heartbreaker.scenes;
 
 import Heartbreaker.engine.*;
+import Heartbreaker.engine.input.KeyInput;
 import Heartbreaker.main.Heartbreaker;
 import Heartbreaker.objects.*;
 
@@ -39,7 +40,7 @@ public class MainMenu extends Level {
 
     public void updateScene(double delta){
         updateObjects(delta);
-        if(Keyboard.isKeyPressed(KeyEvent.VK_SLASH)){
+        if(KeyInput.isKeyPressed(KeyEvent.VK_SLASH)){
             GameFrame.setCurrentScene(new PhysicsTestingArea());
         }
     }

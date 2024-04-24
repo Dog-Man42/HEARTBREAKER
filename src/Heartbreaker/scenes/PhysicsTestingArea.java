@@ -2,8 +2,8 @@ package Heartbreaker.scenes;
 
 import Heartbreaker.engine.Camera;
 import Heartbreaker.engine.GameFrame;
-import Heartbreaker.engine.MouseInput;
 import Heartbreaker.engine.collision.CollisionManager;
+import Heartbreaker.engine.input.MouseInput;
 import Heartbreaker.engine.scenes.Scene;
 import Heartbreaker.engine.vectors.Vector2;
 import Heartbreaker.objects.*;
@@ -29,10 +29,29 @@ public class PhysicsTestingArea extends Scene {
         origin = new Point(GameFrame.GAME_WIDTH/2,GameFrame.GAME_HEIGHT/2);
         camera = new Camera(0,0,.75);
         Random random = new Random();
-        for(int i = 0; i < 2500; i++){
-            int mass = random.nextInt(4,6);
-            addObject(new PhysicsBall(random.nextInt(-5000,5001),random.nextInt(-5000,5001),2 * mass,mass,random.nextInt(-100,101),random.nextInt(-100,101)));
+        for(int i = 0; i < 1000; i++){
+            int mass = random.nextInt(3,6);
+            mass=4;
+            addObject(new PhysicsBall(random.nextInt(-3000,3001),random.nextInt(-3000,3001),2 * mass,mass,random.nextInt(-50,51),random.nextInt(-50,51)));
         }
+
+        PhysicsBall pb1 = new PhysicsBall(100,100,10,15,-80,80);
+        PhysicsBall pb2 = new PhysicsBall(100,90,10,15,-80,80);
+        PhysicsBall pb3 = new PhysicsBall(80,90,10,15,-80,80);
+        PhysicsBall pb4 = new PhysicsBall(80,100,10,15,-80,80);
+        pb1.addLink(new PhysicsBall.Link(pb1,pb2,40,1));
+        pb2.addLink(new PhysicsBall.Link(pb2,pb3,40,1));
+        pb3.addLink(new PhysicsBall.Link(pb3,pb4,40,1));
+        pb4.addLink(new PhysicsBall.Link(pb4,pb1,40,1));
+        pb1.linkLimit = 1;
+        pb2.linkLimit = 1;
+        pb3.linkLimit = 1;
+        pb4.linkLimit = 1;
+
+        addObject(pb1);
+        addObject(pb2);
+        addObject(pb3);
+        addObject(pb4);
         return true;
     }
 
@@ -51,10 +70,11 @@ public class PhysicsTestingArea extends Scene {
             dragStartCam = camera.getPosition();
             dragStartMouse = MouseInput.getPosition();
         }
-        int substeps = 4;
+        int substeps = 1;
         for(int i = 0; i < substeps; i++){
             updateObjects(delta/substeps);
         }
+
 
     }
 
@@ -63,9 +83,6 @@ public class PhysicsTestingArea extends Scene {
         drawGrid(g);
         drawObjects(g, delta);
     }
-
-
-
     public void drawGrid(Graphics2D g){
         double zoom = (camera.getZoom());
         double s = (zoom * 200) % 50 + 50;

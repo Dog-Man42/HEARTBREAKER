@@ -1,5 +1,8 @@
 package Heartbreaker.engine;
 
+import Heartbreaker.engine.input.KeyInput;
+import Heartbreaker.engine.input.MouseInput;
+
 import java.awt.event.KeyEvent;
 import java.awt.geom.Point2D;
 
@@ -15,24 +18,24 @@ public class Camera {
     }
 
     public void update(double delta){
-        if(Keyboard.isKeyPressed(KeyEvent.VK_LEFT)){
+        if(KeyInput.isKeyPressed(KeyEvent.VK_LEFT)){
             xPosition -= (1/zoom) * 250 * delta;
         }
-        if(Keyboard.isKeyPressed(KeyEvent.VK_UP)){
+        if(KeyInput.isKeyPressed(KeyEvent.VK_UP)){
             yPosition -= (1/zoom) * 250 * delta;
         }
-        if(Keyboard.isKeyPressed(KeyEvent.VK_RIGHT)){
+        if(KeyInput.isKeyPressed(KeyEvent.VK_RIGHT)){
             xPosition += (1/zoom) * 250 * delta;
         }
-        if(Keyboard.isKeyPressed(KeyEvent.VK_DOWN)){
+        if(KeyInput.isKeyPressed(KeyEvent.VK_DOWN)){
             yPosition += (1/zoom) * 250 * delta;
         }
-        if(Keyboard.isKeyPressed(KeyEvent.VK_MINUS)){
+        if(KeyInput.isKeyPressed(KeyEvent.VK_MINUS)){
             if(zoom > .04) {
                 zoom -= .01;
             }
         }
-        if(Keyboard.isKeyPressed(KeyEvent.VK_EQUALS)){
+        if(KeyInput.isKeyPressed(KeyEvent.VK_EQUALS)){
             zoom += .01;
         }
 

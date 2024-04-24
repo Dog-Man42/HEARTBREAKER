@@ -1,5 +1,6 @@
 package Heartbreaker.engine;
 
+import Heartbreaker.engine.input.MouseInput;
 import Heartbreaker.engine.scenes.DefaultScene;
 import Heartbreaker.engine.scenes.Scene;
 import Heartbreaker.main.Heartbreaker;
