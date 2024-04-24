@@ -1,4 +1,4 @@
-package Heartbreaker.engine;
+package Heartbreaker.engine.input;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;

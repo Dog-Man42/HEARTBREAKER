@@ -2,6 +2,8 @@ package Heartbreaker.objects;
 
 import Heartbreaker.engine.*;
 import Heartbreaker.engine.collision.*;
+import Heartbreaker.engine.input.KeyInput;
+import Heartbreaker.engine.input.MouseInput;
 import Heartbreaker.scenes.MainMenu;
 
 import java.awt.*;
@@ -87,7 +89,7 @@ public class Player extends Entity implements UsesPolar, Collider{
         changeXPos(xvel * delta);
         changeYPos(yvel * delta);
 
-        if(Keyboard.isKeyPressed(KeyEvent.VK_SPACE) || Math.abs(xvel) > 0.01 ||Math.abs(xvel) > 0.01) {
+        if(KeyInput.isKeyPressed(KeyEvent.VK_SPACE) || Math.abs(xvel) > 0.01 ||Math.abs(xvel) > 0.01) {
             radialPosition = cartesianToRadius(getXPosition() - getScene().origin.x, getYPosition() - getScene().origin.y);
             theta = cartesianToTheta(getYPosition() - getScene().origin.y, getXPosition() - getScene().origin.x);
         }
@@ -154,9 +156,9 @@ public class Player extends Entity implements UsesPolar, Collider{
 
     public void checkKeys(double delta){
 
-        boolean spacePressed = Keyboard.isKeyPressed(KeyEvent.VK_SPACE);
+        boolean spacePressed = KeyInput.isKeyPressed(KeyEvent.VK_SPACE);
 
-        if(Keyboard.isKeyPressed(KeyEvent.VK_D)) {
+        if(KeyInput.isKeyPressed(KeyEvent.VK_D)) {
             if(spacePressed){
                 xvel += 150 * 60 * acceleration * delta;
                 if (xvel > 720) {
@@ -170,7 +172,7 @@ public class Player extends Entity implements UsesPolar, Collider{
                 }
             }
         }
-        if(Keyboard.isKeyPressed(KeyEvent.VK_A)) {
+        if(KeyInput.isKeyPressed(KeyEvent.VK_A)) {
             if (spacePressed) {
                 xvel -= 150 * 60 * acceleration * delta;
                 if (xvel < -720) {
@@ -185,7 +187,7 @@ public class Player extends Entity implements UsesPolar, Collider{
                 }
             }
         }
-        if(Keyboard.isKeyPressed(KeyEvent.VK_W)) {
+        if(KeyInput.isKeyPressed(KeyEvent.VK_W)) {
             if(spacePressed){
                 yvel -= 150 * 60 * acceleration * delta;
                 if (yvel < -720){
@@ -201,7 +203,7 @@ public class Player extends Entity implements UsesPolar, Collider{
                 }
             }
         }
-        if(Keyboard.isKeyPressed(KeyEvent.VK_S)) {
+        if(KeyInput.isKeyPressed(KeyEvent.VK_S)) {
             if(spacePressed){
                 yvel += 150 * 60 * acceleration * delta;
                 if (yvel > 720) {
