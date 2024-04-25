@@ -1,9 +1,9 @@
 package Heartbreaker.scenes;
 
 import Heartbreaker.engine.*;
-import Heartbreaker.engine.input.KeyInput;
 import Heartbreaker.main.Heartbreaker;
 import Heartbreaker.objects.*;
+import Heartbreaker.engine.input.KeyInput;
 
 
 import java.awt.*;
@@ -13,7 +13,7 @@ import java.awt.event.KeyEvent;
 public class MainMenu extends Level {
 
 
-
+    private int slashCoolDown = 120;
     public MainMenu(){}
 
     public boolean initialize() {
@@ -40,8 +40,11 @@ public class MainMenu extends Level {
 
     public void updateScene(double delta){
         updateObjects(delta);
-        if(KeyInput.isKeyPressed(KeyEvent.VK_SLASH)){
+        if(KeyInput.isKeyPressed(KeyEvent.VK_SLASH) && slashCoolDown <= 0){
             GameFrame.setCurrentScene(new PhysicsTestingArea());
+        }
+        if(slashCoolDown > 0){
+            slashCoolDown--;
         }
     }
 

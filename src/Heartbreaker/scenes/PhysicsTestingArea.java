@@ -2,12 +2,15 @@ package Heartbreaker.scenes;
 
 import Heartbreaker.engine.Camera;
 import Heartbreaker.engine.GameFrame;
-import Heartbreaker.engine.collision.CollisionManager;
+import Heartbreaker.engine.input.KeyInput;
 import Heartbreaker.engine.input.MouseInput;
+import Heartbreaker.engine.collision.CollisionManager;
 import Heartbreaker.engine.scenes.Scene;
 import Heartbreaker.engine.vectors.Vector2;
 import Heartbreaker.objects.*;
 
+
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.util.Random;
@@ -19,7 +22,8 @@ public class PhysicsTestingArea extends Scene {
     private boolean dragging = false;
     private Point dragStartMouse = new Point(0,0);
     private Point2D.Double dragStartCam = new Point2D.Double(0,0);
-    private int frame = 0;
+    private int slashCoolDown = 120;
+
 
     public PhysicsTestingArea() {}
 
@@ -29,24 +33,25 @@ public class PhysicsTestingArea extends Scene {
         origin = new Point(GameFrame.GAME_WIDTH/2,GameFrame.GAME_HEIGHT/2);
         camera = new Camera(0,0,.75);
         Random random = new Random();
-        for(int i = 0; i < 1000; i++){
-            int mass = random.nextInt(3,6);
-            mass=4;
-            addObject(new PhysicsBall(random.nextInt(-3000,3001),random.nextInt(-3000,3001),2 * mass,mass,random.nextInt(-50,51),random.nextInt(-50,51)));
+        for(int i = 0; i < 3000; i++){
+            int mass = random.nextInt(3,8);
+
+            addObject(new PhysicsBall(random.nextInt(-3500,3501),random.nextInt(-3500,3501),8,mass,random.nextInt(-50,51),random.nextInt(-50,51)));
         }
 
         PhysicsBall pb1 = new PhysicsBall(100,100,10,15,-80,80);
         PhysicsBall pb2 = new PhysicsBall(100,90,10,15,-80,80);
         PhysicsBall pb3 = new PhysicsBall(80,90,10,15,-80,80);
         PhysicsBall pb4 = new PhysicsBall(80,100,10,15,-80,80);
-        pb1.addLink(new PhysicsBall.Link(pb1,pb2,40,1));
-        pb2.addLink(new PhysicsBall.Link(pb2,pb3,40,1));
-        pb3.addLink(new PhysicsBall.Link(pb3,pb4,40,1));
-        pb4.addLink(new PhysicsBall.Link(pb4,pb1,40,1));
-        pb1.linkLimit = 1;
-        pb2.linkLimit = 1;
-        pb3.linkLimit = 1;
-        pb4.linkLimit = 1;
+        pb1.linkLimit = 3;
+        pb2.linkLimit = 3;
+        pb3.linkLimit = 3;
+        pb4.linkLimit = 3;
+        pb1.addLink(new PhysicsBall.Link(pb1,pb2,40,2));
+        pb2.addLink(new PhysicsBall.Link(pb2,pb3,40,2));
+        pb3.addLink(new PhysicsBall.Link(pb3,pb4,40,2));
+        pb4.addLink(new PhysicsBall.Link(pb4,pb1,40,2));
+        addObject(new PhysicsBall(0,70,20,10000,2,0));
 
         addObject(pb1);
         addObject(pb2);
@@ -57,6 +62,13 @@ public class PhysicsTestingArea extends Scene {
 
     @Override
     public void updateScene(double delta) {
+
+        if(KeyInput.isKeyPressed(KeyEvent.VK_SLASH) && slashCoolDown <= 0){
+            GameFrame.setCurrentScene(new MainMenu());
+        }
+        if(slashCoolDown > 0){
+            slashCoolDown--;
+        }
         if(dragging){
             if(MouseInput.isButtonPressed(MouseEvent.BUTTON1)){
                 Vector2 off = Vector2.difference(new Vector2(dragStartMouse), new Vector2(MouseInput.getPosition()));
@@ -70,10 +82,13 @@ public class PhysicsTestingArea extends Scene {
             dragStartCam = camera.getPosition();
             dragStartMouse = MouseInput.getPosition();
         }
-        int substeps = 1;
-        for(int i = 0; i < substeps; i++){
-            updateObjects(delta/substeps);
+
+        double subdelta = delta;
+        if(delta > 1/50.0){
+            subdelta = 1/60.0;
         }
+        //subdelta = 1/10000.0;
+        updateObjects(subdelta);
 
 
     }
