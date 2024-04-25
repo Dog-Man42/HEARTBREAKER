@@ -50,7 +50,7 @@ public class FrameTimeGraph extends GameObject {
         for(int i = 0; i < temp.length; i++){
             g.setStroke(new BasicStroke(1));
             g.setFont(new Font(Font.MONOSPACED,Font.ROMAN_BASELINE,20));
-            g.drawString("Max delta Milliseconds " + maxTime,0,Math.round(getYPosition() - 10));
+            g.drawString("Max Frametime ms " + maxTime,0,Math.round(getYPosition() + 15));
 
             g.drawLine((int) Math.round(line[i].x),(int) Math.round(getYPosition()),(int) Math.round(line[i].x),(int) Math.round(line[i].y));
         }

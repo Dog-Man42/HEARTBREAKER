@@ -24,7 +24,9 @@ public class GameFrame extends JPanel implements Runnable{
     public static double delta = 0;
     public static double frameTime = 0;
     public static int FPS = 0;
-    public static int targetFPS = 60;
+    public static double targetFPS = 60;
+
+    private static double ns;
 
     public static boolean LOADING = false;
 
@@ -96,8 +98,8 @@ public class GameFrame extends JPanel implements Runnable{
     public void run(){
         //Game Loop
         long lastTime = System.nanoTime();
-        double amountOfTicks = targetFPS;
-        double ns = 1000000000 / 120.0;
+
+        ns = 1000000000 / targetFPS;
         long timer = System.currentTimeMillis();
         int frames = 0;
         double frameTimeSum = 0;
@@ -110,6 +112,7 @@ public class GameFrame extends JPanel implements Runnable{
                     update();
                 }
                 frames++;
+
                 repaint();
 
                 lastTime += ns;
@@ -134,6 +137,9 @@ public class GameFrame extends JPanel implements Runnable{
         }
     }
 
+    public static void setFPS(double fps){
+        ns = 1000000000 / fps;
+    }
     public void update(){
         currentScene.updateScene(delta);
     }
@@ -142,6 +148,7 @@ public class GameFrame extends JPanel implements Runnable{
     public void paintComponent(Graphics g2){
         //super.paintComponent(g2);
         bufferedImage = new BufferedImage(getWidth(),getHeight(),BufferedImage.TYPE_3BYTE_BGR);
+        //bufferedImage = createVolatileImage(getWidth(),getHeight());
         graphics2D = bufferedImage.createGraphics();
 
         graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,

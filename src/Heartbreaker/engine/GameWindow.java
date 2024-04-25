@@ -32,6 +32,10 @@ public class GameWindow extends JFrame{
         this.setLocationRelativeTo(null);
     }
 
+    public static void setFPS(double fps){
+        panel.setFPS(fps);
+    }
+
     public static void addComponent(JComponent component){
         panel.add(component);
         panel.uiComponents.add(component);

@@ -11,6 +11,7 @@ public class CollisionManager {
     /** Default constructor that initializes colliders */
     public CollisionManager(){
         colliders = new ArrayList<>();
+
     }
 
     /**
@@ -20,6 +21,7 @@ public class CollisionManager {
      * each collider through {@link Collider#collided(CollisionData)}.
      */
     public void updateColliders(){
+
         for(int i = 0; i < colliders.size(); i++){
             Collider collider1 = colliders.get(i);
             for(int j = i+1; j < colliders.size(); j++){
@@ -58,7 +60,15 @@ public class CollisionManager {
                 }
             }
         }
+
     }
+
+
+
+
+
+
+
 
     /**
      * Determines whether two given colliders are allowed to collide with each other.
