@@ -49,4 +49,7 @@ public class Heartbreaker {
 
         track.start();
     }
+    public static void stopTrack(){
+        track.stop();
+    }
 }

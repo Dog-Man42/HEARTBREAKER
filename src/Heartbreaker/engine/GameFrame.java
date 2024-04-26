@@ -1,5 +1,6 @@
 package Heartbreaker.engine;
 
+import Heartbreaker.engine.input.KeyInput;
 import Heartbreaker.engine.input.MouseInput;
 import Heartbreaker.engine.scenes.DefaultScene;
 import Heartbreaker.engine.scenes.Scene;
@@ -110,6 +111,9 @@ public class GameFrame extends JPanel implements Runnable{
 
                 if(!LOADING) {
                     update();
+                    if(KeyInput.isKeyPressed(KeyEvent.VK_M)){
+                        Heartbreaker.stopTrack();
+                    }
                 }
                 frames++;
 
@@ -126,6 +130,8 @@ public class GameFrame extends JPanel implements Runnable{
                     ftGraph.addFrame(frameTime);
                 }
                 frameStart = System.nanoTime();
+
+
             }
             if(System.currentTimeMillis() - timer >= 1000) {
                 timer += 1000;

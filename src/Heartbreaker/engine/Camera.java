@@ -39,10 +39,10 @@ public class Camera {
             zoom += .01;
         }
 
-        double zoomAmount = MouseInput.getScrollAmount() / 25.0;
+        double zoomAmount = MouseInput.getScrollAmount() / 5.0 * zoom;
         if(zoomAmount > 0){
             if (zoom > 0){
-                zoom -= zoomAmount * zoom;
+                zoom -= zoomAmount;
                 if(zoom == 0){
                     zoom = 0.001;
                 }
