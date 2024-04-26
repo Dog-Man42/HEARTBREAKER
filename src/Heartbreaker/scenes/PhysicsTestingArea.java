@@ -33,16 +33,17 @@ public class PhysicsTestingArea extends Scene {
         origin = new Point(GameFrame.GAME_WIDTH/2,GameFrame.GAME_HEIGHT/2);
         camera = new Camera(0,0,.75);
         Random random = new Random();
-        for(int i = 0; i < 3000; i++){
-            int mass = random.nextInt(3,8);
+        for(int i = 0; i < 4000; i++){
+            int mass = random.nextInt(4,13);
+            double radius = random.nextDouble(4,10);
 
-            addObject(new PhysicsBall(random.nextInt(-3500,3501),random.nextInt(-3500,3501),8,mass,random.nextInt(-50,51),random.nextInt(-50,51)));
+            addObject(new PhysicsBall(random.nextInt(-3500,3501),random.nextInt(-3500,3501),radius,mass,random.nextInt(-50,51),random.nextInt(-50,51)));
         }
 
-        PhysicsBall pb1 = new PhysicsBall(100,100,10,15,-80,80);
-        PhysicsBall pb2 = new PhysicsBall(100,90,10,15,-80,80);
-        PhysicsBall pb3 = new PhysicsBall(80,90,10,15,-80,80);
-        PhysicsBall pb4 = new PhysicsBall(80,100,10,15,-80,80);
+        PhysicsBall pb1 = new PhysicsBall(100,100,10,25,-80,80);
+        PhysicsBall pb2 = new PhysicsBall(100,90,10,25,-80,80);
+        PhysicsBall pb3 = new PhysicsBall(80,90,10,25,-80,80);
+        PhysicsBall pb4 = new PhysicsBall(80,100,10,25,-80,80);
         pb1.linkLimit = 3;
         pb2.linkLimit = 3;
         pb3.linkLimit = 3;
@@ -51,8 +52,10 @@ public class PhysicsTestingArea extends Scene {
         pb2.addLink(new PhysicsBall.Link(pb2,pb3,40,2));
         pb3.addLink(new PhysicsBall.Link(pb3,pb4,40,2));
         pb4.addLink(new PhysicsBall.Link(pb4,pb1,40,2));
-        addObject(new PhysicsBall(0,70,20,10000,2,0));
-
+        //addObject(new PhysicsBall(0,100,20,200,100,0));
+        //addObject(new PhysicsBall(0,-100,20,200,-100,0));
+        //addObject(new PhysicsBall(100,0,20,200,0,-100));
+        addObject(new PhysicsBall(15000,0,10,5000,-1000,10));
         addObject(pb1);
         addObject(pb2);
         addObject(pb3);
@@ -84,8 +87,8 @@ public class PhysicsTestingArea extends Scene {
         }
 
         double subdelta = delta;
-        if(delta > 1/50.0){
-            subdelta = 1/60.0;
+        if(delta > 1/120.0){
+            subdelta = 1/120.0;
         }
         //subdelta = 1/10000.0;
         updateObjects(subdelta);
