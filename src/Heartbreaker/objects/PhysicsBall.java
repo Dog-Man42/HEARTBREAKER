@@ -1,5 +1,6 @@
 package Heartbreaker.objects;
 
+import Heartbreaker.engine.Camera;
 import Heartbreaker.engine.GameFrame;
 import Heartbreaker.engine.GameObject;
 import Heartbreaker.engine.GameWindow;
@@ -13,6 +14,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -32,12 +34,15 @@ public class PhysicsBall extends GameObject implements Collider {
     private Vector2 velocity = null;
     private Vector2 friction = null;
 
-    public int linkLimit = 6;
+    public int linkLimit = 4;
 
     private boolean followed = false;
     private int followCool = 0;
     private double originalRadius = 0;
+    private double originalDensity = 1;
+
     private Vector2 velLast = new Vector2(0,0);
+
     public static class Link{
         
         public PhysicsBall a;
@@ -50,7 +55,7 @@ public class PhysicsBall extends GameObject implements Collider {
 
 
         
-        public Link(PhysicsBall a, PhysicsBall b, double restLength, double force){//
+        public Link(PhysicsBall a, PhysicsBall b, double restLength, double force){
             this.a = a;
             this.b = b;
             this.restLength = restLength;
@@ -143,6 +148,7 @@ public class PhysicsBall extends GameObject implements Collider {
         this.xVel = xvel;
         this.yVel = yvel;
         this.originalRadius = radius;
+        this.originalDensity = getDensity();
     }
     
     public void addLink(Link link){
@@ -166,8 +172,8 @@ public class PhysicsBall extends GameObject implements Collider {
         Vector2 temp = Vector2.divide(impulse,mass);
         accel = Vector2.sum(accel, Vector2.multiply(temp, GameFrame.delta));
         double sqrt = Math.sqrt(VectorMath.length(Vector2.multiply(temp, GameFrame.delta)));
-        double density = (mass / (Math.PI * radius * radius));
-        double factor =  (sqrt / density);
+        double density = getDensity();
+        double factor =  (sqrt / (density));
         factor *= GameFrame.delta;
 
 
@@ -177,9 +183,13 @@ public class PhysicsBall extends GameObject implements Collider {
             radius = radius - factor;
         }
         if(radius < .5){
-            System.out.println(factor);
+            //System.out.println(factor);
             radius = .5;
         }
+    }
+
+    private double getDensity(){
+        return (mass / (Math.PI * radius * radius));
     }
 
     @Override
@@ -197,9 +207,6 @@ public class PhysicsBall extends GameObject implements Collider {
         changeXPos(xVel * delta);
         changeYPos(yVel * delta);
 
-        if(links.size() > linkLimit){
-            links.clear();
-        }
 
         if(followed){
             double x = (getXPosition() + getScene().getCamera().getxPosition())/2;
@@ -217,7 +224,10 @@ public class PhysicsBall extends GameObject implements Collider {
             }
         } else {
             if(followCool <= 0) {
-                if (Math.abs(VectorMath.length(Vector2.difference(new Vector2(getPositionCameraSpace()), new Vector2(MouseInput.getPosition())))) <= radius * getScene().getCamera().getZoom()) {
+                if (Math.abs(VectorMath.length(Vector2.difference(new Vector2(getPositionCameraSpace()), new Vector2(MouseInput.getPosition())))) <= radius * 4 * getScene().getCamera().getZoom()) {
+                    if(KeyInput.isKeyPressed(KeyEvent.VK_K)){
+                        links.clear();
+                    }
                     if (MouseInput.isButtonPressed(MouseEvent.BUTTON1)) {
                         followed = true;
                         followCool = 60;
@@ -227,16 +237,19 @@ public class PhysicsBall extends GameObject implements Collider {
             }
         }
 
+
+        //Jank ass Pseudo-pressure
         if(accel.equals(new Vector2(0,0))){
             if(radius < originalRadius) {
-                radius += (originalRadius) * delta;
+
+                radius += (originalRadius*2) * delta;
                 if(radius > originalRadius){
                     radius = originalRadius;
                 }
             }
         } else {
             if( radius < originalRadius){
-                radius += (originalRadius/4) * delta;
+                radius += (originalRadius/1.5) * delta;
                 if(radius > originalRadius){
                     radius = originalRadius;
                 }
@@ -250,7 +263,7 @@ public class PhysicsBall extends GameObject implements Collider {
             double length = VectorMath.length(displacement);
 
 
-            if(link.shouldBreak()){
+            if(link.shouldBreak() || links.size() > linkLimit || (getDensity() - originalDensity) >= .1){
                 it.remove();
             } else {
                 link.updateForce(this);
@@ -258,15 +271,48 @@ public class PhysicsBall extends GameObject implements Collider {
 
 
         }
-
+ 
         Vector2 originV = Vector2.difference(new Vector2(0,0), new Vector2(getPosition()));
         originV = VectorMath.normalize(originV);
 
 
         double distance = VectorMath.length(new Vector2(getPosition()));
-        if(distance > 1) {
-            applyImpulse(Vector2.multiply(originV,   mass * (100/(.001 * distance + .005))));
+        if(KeyInput.isKeyPressed(KeyEvent.VK_J) || KeyInput.isKeyPressed(KeyEvent.VK_H)) {
 
+            Point mp = MouseInput.getPosition();
+            Camera cam = getScene().getCamera();
+            Point origin = getScene().origin;
+
+            // Step 1: Subtract the origin
+            double adjustedX = (mp.x - origin.x);
+            double adjustedY = (mp.y - origin.y);
+
+            // Step 2: Divide by the zoom factor to undo scaling
+            adjustedX /= cam.getZoom();
+            adjustedY /= cam.getZoom();
+
+            // Step 3: Add the camera's position to adjust back to world space
+            double worldX = adjustedX + cam.getxPosition();
+            double worldY = adjustedY + cam.getyPosition();
+            Vector2 forcePosition = new Vector2(worldX, worldY);
+            Vector2 forceVector = Vector2.difference(forcePosition, new Vector2(getPosition()));
+            double mDist = VectorMath.length(forceVector);
+            forceVector = VectorMath.normalize(forceVector);
+            if (mDist > 10) {
+                if (KeyInput.isKeyPressed(KeyEvent.VK_J))
+                    applyImpulse(Vector2.multiply(forceVector, mass * 1000000 * (1 / (mDist * mDist))));
+                else if (KeyInput.isKeyPressed(KeyEvent.VK_H))
+                    applyImpulse(Vector2.multiply(forceVector, -mass * 1000000 * (1 / (mDist * mDist))));
+            }
+
+        }
+
+        if(distance >= .5) {
+            if(!KeyInput.isKeyPressed(KeyEvent.VK_G)) {
+                applyImpulse(Vector2.multiply(originV, mass * 10 * (1 / (.001 * distance + .005))));
+            } else {
+                applyImpulse(Vector2.multiply(originV, -mass * 10 * (1 / (.001 * distance + .005))));
+            }
         }
         if(distance > 7500){
             applyImpulse(Vector2.multiply(originV,   mass * 100));
@@ -305,10 +351,18 @@ public class PhysicsBall extends GameObject implements Collider {
 
             } else {
                 Vector2 vel = new Vector2(xVel, yVel);
+
+
+                velLast = new Vector2((vel.x + velLast.x) / 2.0, (vel.y + velLast.y) / 2.0);
                 //vel = Vector2.difference(vel,velLast);
 
-                velLast = new Vector2((xVel + velLast.x) / 2.0, (yVel + velLast.y) / 2);
-                g.setColor(vectorToColor(Vector2.divide(vel,100)));
+                Color col = vectorToColor(Vector2.divide(velLast,1));
+                double massFact = mapToRange(mass,1,25,0.1,1);
+                double deltaDensity = mapToRange(getDensity() - originalDensity,0,.1,.1,1);
+                double massDense = deltaDensity * massFact * 5;
+                massDense = mapToRange(massDense,0,2,0.1,1);
+                col = new Color((int) (col.getRed() * massDense), (int) (col.getGreen() * massDense), (int) (col.getBlue() * massDense));
+                g.setColor(col);
                 g.fillOval((int) (p.x - drawRadius), (int) (p.y - drawRadius), (int) drawRadius * 2, (int) drawRadius * 2);
             }
 
@@ -409,7 +463,7 @@ public class PhysicsBall extends GameObject implements Collider {
 
 
 
-            double frictionCoefficient = .9;
+            double frictionCoefficient = .75;
 
 
 
@@ -433,7 +487,7 @@ public class PhysicsBall extends GameObject implements Collider {
 
             double dMomentum = (VectorMath.length(v) * mass) - (VectorMath.length(v2) * m2);
 
-            if(Math.abs(dMomentum) <= 500) {
+            if(Math.abs(dMomentum) <= 1000 && (getDensity() - originalDensity) <= .2) {
                 Link link = new Link(this, collider, radius + collider.getRadius(), 1 * Math.min(.8,Math.max(Math.random(),.85)));
                 if(!hasLink(link) && !collider.hasLink(link)) {
                     if(collider.links.size() < collider.linkLimit && links.size() < linkLimit) {

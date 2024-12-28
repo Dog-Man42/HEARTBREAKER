@@ -5,7 +5,6 @@ import Heartbreaker.engine.input.MouseInput;
 import Heartbreaker.engine.scenes.DefaultScene;
 import Heartbreaker.engine.scenes.Scene;
 import Heartbreaker.main.Heartbreaker;
-import Heartbreaker.objects.FrameTimeGraph;
 import Heartbreaker.scenes.*;
 
 
@@ -13,12 +12,15 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 public class GameFrame extends JPanel implements Runnable{
 
-    public static int GAME_WIDTH = 1000;
-    public static int GAME_HEIGHT = 800;
+    public static int GAME_WIDTH = 1920;
+    public static int GAME_HEIGHT = 1080;
     static Dimension SCREEN_SIZE = new Dimension(GAME_WIDTH,GAME_HEIGHT);
 
 
@@ -68,8 +70,8 @@ public class GameFrame extends JPanel implements Runnable{
                 GAME_WIDTH = e.getComponent().getWidth();
                 GAME_HEIGHT = e.getComponent().getHeight();
                 SCREEN_SIZE.setSize(GAME_WIDTH,GAME_HEIGHT);
-
                 currentScene.windowResized();
+                System.gc();
 
             }
         });
@@ -118,6 +120,15 @@ public class GameFrame extends JPanel implements Runnable{
                 frames++;
 
                 repaint();
+
+                try {
+
+                    if( currentScene.getObjects() != null){
+                        System.out.println(Runtime.getRuntime().totalMemory());
+                    }
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
 
                 lastTime += ns;
                 long frameEnd = System.nanoTime();
@@ -204,7 +215,12 @@ public class GameFrame extends JPanel implements Runnable{
 
                 // Initialize the current scene
                 currentScene = scene;
-                currentScene.initialize();
+                try {
+                    currentScene.initialize();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+
                 LOADING = false;
 
                 // Hide the loading screen
@@ -238,7 +254,13 @@ public class GameFrame extends JPanel implements Runnable{
         }
     }
 
-
+    public static long getBytesFromList(ArrayList list) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream out = new ObjectOutputStream(baos);
+        out.writeObject(list);
+        out.close();
+        return baos.toByteArray().length;
+    }
 
 
 

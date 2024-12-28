@@ -1,13 +1,16 @@
 package Heartbreaker.scenes;
 
 import Heartbreaker.engine.*;
+import Heartbreaker.engine.resources.LoadableResource;
 import Heartbreaker.main.Heartbreaker;
 import Heartbreaker.objects.*;
 import Heartbreaker.engine.input.KeyInput;
+import Heartbreaker.scenes.dungeonGen.DungeonGenerationTest;
 
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.Arrays;
 
 
 public class MainMenu extends Level {
@@ -27,9 +30,11 @@ public class MainMenu extends Level {
         shield = null;
         //camera = new Camera(origin.x,origin.y,1);
 
-
-
-
+        LoadableResource<String> hi = new LoadableResource<>("Hello", "Goodbye");
+        System.out.println(hi);
+        System.out.println(hi.getResourceName());
+        System.out.println(hi.getSharedResource().getClass());
+        System.out.println(Arrays.toString(hi.getSharedResource().getBytes()));
 
 
         return true;
@@ -42,6 +47,9 @@ public class MainMenu extends Level {
         updateObjects(delta);
         if(KeyInput.isKeyPressed(KeyEvent.VK_SLASH) && slashCoolDown <= 0){
             GameFrame.setCurrentScene(new PhysicsTestingArea());
+        }
+        if(KeyInput.isKeyPressed(KeyEvent.VK_PERIOD) && slashCoolDown <= 0){
+            GameFrame.setCurrentScene(new DungeonGenerationTest());
         }
         if(slashCoolDown > 0){
             slashCoolDown--;

@@ -1,4 +1,4 @@
-package Heartbreaker.objects;
+package Heartbreaker.engine;
 
 import Heartbreaker.engine.GameFrame;
 import Heartbreaker.engine.GameObject;
@@ -52,7 +52,7 @@ public class FrameTimeGraph extends GameObject {
             g.setFont(new Font(Font.MONOSPACED,Font.ROMAN_BASELINE,20));
             g.drawString("Max Frametime ms " + maxTime,0,Math.round(getYPosition() + 15));
 
-            g.drawLine((int) Math.round(line[i].x),(int) Math.round(getYPosition()),(int) Math.round(line[i].x),(int) Math.round(line[i].y));
+            g.drawLine((int) Math.floor(line[i].x),(int) Math.round(getYPosition()),(int) Math.floor(line[i].x),(int) Math.round(line[i].y));
         }
         for(int i = 1; i < 31; i++){
             g.drawLine((int) line[temp.length-1].x - 20, (int) Math.round(getYPosition()) -10 * i,(int) line[temp.length-1].x + 10,(int) Math.round(getYPosition()) - 10 * i);

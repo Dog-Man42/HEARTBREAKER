@@ -131,7 +131,7 @@ public abstract class GameObject {
     }
 
     /**
-     * Generates a Polygon from an a transformed array of provided points
+     * Generates a Polygon from an ........,....... transformed array of provided points
      *
      * @param points Point2D.Double array
      * @return polygon consisting of given points
