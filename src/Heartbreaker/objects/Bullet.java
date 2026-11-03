@@ -3,10 +3,10 @@ package Heartbreaker.objects;
 import java.awt.*;
 import java.awt.geom.Point2D;
 
-import Heartbreaker.engine.GameObject;
-import Heartbreaker.engine.collision.Collider;
-import Heartbreaker.engine.collision.CollisionData;
-import Heartbreaker.engine.vectors.*;
+import Heartbreaker.valentine.GameObject;
+import Heartbreaker.valentine.collision.Collider;
+import Heartbreaker.valentine.collision.CollisionData;
+import Heartbreaker.valentine.vectors.*;
 import Heartbreaker.scenes.Level;
 
 public class Bullet extends GameObject implements Collider{

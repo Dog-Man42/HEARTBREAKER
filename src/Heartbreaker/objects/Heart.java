@@ -4,10 +4,10 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.Random;
 
-import Heartbreaker.engine.GameFrame;
-import Heartbreaker.engine.SoundManager;
-import Heartbreaker.engine.collision.Collider;
-import Heartbreaker.engine.collision.CollisionData;
+import Heartbreaker.valentine.GameFrame;
+import Heartbreaker.valentine.SoundManager;
+import Heartbreaker.valentine.collision.Collider;
+import Heartbreaker.valentine.collision.CollisionData;
 import Heartbreaker.main.Heartbreaker;
 import Heartbreaker.scenes.Level;
 import Heartbreaker.scenes.Level1;

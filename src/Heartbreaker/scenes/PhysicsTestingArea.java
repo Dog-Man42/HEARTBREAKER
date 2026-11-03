@@ -1,13 +1,13 @@
 package Heartbreaker.scenes;
 
-import Heartbreaker.engine.Camera;
-import Heartbreaker.engine.GameFrame;
-import Heartbreaker.engine.GameWindow;
-import Heartbreaker.engine.input.KeyInput;
-import Heartbreaker.engine.input.MouseInput;
-import Heartbreaker.engine.collision.CollisionManager;
-import Heartbreaker.engine.scenes.Scene;
-import Heartbreaker.engine.vectors.Vector2;
+import Heartbreaker.valentine.Camera;
+import Heartbreaker.valentine.GameFrame;
+import Heartbreaker.valentine.VWindow;
+import Heartbreaker.valentine.input.KeyInput;
+import Heartbreaker.valentine.input.MouseInput;
+import Heartbreaker.valentine.collision.CollisionManager;
+import Heartbreaker.valentine.scenes.Scene;
+import Heartbreaker.valentine.vectors.Vector2;
 import Heartbreaker.main.Heartbreaker;
 import Heartbreaker.objects.*;
 
@@ -35,8 +35,8 @@ public class PhysicsTestingArea extends Scene {
         origin = new Point(GameFrame.GAME_WIDTH/2,GameFrame.GAME_HEIGHT/2);
         camera = new Camera(0,0,.75);
         Random random = new Random();
-        for(int i = 0; i < 5500; i++){
-            int mass = random.nextInt(1,50);
+        for(int i = 0; i < 500; i++){
+            int mass = random.nextInt(1,500);
             double radius = random.nextDouble(4,25);
 
             addObject(new PhysicsBall(random.nextInt(-4500,4501),random.nextInt(-4500,4501),radius,mass,random.nextInt(-50,51),random.nextInt(-50,51)));
@@ -73,7 +73,7 @@ public class PhysicsTestingArea extends Scene {
             GameFrame.setCurrentScene(new MainMenu());
         }
         if(KeyInput.isKeyPressed(KeyEvent.VK_N) && slashCoolDown <= 0){
-            GameWindow.DEBUG = !GameWindow.DEBUG;
+            VWindow.DEBUG = !VWindow.DEBUG;
             Heartbreaker.DEBUG_MODE = !Heartbreaker.DEBUG_MODE;
             slashCoolDown = 120;
         }
@@ -98,7 +98,7 @@ public class PhysicsTestingArea extends Scene {
         if(delta > 1/60.0){
             subdelta = 1/60.0;
         }
-        subdelta = 1/60.0;
+        subdelta = 1/360.0;
         updateObjects(subdelta);
         camera.update(delta);
 

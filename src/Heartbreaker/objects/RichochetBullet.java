@@ -1,8 +1,8 @@
 package Heartbreaker.objects;
 
-import Heartbreaker.engine.collision.CollisionData;
-import Heartbreaker.engine.vectors.Vector2;
-import Heartbreaker.engine.vectors.VectorMath;
+import Heartbreaker.valentine.collision.CollisionData;
+import Heartbreaker.valentine.vectors.Vector2;
+import Heartbreaker.valentine.vectors.VectorMath;
 
 import java.awt.*;
 

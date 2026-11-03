@@ -1,20 +1,19 @@
 package Heartbreaker.objects;
 
-import Heartbreaker.engine.Camera;
-import Heartbreaker.engine.GameFrame;
-import Heartbreaker.engine.GameObject;
-import Heartbreaker.engine.GameWindow;
-import Heartbreaker.engine.input.KeyInput;
-import Heartbreaker.engine.input.MouseInput;
-import Heartbreaker.engine.collision.Collider;
-import Heartbreaker.engine.collision.CollisionData;
-import Heartbreaker.engine.vectors.*;
+import Heartbreaker.valentine.Camera;
+import Heartbreaker.valentine.GameFrame;
+import Heartbreaker.valentine.GameObject;
+import Heartbreaker.valentine.VWindow;
+import Heartbreaker.valentine.input.KeyInput;
+import Heartbreaker.valentine.input.MouseInput;
+import Heartbreaker.valentine.collision.Collider;
+import Heartbreaker.valentine.collision.CollisionData;
+import Heartbreaker.valentine.vectors.*;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -85,14 +84,17 @@ public class PhysicsBall extends GameObject implements Collider {
                 Vector2 totalForce = Vector2.sum(force, dampingForce);
 
                 //plasticity
+                /*
                 if(getLength() > restLength){
 
-                    double factor = ((k / (restLength - strength)) / 10) * GameFrame.delta;
+                    double factor = ((k / (restLength - strength)) / 100) * GameFrame.delta;
 
-                    restLength += factor/2;
-                    strength -= factor;
+                    restLength += factor/4.0;
+                    strength -= factor*2.0;
                     k -= factor;
                 }
+
+                 */
 
                 a.applyImpulse(Vector2.multiply(totalForce,b.mass));
                 b.applyImpulse(Vector2.multiply(totalForce,-a.mass));
@@ -300,9 +302,9 @@ public class PhysicsBall extends GameObject implements Collider {
             forceVector = VectorMath.normalize(forceVector);
             if (mDist > 10) {
                 if (KeyInput.isKeyPressed(KeyEvent.VK_J))
-                    applyImpulse(Vector2.multiply(forceVector, mass * 1000000 * (1 / (mDist * mDist))));
+                    applyImpulse(Vector2.multiply(forceVector, mass * 2000000 * (1 / (mDist * mDist))));
                 else if (KeyInput.isKeyPressed(KeyEvent.VK_H))
-                    applyImpulse(Vector2.multiply(forceVector, -mass * 1000000 * (1 / (mDist * mDist))));
+                    applyImpulse(Vector2.multiply(forceVector, -mass * 2000000 * (1 / (mDist * mDist))));
             }
 
         }
@@ -335,7 +337,7 @@ public class PhysicsBall extends GameObject implements Collider {
 
                 g.setColor(Color.WHITE);
                 g.fillOval((int) (p.x - drawRadius), (int) (p.y - drawRadius), (int) (drawRadius * 2.0), (int) (drawRadius * 2.0));
-                if (GameWindow.DEBUG) {
+                if (VWindow.DEBUG) {
                     Vector2 vel = new Vector2(xVel, yVel);
                     g.setColor(vectorToColor(vel));
                     g.drawLine((int) p.x, (int) p.y, (int) (p.x + vel.x * zoom), (int) (p.y + vel.y * zoom));
@@ -367,7 +369,7 @@ public class PhysicsBall extends GameObject implements Collider {
             }
 
             g.setColor(Color.white);
-            if (GameWindow.DEBUG) {
+            if (VWindow.DEBUG) {
                 for (Iterator<Link> it = links.iterator(); it.hasNext(); ) {
                     Link link = it.next();
                     double hue = mapToRange(link.getLength(), 0, 2 * link.restLength, 0, 300);

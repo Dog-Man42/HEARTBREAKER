@@ -1,11 +1,12 @@
 package Heartbreaker.scenes;
 
-import Heartbreaker.engine.*;
-import Heartbreaker.engine.resources.LoadableResource;
+import Heartbreaker.valentine.*;
+import Heartbreaker.valentine.resources.LoadableResource;
 import Heartbreaker.main.Heartbreaker;
 import Heartbreaker.objects.*;
-import Heartbreaker.engine.input.KeyInput;
+import Heartbreaker.valentine.input.KeyInput;
 import Heartbreaker.scenes.dungeonGen.DungeonGenerationTest;
+import Heartbreaker.scenes.ellipseTest.EllipseTestScene;
 
 
 import java.awt.*;
@@ -50,6 +51,9 @@ public class MainMenu extends Level {
         }
         if(KeyInput.isKeyPressed(KeyEvent.VK_PERIOD) && slashCoolDown <= 0){
             GameFrame.setCurrentScene(new DungeonGenerationTest());
+        }
+        if(KeyInput.isKeyPressed(KeyEvent.VK_COMMA) && slashCoolDown <= 0){
+            GameFrame.setCurrentScene(new EllipseTestScene());
         }
         if(slashCoolDown > 0){
             slashCoolDown--;

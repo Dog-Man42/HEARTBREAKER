@@ -1,11 +1,8 @@
 package Heartbreaker.scenes.dungeonGen;
 
-import Heartbreaker.engine.GameFrame;
-import Heartbreaker.engine.GameWindow;
-import Heartbreaker.engine.vectors.Vector2;
+import Heartbreaker.valentine.vectors.Vector2;
 
 import java.awt.*;
-import java.io.DataInput;
 import java.util.*;
 
 public class Generator {

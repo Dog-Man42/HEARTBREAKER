@@ -1,6 +1,6 @@
 package Heartbreaker.scenes;
 
-import Heartbreaker.engine.GameFrame;
+import Heartbreaker.valentine.GameFrame;
 
 import javax.swing.*;
 import java.awt.*;

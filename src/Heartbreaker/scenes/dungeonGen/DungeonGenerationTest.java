@@ -1,7 +1,7 @@
 package Heartbreaker.scenes.dungeonGen;
 
-import Heartbreaker.engine.input.KeyInput;
-import Heartbreaker.engine.scenes.DefaultTestScene;
+import Heartbreaker.valentine.input.KeyInput;
+import Heartbreaker.valentine.scenes.DefaultTestScene;
 import Heartbreaker.main.Heartbreaker;
 
 import java.awt.event.KeyEvent;

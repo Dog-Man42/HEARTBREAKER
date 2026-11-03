@@ -1,7 +1,7 @@
 package Heartbreaker.objects;
 
-import Heartbreaker.engine.GameFrame;
-import Heartbreaker.engine.GameObject;
+import Heartbreaker.valentine.GameFrame;
+import Heartbreaker.valentine.GameObject;
 
 import java.awt.geom.*;
 import java.awt.*;

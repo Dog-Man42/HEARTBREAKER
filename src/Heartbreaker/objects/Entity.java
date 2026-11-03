@@ -1,15 +1,15 @@
 package Heartbreaker.objects;
 
-import Heartbreaker.engine.GameFrame;
-import Heartbreaker.engine.GameObject;
-import Heartbreaker.engine.collision.Collider;
-import Heartbreaker.engine.collision.CollisionData;
+import Heartbreaker.valentine.GameFrame;
+import Heartbreaker.valentine.GameObject;
+import Heartbreaker.valentine.collision.Collider;
+import Heartbreaker.valentine.collision.CollisionData;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
 
 /**
- * Entity is the base abstract class for all objects which have health, take damage, and collide with other {@link Heartbreaker.engine.collision.Collider colliders}
+ * Entity is the base abstract class for all objects which have health, take damage, and collide with other {@link Heartbreaker.valentine.collision.Collider colliders}
  *
  * @author tuckt
  */

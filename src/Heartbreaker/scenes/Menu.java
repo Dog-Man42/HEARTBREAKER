@@ -1,6 +1,6 @@
 package Heartbreaker.scenes;
 
-import Heartbreaker.engine.scenes.Scene;
+import Heartbreaker.valentine.scenes.Scene;
 
 import java.awt.*;
 

@@ -1,0 +1,51 @@
+
+package Heartbreaker.valentine;
+
+
+import java.awt.*;
+import javax.swing.*;
+import Heartbreaker.valentine.scenes.Scene;
+
+
+
+public class VWindow extends JFrame{
+    public static GameFrame panel;
+
+    private static boolean playing = false;
+
+    public static boolean DEBUG = false;
+
+
+
+    public VWindow(String title, Scene mainScene) {
+        panel = new GameFrame(mainScene);
+
+        this.add(panel) ;
+        this.setTitle(title);
+        this.setResizable(true);
+        this.setBackground(Color.BLACK);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setLocationRelativeTo(null);
+        this.pack();
+
+        this.setVisible(true);
+        this.setLocationRelativeTo(null);
+    }
+
+    public static void setFPS(double fps){
+        panel.setFPS(fps);
+    }
+
+    public static void addComponent(JComponent component){
+        panel.add(component);
+        panel.uiComponents.add(component);
+    }
+    public static void clearComponents(){
+        panel.removeAll();
+        panel.revalidate();
+        panel.repaint();
+        panel.uiComponents.clear();
+
+    }
+
+}

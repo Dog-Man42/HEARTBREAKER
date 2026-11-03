@@ -1,9 +1,9 @@
 package Heartbreaker.objects;
 
 
-import Heartbreaker.engine.GameFrame;
-import Heartbreaker.engine.GameObject;
-import Heartbreaker.engine.SoundManager;
+import Heartbreaker.valentine.GameFrame;
+import Heartbreaker.valentine.GameObject;
+import Heartbreaker.valentine.SoundManager;
 
 import java.awt.*;
 import java.awt.geom.*;

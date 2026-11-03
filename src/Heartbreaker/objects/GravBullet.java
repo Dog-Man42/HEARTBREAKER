@@ -1,8 +1,8 @@
 package Heartbreaker.objects;
 
-import Heartbreaker.engine.collision.Collider;
-import Heartbreaker.engine.UsesPolar;
-import Heartbreaker.engine.collision.CollisionData;
+import Heartbreaker.valentine.collision.Collider;
+import Heartbreaker.valentine.UsesPolar;
+import Heartbreaker.valentine.collision.CollisionData;
 import Heartbreaker.scenes.Level;
 
 import java.awt.*;

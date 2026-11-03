@@ -1,6 +1,6 @@
 package Heartbreaker.objects;
 
-import Heartbreaker.engine.GameObject;
+import Heartbreaker.valentine.GameObject;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
